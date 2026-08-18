@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Insight Proposal</title>
+  <link rel="stylesheet" href="../colors_and_type.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/highcharts@11.4.8/highcharts.js"></script>
+  <script src="deck-stage.js" defer></script>
+  <style>
+    html, body { background:#0e0c16; color:#f9fafb; font-family:'Inter', -apple-system, sans-serif; margin:0; padding:0; }
+    deck-stage > section {
+      width: 1920px; height: 1080px; box-sizing: border-box;
+      background: var(--slide-bg, rgb(18,14,30)); color: rgb(249,250,251);
+      padding: 80px 120px; display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+    }
+    .accent { color: var(--accent-br, rgb(192,132,252)); }
+    .slide-title { font-weight: 600; font-size: 34px; color: rgb(249,250,251); letter-spacing: -0.01em;
+      padding-bottom: 18px; border-bottom: 1px solid rgba(75,85,99,0.5); margin-bottom: 14px; }
+    .slide-sub { font-size: 22px; color: rgb(209,213,219); margin-bottom: 36px; line-height: 1.5; }
+    .eyebrow { font-size: 16px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent, rgb(168,85,247)); margin-bottom: 18px; }
+    .card { padding: 30px 34px; background: rgba(255,255,255,0.025); border: 1px solid rgba(75,85,99,0.5); border-radius: 16px; position: relative; }
+    .card.glow { border-color: var(--accent-bd, rgba(168,85,247,0.5)); background: var(--accent-soft, rgba(168,85,247,0.06)); }
+    .pill-num { font-weight: 700; font-size: 56px; line-height: 1; color: var(--accent-dim, rgba(168,85,247,0.5)); font-variant-numeric: tabular-nums; }
+    .big-num { font-weight: 700; font-size: 70px; color: rgb(249,250,251); letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .ring { width: 56px; height: 56px; border-radius: 9999px; position: relative; display:flex; align-items:center; justify-content:center; }
+    .ring::before { content:''; position:absolute; inset:0; border-radius:9999px; border:5px solid var(--accent, rgb(168,85,247)); box-shadow: 0 0 18px -2px var(--accent, rgba(168,85,247,0.7)); }
+    .ring::after { content:''; width:18px; height:18px; border-radius:9999px; background:var(--accent-br, rgb(192,132,252)); }
+    .pbadge { width:56px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:18px; color:#fff; border:1px solid rgba(255,255,255,0.16); letter-spacing:0.02em; }
+    .tt { width:100%; border-collapse:collapse; }
+    .tt th { text-align:left; font-size:15px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:rgb(163,163,163); padding:14px 20px; border-bottom:1px solid rgba(75,85,99,0.5); }
+    .tt td { font-size:22px; color:rgb(229,231,235); padding:16px 20px; border-bottom:1px solid rgba(75,85,99,0.35); }
+    .tt td.num { text-align:right; font-variant-numeric:tabular-nums; }
+    .pos { color: rgb(110,231,183); font-weight:600; }
+    .neg { color: rgb(248,113,113); }
+    .legend-dot { width:14px; height:4px; border-radius:2px; display:inline-block; margin-right:8px; vertical-align:middle; }
+    .footnote { font-size: 14px; color: rgb(107,114,128); line-height: 1.5; }
+    .chart { width:100%; height:100%; }
+  </style>
+  <template id="__bundler_thumbnail">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+      <rect width="400" height="400" fill="#18121e"/>
+      <path d="M70 280 L150 280 L260 150 L330 150" fill="none" stroke="#c084fc" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="70" y1="320" x2="330" y2="120" stroke="#5b6472" stroke-width="6" stroke-dasharray="14 12"/>
+    </svg>
+  </template>
+</head>
+<body>
+  <deck-stage id="stage"></deck-stage>
+
+  <script>
+  /* ====== Provider theming ====== */
+  const PROVIDERS = {
+    'Halo':       { abbr:'HALO', brand:'rgb(124,58,237)', accent:'rgb(168,85,247)', br:'rgb(192,132,252)', slideBg:'rgb(18,14,30)' },
+    'BlackRock':  { abbr:'BLK',  brand:'rgb(17,24,32)',   accent:'rgb(5,122,85)',   br:'rgb(110,231,183)', slideBg:'rgb(13,20,18)' },
+    'PIMCO':      { abbr:'PIM',  brand:'rgb(0,46,110)',   accent:'rgb(37,99,235)',  br:'rgb(147,178,240)', slideBg:'rgb(12,16,28)' },
+    'Blackstone': { abbr:'BX',   brand:'rgb(38,38,38)',   accent:'rgb(202,138,4)',  br:'rgb(245,200,90)',  slideBg:'rgb(22,19,12)' },
+    'Nuveen':     { abbr:'NUV',  brand:'rgb(13,123,138)', accent:'rgb(190,24,93)',  br:'rgb(244,164,200)', slideBg:'rgb(24,14,20)' },
+  };
+
+  /* ====== Per-insight proposal data ====== */
+  const DATA = {
+    watson: { name:'Watson', who:'John & Kristin Watson', provider:'Halo', product:'Buffered ETF', cat:'Defined Outcome', kind:'payoff',
+      signal:'Single-stock concentration', signalBody:'38% of the taxable account sits in one large-cap technology position — beyond the household\u2019s policy ceiling. A sharp single-name drawdown would put a disproportionate share of net worth at risk.',
+      scope:'$10.4M', term:'12 months', payoff:{ buffer:15, cap:18, participation:1 },
+      scen:[['Index falls 25%','\u221225.0%','\u221210.0%',false],['Index falls 15%','\u221215.0%','0.0%',true],['Index rises 12%','+12.0%','+12.0%',true],['Index rises 24%','+24.0%','+18.0% (cap)',true]],
+      sleevePct:38, sleeveLabel:'of equity moved into a buffered structure' },
+    young: { name:'David Young', who:'David Young', provider:'Halo', product:'Market-Linked CD', cat:'FDIC-Insured · Index-Linked', kind:'payoff',
+      signal:'Idle cash drag', signalBody:'$2.1M has sat in money-market and held-away cash for more than 90 days, yielding below the household\u2019s blended target — a quiet, persistent drag on the plan.',
+      scope:'$2.1M', term:'3 years', payoff:{ principalProtected:true, cap:18, participation:1 },
+      scen:[['Index falls 30%','\u221230.0%','0.0% (principal)',true],['Index falls 10%','\u221210.0%','0.0% (principal)',true],['Index rises 10%','+10.0%','+10.0%',true],['Index rises 20%','+20.0%','+18.0% (cap)',true]],
+      sleevePct:7, sleeveLabel:'of idle cash put to protected work' },
+    hawkins: { name:'Hawkins', who:'Ricardo & Cameron Hawkins', provider:'Halo', product:'Defined-Outcome ETF', cat:'Defined Outcome', kind:'payoff',
+      signal:'Sector concentration', signalBody:'Energy and financials make up 41% of equity exposure against a 25% policy ceiling, and the household review is past due — a clean opportunity to bring exposure back to policy with protection.',
+      scope:'$6.8M', term:'12 months', payoff:{ buffer:12, cap:16, participation:1 },
+      scen:[['Index falls 25%','\u221225.0%','\u221213.0%',false],['Index falls 12%','\u221212.0%','0.0%',true],['Index rises 10%','+10.0%','+10.0%',true],['Index rises 22%','+22.0%','+16.0% (cap)',true]],
+      sleevePct:25, sleeveLabel:'of equity returned to policy with a buffer' },
+    lang: { name:'Lang', who:'Aubrey & Josh Lang', provider:'Halo', product:'Principal-Protected Note', cat:'Structured Note', kind:'payoff',
+      signal:'Sequence-of-returns risk', signalBody:'The household is within five years of drawdown but still carries 62% equity. A poor early return sequence would materially and permanently impair the plan.',
+      scope:'$4.5M', term:'5 years', payoff:{ principalProtected:true, participation:0.7 },
+      scen:[['Index falls 35%','\u221235.0%','0.0% (principal)',true],['Index falls 15%','\u221215.0%','0.0% (principal)',true],['Index rises 15%','+15.0%','+10.5%',true],['Index rises 25%','+25.0%','+17.5%',true]],
+      sleevePct:27, sleeveLabel:'of equity moved behind a principal floor' },
+    edwards: { name:'Edwards', who:'Aubrey & Josh Edwards', provider:'Halo', product:'Structured Income Note', cat:'Structured Note', kind:'payoff',
+      signal:'Concentrated equity, no hedge', signalBody:'The book is 92% equity with no protective overlay. The stated tolerance is aggressive, but there is no defined floor anywhere in the plan.',
+      scope:'$7.6M', term:'2 years', payoff:{ barrier:20, coupon:9.2 },
+      scen:[['Index falls 25%','\u221225.0%','\u221225.0%',false],['Index falls 18%','\u221218.0%','+9.2% coupon',true],['Flat market','0.0%','+9.2% coupon',true],['Index rises 15%','+15.0%','+9.2% coupon',true]],
+      sleevePct:25, sleeveLabel:'of equity generating protected income' },
+    smith: { name:'Smith', who:'Keith & Asheley Smith', provider:'Halo', product:'RILA Annuity', cat:'Registered Index-Linked Annuity', kind:'payoff',
+      signal:'Near-retirement income gap', signalBody:'Both spouses retire within 24 months. Current fixed-income yield trails the household\u2019s planned drawdown by roughly 1.4% — a gap filled today by drawing down principal.',
+      scope:'$8.2M', term:'6 years', payoff:{ buffer:10, cap:30, participation:1, income:4.6 },
+      scen:[['Index falls 20%','\u221220.0%','\u221210.0%',false],['Index falls 10%','\u221210.0%','0.0%',true],['Flat market','0.0%','+4.6% income',true],['Index rises 15%','+15.0%','+4.6% income',true]],
+      sleevePct:28, sleeveLabel:'of the bond sleeve converted to protected income' },
+
+    /* ---- Allocation-illustration insights (other providers) ---- */
+    davenport: { name:'Davenport', who:'Robert Davenport', provider:'BlackRock', product:'BLK Target Allocation', cat:'ETF Model Portfolio', kind:'alloc',
+      signal:'Allocation drift', signalBody:'The equity sleeve has drifted 8% above target after the rally. Rebalancing to the BLK Target Allocation model brings the portfolio back to policy with minimal turnover.',
+      scope:'$2.9M', term:'0.12% ER',
+      before:[['US Equity',58,'rgb(110,231,183)'],['Intl Equity',10,'rgb(120,160,230)'],['Fixed Income',26,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
+      after:[['US Equity',50,'rgb(110,231,183)'],['Intl Equity',14,'rgb(120,160,230)'],['Fixed Income',30,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
+      proj:{ now:2.90, after:3.04, label:'Projected account value · 12 months' }, sleevePct:30, sleeveLabel:'rebalanced back to model targets' },
+    collins: { name:'Collins', who:'James Collins', provider:'BlackRock', product:'BLK Target Allocation', cat:'Model Update · EM to 8%', kind:'alloc',
+      signal:'IPS diversification gap', signalBody:'A model update increases emerging-market exposure to 8% via the BLK Target Allocation, closing an IPS diversification gap while staying inside the existing low-cost model.',
+      scope:'$2.3M', term:'EM to 8%',
+      before:[['US Equity',64,'rgb(110,231,183)'],['Intl Dev',24,'rgb(120,160,230)'],['EM',2,'rgb(245,200,90)'],['Fixed Income',10,'rgb(163,163,163)']],
+      after:[['US Equity',60,'rgb(110,231,183)'],['Intl Dev',22,'rgb(120,160,230)'],['EM',8,'rgb(245,200,90)'],['Fixed Income',10,'rgb(163,163,163)']],
+      proj:{ now:2.30, after:2.40, label:'Projected account value · 12 months' }, sleevePct:8, sleeveLabel:'added in emerging-market exposure' },
+    workman: { name:'Workman', who:'Maria Workman', provider:'PIMCO', product:'PIMCO Total Return (PTTRX)', cat:'Active Fund · 0.46% ER', kind:'alloc',
+      signal:'Idle cash + duration gap', signalBody:'Idle cash plus an AGG drag — repositioning $1.16M into PIMCO Total Return closes the duration gap and deploys the full idle balance with no tax impact.',
+      scope:'$1.16M', term:'0.46% ER',
+      before:[['Equity',55,'rgb(110,231,183)'],['Core Bond (AGG)',22,'rgb(120,160,230)'],['Cash',23,'rgb(163,163,163)']],
+      after:[['Equity',55,'rgb(110,231,183)'],['PIMCO Total Return',38,'rgb(120,160,230)'],['Cash',7,'rgb(163,163,163)']],
+      proj:{ now:5.10, after:5.32, label:'Projected account value · 12 months' }, sleevePct:23, sleeveLabel:'of idle cash repositioned into core fixed income' },
+    chen: { name:'Chen', who:'Robert Chen', provider:'PIMCO', product:'PIMCO Income (PIMIX)', cat:'Active Fund · 5.6% yield', kind:'alloc',
+      signal:'Income shortfall', signalBody:'Light income duration in the fixed-income sleeve — adding PIMCO Income lifts portfolio yield to roughly 5.6% without materially extending credit risk.',
+      scope:'$3.4M', term:'5.6% yield',
+      before:[['Equity',60,'rgb(110,231,183)'],['Core Bond',30,'rgb(120,160,230)'],['Cash',10,'rgb(163,163,163)']],
+      after:[['Equity',58,'rgb(110,231,183)'],['PIMCO Income',28,'rgb(120,160,230)'],['Core Bond',10,'rgb(245,200,90)'],['Cash',4,'rgb(163,163,163)']],
+      proj:{ now:3.40, after:3.55, label:'Projected account value · 12 months' }, sleevePct:28, sleeveLabel:'allocated to a higher-yield income sleeve' },
+    sinclair: { name:'Sinclair Foundation', who:'The Sinclair Foundation', provider:'Blackstone', product:'Blackstone BREIT', cat:'Private REIT', kind:'alloc',
+      signal:'Private-markets underweight', signalBody:'A qualified purchaser with 0% private real estate. A BREIT allocation fits the IPS target and diversifies an equity-heavy book with income-producing private real estate.',
+      scope:'$6.4M', term:'IPS target',
+      before:[['Public Equity',64,'rgb(110,231,183)'],['Fixed Income',30,'rgb(120,160,230)'],['Private RE',0,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
+      after:[['Public Equity',56,'rgb(110,231,183)'],['Fixed Income',28,'rgb(120,160,230)'],['Private RE',12,'rgb(245,200,90)'],['Cash',4,'rgb(163,163,163)']],
+      proj:{ now:6.40, after:6.70, label:'Projected portfolio value · 12 months' }, sleevePct:12, sleeveLabel:'added in private real estate' },
+    delgado: { name:'Delgado', who:'The Delgado Family', provider:'Blackstone', product:'Blackstone BCRED', cat:'Private Credit · ~9% yield', kind:'alloc',
+      signal:'Alternatives gap', signalBody:'Underexposed to private credit. A BCRED direct-lending sleeve targets roughly 9% yield and diversifies income sources away from the public-bond sleeve.',
+      scope:'$4.8M', term:'~9% target yield',
+      before:[['Equity',62,'rgb(110,231,183)'],['Public Bonds',32,'rgb(120,160,230)'],['Private Credit',0,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
+      after:[['Equity',58,'rgb(110,231,183)'],['Public Bonds',24,'rgb(120,160,230)'],['Private Credit',14,'rgb(245,200,90)'],['Cash',4,'rgb(163,163,163)']],
+      proj:{ now:4.80, after:5.05, label:'Projected portfolio value · 12 months' }, sleevePct:14, sleeveLabel:'added in private credit' },
+    okafor: { name:'Okafor Trust', who:'The Okafor Trust', provider:'Nuveen', product:'Nuveen AMT-Free Muni', cat:'Municipal SMA', kind:'alloc',
+      signal:'Tax drag', signalBody:'A 37%-bracket trust holding a taxable bond sleeve. Swapping to a Nuveen AMT-free municipal SMA improves after-tax yield by moving to tax-exempt income.',
+      scope:'$2.3M', term:'Municipal SMA',
+      before:[['Equity',50,'rgb(110,231,183)'],['Taxable Bonds',42,'rgb(120,160,230)'],['Cash',8,'rgb(163,163,163)']],
+      after:[['Equity',50,'rgb(110,231,183)'],['AMT-Free Munis',42,'rgb(245,200,90)'],['Cash',8,'rgb(163,163,163)']],
+      proj:{ now:2.30, after:2.39, label:'Projected after-tax value · 12 months' }, sleevePct:42, sleeveLabel:'moved to tax-exempt municipals' },
+  };
+
+  const PILLARS_PROTECT = [
+    ['1','Defined Downside','A stated buffer, barrier, or 100% principal floor absorbs losses before your capital is touched.'],
+    ['2','Known Terms Up Front','Protection level, cap, and maturity are fixed the day you invest — no surprises and no active management.'],
+    ['3','Upside Participation','You keep market upside to a defined cap, or earn a contingent coupon, rather than retreating to cash.'],
+    ['4','Fits Your Plan','Funded from the at-risk sleeve, so it complements your existing allocation without a forced taxable sale.'],
+  ];
+  const PILLARS_ALLOC = [
+    ['1','Back to Policy','Brings the portfolio back in line with your investment policy and target allocation.'],
+    ['2','Low Cost & Tax-Aware','Implemented through low-cost vehicles with minimal turnover to limit tax drag.'],
+    ['3','Provider Conviction','Reflects the manager\u2019s current house view and model positioning, refreshed continuously.'],
+    ['4','Documented Rationale','Every move ties back to a stated objective you can see in this proposal.'],
+  ];
+
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  const params = new URLSearchParams(location.search);
+  const id = params.get('id') || params.get('client') || 'watson';
+  const d = DATA[id] || DATA.watson;
+  const Praw = PROVIDERS[d.provider] || PROVIDERS.Halo;
+  // Field house theming for ALL proposals & CTAs (green / slate); providers differ only by their badge monogram.
+  const P = { abbr:Praw.abbr, brand:Praw.brand, accent:'rgb(5,122,85)', br:'rgb(52,211,153)', slideBg:'rgb(13,22,38)' };
+  const isPayoff = d.kind === 'payoff';
+  document.title = `${d.product} Proposal · ${d.name}`;
+
+  /* Apply provider theme as CSS custom props on :root */
+  const rs = document.documentElement.style;
+  rs.setProperty('--slide-bg', P.slideBg);
+  rs.setProperty('--accent', P.accent);
+  rs.setProperty('--accent-br', P.br);
+  rs.setProperty('--accent-bd', P.accent.replace('rgb','rgba').replace(')',',0.5)'));
+  rs.setProperty('--accent-soft', P.accent.replace('rgb','rgba').replace(')',',0.08)'));
+  rs.setProperty('--accent-dim', P.accent.replace('rgb','rgba').replace(')',',0.5)'));
+
+  /* ====== Payoff math ====== */
+  function payoff(r, p){
+    if (p.principalProtected){
+      if (r <= 0) return 0;
+      let v = r * (p.participation || 1);
+      return p.cap != null ? Math.min(v, p.cap) : v;
+    }
+    if (p.barrier != null){ // barrier income note
+      return r >= -p.barrier ? p.coupon : r;
+    }
+    // buffer note
+    if (r >= 0){ let v = r * (p.participation || 1); return p.cap != null ? Math.min(v, p.cap) : v; }
+    return Math.min(0, r + (p.buffer || 0)); // buffer absorbs first buffer% of loss
+  }
+
+  const coverHeader = d.provider === 'Halo'
+    ? `<div class="ring"></div><div><div style="font-weight:700; font-size:24px; color:rgb(249,250,251); letter-spacing:0.04em;">HALO</div><div style="font-size:14px; color:rgb(163,163,163); letter-spacing:0.06em;">PROTECTIVE INVESTMENTS</div></div>`
+    : `<div class="pbadge" style="background:${P.brand};">${P.abbr}</div><div><div style="font-weight:700; font-size:24px; color:rgb(249,250,251); letter-spacing:0.02em;">${esc(d.provider)}</div><div style="font-size:14px; color:rgb(163,163,163); letter-spacing:0.06em;">VIA FIELD</div></div>`;
+
+  /* ====== Slides ====== */
+  const cover = `
+    <section data-screen-label="01 Cover" style="padding:0; flex-direction:row;">
+      <div style="flex:1; min-width:0; position:relative; overflow:hidden;">
+        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1600&q=80" alt="" style="width:100%; height:100%; object-fit:cover; filter:saturate(0.9) brightness(0.72);" />
+        <div style="position:absolute; inset:0; background:linear-gradient(120deg, ${P.accent.replace('rgb','rgba').replace(')',',0.5)')} 0%, ${P.slideBg.replace('rgb','rgba').replace(')',',0.15)')} 70%);"></div>
+      </div>
+      <div style="width:940px; padding:120px 110px; display:flex; flex-direction:column; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:16px;">${coverHeader}</div>
+        <div>
+          <h1 style="font-weight:700; font-size:74px; line-height:1.06; letter-spacing:-0.03em; margin:0 0 24px; color:${P.br};">${esc(d.product)}<br/>Proposal</h1>
+          <div style="font-size:28px; color:rgb(209,213,219); margin-bottom:18px;">${esc(d.cat)}</div>
+          <div style="font-size:22px; color:rgb(229,231,235);">Prepared for ${esc(d.who)}</div>
+        </div>
+        <div class="footnote" style="max-width:640px;">This proposal responds to a specific opportunity identified in your portfolio. Terms shown are indicative and confirmed at purchase. Please review carefully and contact your advisor with any questions.</div>
+      </div>
+    </section>`;
+
+  const PILLARS = isPayoff ? PILLARS_PROTECT : PILLARS_ALLOC;
+  const why = `
+    <section data-screen-label="02 Why This Matters">
+      <div class="eyebrow">The opportunity</div>
+      <div class="slide-title">Why we\u2019re recommending this now</div>
+      <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:48px; flex:1; min-height:0;">
+        <div class="card glow" style="display:flex; flex-direction:column; justify-content:center;">
+          <div style="display:inline-flex; align-self:flex-start; align-items:center; gap:10px; padding:8px 16px; border-radius:9999px; background:rgba(234,179,8,0.14); border:1px solid rgba(234,179,8,0.4); margin-bottom:26px;">
+            <span style="width:9px; height:9px; border-radius:9999px; background:rgb(234,179,8);"></span>
+            <span style="font-size:18px; font-weight:600; color:rgb(250,204,21);">${esc(d.signal)}</span>
+          </div>
+          <div style="font-size:26px; line-height:1.5; color:rgb(229,231,235);">${esc(d.signalBody)}</div>
+          <div style="margin-top:32px; display:flex; gap:40px;">
+            <div><div style="font-size:15px; color:rgb(163,163,163); margin-bottom:8px;">PROVIDER</div><div style="font-size:24px; font-weight:600;">${esc(d.provider)}</div></div>
+            <div><div style="font-size:15px; color:rgb(163,163,163); margin-bottom:8px;">ASSETS IN SCOPE</div><div style="font-size:24px; font-weight:600; color:${P.br};">${esc(d.scope)}</div></div>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:20px; justify-content:center;">
+          ${PILLARS.map(p => `
+            <div style="display:flex; gap:24px; align-items:flex-start;">
+              <div class="pill-num">${p[0]}</div>
+              <div style="padding-top:6px;">
+                <div style="font-weight:600; font-size:22px; color:rgb(249,250,251); margin-bottom:6px;">${esc(p[1])}</div>
+                <div style="font-size:18px; color:rgb(163,163,163); line-height:1.5;">${esc(p[2])}</div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </section>`;
+
+  // Structure slide — key terms
+  const structCards = isPayoff
+    ? (() => {
+        const pp = d.payoff;
+        const prot = pp.principalProtected ? '100%' : (pp.barrier != null ? `${pp.barrier}% barrier` : `${pp.buffer}%`);
+        const up = pp.barrier != null ? `${pp.coupon}% coupon` : (pp.cap != null ? `${pp.cap}%` : `${Math.round((pp.participation||1)*100)}% part.`);
+        return [['Downside protection', prot],['Upside', up],['Term', d.term],['Assets in scope', d.scope]];
+      })()
+    : [['Vehicle', d.cat.split(' · ')[0]],['Terms', d.term],['Assets in scope', d.scope],['Provider', d.provider]];
+  const structure = `
+    <section data-screen-label="03 Recommendation">
+      <div class="eyebrow">The recommendation</div>
+      <div class="slide-title">${esc(d.product)}</div>
+      <div class="slide-sub">${esc(d.cat)}</div>
+      <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:24px;">
+        ${structCards.map((c,i) => `<div class="card ${i===0?'glow':''}"><div style="font-size:17px; color:rgb(163,163,163); margin-bottom:14px;">${esc(c[0])}</div><div class="big-num" ${i===3?`style="color:${P.br};"`:''}>${esc(c[1])}</div></div>`).join('')}
+      </div>
+      <div class="card" style="margin-top:30px; display:flex; align-items:center; gap:26px;">
+        ${d.provider==='Halo' ? '<div class="ring" style="flex-shrink:0;"></div>' : `<div class="pbadge" style="background:${P.brand}; flex-shrink:0;">${P.abbr}</div>`}
+        <div style="font-size:21px; color:rgb(209,213,219); line-height:1.55;">Sourced through <span class="accent" style="font-weight:600;">${esc(d.provider)}</span> and matched to this household\u2019s objective. Final issuer, pricing, and terms are confirmed with the provider before any order is placed.</div>
+      </div>
+    </section>`;
+
+  // ILLUSTRATION slide
+  const illustration = isPayoff
+    ? `<section data-screen-label="04 Payoff Illustration">
+        <div class="eyebrow">How it works</div>
+        <div class="slide-title">Payoff at maturity</div>
+        <div class="slide-sub">What the ${esc(d.scope)} sleeve returns at the end of the ${esc(d.term)} term, for any level of the reference index.</div>
+        <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:48px; flex:1; min-height:0;">
+          <div class="card" style="padding:24px 28px; display:flex; flex-direction:column;">
+            <div style="display:flex; gap:28px; margin-bottom:8px;">
+              <span style="font-size:16px; color:rgb(163,163,163);"><span class="legend-dot" style="background:${P.accent}; height:5px;"></span>With ${esc(d.provider)}</span>
+              <span style="font-size:16px; color:rgb(163,163,163);"><span class="legend-dot" style="background:rgb(120,130,140);"></span>Unprotected (1:1 index)</span>
+            </div>
+            <div id="payoffChart" class="chart" style="flex:1;"></div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:18px; justify-content:center;">
+            <div class="card glow"><div style="font-weight:600; font-size:22px; margin-bottom:8px; color:${P.br};">Protection zone</div><div style="font-size:18px; color:rgb(209,213,219); line-height:1.55;">${isPayoffProtCopy()}</div></div>
+            <div class="card"><div style="font-weight:600; font-size:22px; margin-bottom:8px;">Upside</div><div style="font-size:18px; color:rgb(163,163,163); line-height:1.55;">${isPayoffUpCopy()}</div></div>
+          </div>
+        </div>
+      </section>`
+    : `<section data-screen-label="04 Allocation">
+        <div class="eyebrow">How it fits</div>
+        <div class="slide-title">Before &amp; after</div>
+        <div class="slide-sub">The recommended move repositions ${esc(d.scope)} — here\u2019s the allocation today versus after.</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:48px; flex:1; min-height:0;">
+          <div class="card" style="display:flex; flex-direction:column; align-items:center; padding:24px;">
+            <div style="font-size:16px; letter-spacing:0.06em; text-transform:uppercase; color:rgb(163,163,163); margin-bottom:8px;">Today</div>
+            <div id="beforeChart" class="chart" style="flex:1; width:100%;"></div>
+            <div id="beforeLegend" style="width:100%;"></div>
+          </div>
+          <div class="card glow" style="display:flex; flex-direction:column; align-items:center; padding:24px;">
+            <div style="font-size:16px; letter-spacing:0.06em; text-transform:uppercase; color:${P.br}; margin-bottom:8px;">After</div>
+            <div id="afterChart" class="chart" style="flex:1; width:100%;"></div>
+            <div id="afterLegend" style="width:100%;"></div>
+          </div>
+        </div>
+      </section>`;
+
+  function isPayoffProtCopy(){
+    const p = d.payoff;
+    if (p.principalProtected) return 'Your principal is returned in full at maturity — the entire downside, shaded below, is absorbed.';
+    if (p.barrier != null) return `As long as the index doesn\u2019t fall more than ${p.barrier}%, you receive the ${p.coupon}% coupon and your principal back.`;
+    return `The first ${p.buffer}% of any index decline is absorbed — the shaded zone — before your capital is affected.`;
+  }
+  function isPayoffUpCopy(){
+    const p = d.payoff;
+    if (p.barrier != null) return `A fixed ${p.coupon}% coupon is paid while the barrier holds, in place of uncapped market upside.`;
+    if (p.cap != null) return `You participate in index gains up to a ${p.cap}% cap${p.participation && p.participation<1 ? ` at ${Math.round(p.participation*100)}% participation` : ''}.`;
+    return `You participate in ${Math.round((p.participation||1)*100)}% of index gains, with no cap.`;
+  }
+
+  // Scenario / projection slide
+  const scenario = isPayoff
+    ? `<section data-screen-label="05 Scenario Analysis">
+        <div class="eyebrow">What it does</div>
+        <div class="slide-title">Protected vs. unprotected outcomes</div>
+        <div class="slide-sub">Modeled on the ${esc(d.scope)} sleeve over the ${esc(d.term)} term. Protection terms are fixed at purchase.</div>
+        <div style="display:grid; grid-template-columns:1.25fr 1fr; gap:40px; flex:1; min-height:0;">
+          <div class="card" style="padding:8px 0; display:flex; flex-direction:column;"><div id="scenChart" class="chart" style="flex:1;"></div></div>
+          <div class="card" style="padding:0; overflow:hidden; align-self:start; width:100%;">
+            <table class="tt"><thead><tr><th>Scenario</th><th style="text-align:right;">Unprot.</th><th style="text-align:right;">With ${esc(d.provider)}</th></tr></thead>
+            <tbody>${d.scen.map(s=>`<tr><td style="font-size:19px;">${esc(s[0])}</td><td class="num neg" style="font-size:19px;">${esc(s[1])}</td><td class="num ${s[3]?'pos':''}" style="font-size:19px;">${esc(s[2])}</td></tr>`).join('')}</tbody></table>
+          </div>
+        </div>
+      </section>`
+    : `<section data-screen-label="05 Projection">
+        <div class="eyebrow">The impact</div>
+        <div class="slide-title">${esc(d.proj.label)}</div>
+        <div class="slide-sub">Acting on this insight versus leaving the account as-is, over the next 12 months.</div>
+        <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:40px; flex:1; min-height:0;">
+          <div class="card" style="padding:18px 24px; display:flex; flex-direction:column;"><div id="projChart" class="chart" style="flex:1;"></div></div>
+          <div style="display:flex; flex-direction:column; gap:18px; justify-content:center;">
+            <div class="card"><div style="font-size:16px; color:rgb(163,163,163); margin-bottom:10px;">Today</div><div class="big-num">$${d.proj.now.toFixed(2)}M</div></div>
+            <div class="card glow"><div style="font-size:16px; color:${P.br}; margin-bottom:10px;">Projected after</div><div class="big-num" style="color:${P.br};">$${d.proj.after.toFixed(2)}M</div></div>
+          </div>
+        </div>
+      </section>`;
+
+  const fit = `
+    <section data-screen-label="06 Portfolio Fit">
+      <div class="eyebrow">How it fits</div>
+      <div class="slide-title">A focused sleeve inside your existing plan</div>
+      <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:64px; flex:1; min-height:0; align-items:center;">
+        <div style="display:flex; flex-direction:column; align-items:center;">
+          <div style="width:340px; height:340px; border-radius:9999px; background:conic-gradient(${P.accent} 0% ${d.sleevePct}%, rgba(75,85,99,0.45) ${d.sleevePct}% 100%); display:flex; align-items:center; justify-content:center;">
+            <div style="width:220px; height:220px; border-radius:9999px; background:${P.slideBg}; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+              <div style="font-weight:700; font-size:60px; color:${P.br}; line-height:1;">${d.sleevePct}%</div>
+              <div style="font-size:15px; color:rgb(163,163,163); margin-top:6px;">of the account</div>
+            </div>
+          </div>
+          <div style="font-size:18px; color:rgb(163,163,163); margin-top:24px; text-align:center; max-width:320px;">${esc(d.sleeveLabel)}</div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <div class="card"><div style="font-weight:600; font-size:22px; margin-bottom:8px;">No disruption to the rest</div><div style="font-size:18px; color:rgb(163,163,163); line-height:1.55;">The sleeve is funded from the position in question, keeping the rest of the portfolio and its tax posture intact.</div></div>
+          <div class="card"><div style="font-weight:600; font-size:22px; margin-bottom:8px;">Same custodian</div><div style="font-size:18px; color:rgb(163,163,163); line-height:1.55;">It settles alongside existing holdings — no new accounts and nothing held away to track.</div></div>
+          <div class="card glow"><div style="font-weight:600; font-size:22px; margin-bottom:8px;">Monitored continuously</div><div style="font-size:18px; color:rgb(163,163,163); line-height:1.55;">Field tracks the position against its terms and surfaces lifecycle events automatically.</div></div>
+        </div>
+      </div>
+    </section>`;
+
+  const close = `
+    <section data-screen-label="07 Next Steps">
+      <div style="flex:1; display:flex; flex-direction:column; justify-content:center; max-width:1100px;">
+        ${d.provider==='Halo' ? '<div class="ring" style="margin-bottom:30px;"></div>' : `<div class="pbadge" style="background:${P.brand}; margin-bottom:30px;">${P.abbr}</div>`}
+        <h2 style="font-weight:700; font-size:54px; letter-spacing:-0.02em; margin:0 0 24px; color:rgb(249,250,251);">${isPayoff ? 'A defined floor under what matters most.' : 'A clear, documented move — ready when you are.'}</h2>
+        <div style="font-size:24px; color:rgb(209,213,219); line-height:1.6; margin-bottom:40px;">With your approval, we\u2019ll confirm terms with ${esc(d.provider)} and fund the ${esc(d.scope)} sleeve. Your signature is all we need to begin — it settles alongside your existing accounts and is monitored continuously.</div>
+        <div style="display:flex; gap:16px;">
+          <div style="padding:18px 32px; border-radius:12px; background:${P.accent}; color:#fff; font-weight:600; font-size:20px;">Approve &amp; proceed</div>
+          <div style="padding:18px 32px; border-radius:12px; border:1px solid rgba(75,85,99,0.7); color:rgb(229,231,235); font-weight:500; font-size:20px;">Discuss further</div>
+        </div>
+      </div>
+      <div class="footnote" style="max-width:1100px; border-top:1px solid rgba(75,85,99,0.4); padding-top:24px;">For informational purposes only and not an offer, solicitation, or recommendation. Investments involve risk, including possible loss of principal, issuer credit risk, and limited liquidity; caps limit upside. FDIC insurance, where noted, applies to bank-issued CDs subject to limits. Private funds carry liquidity and valuation constraints. Terms are indicative and confirmed at purchase.</div>
+    </section>`;
+
+  /* "Lower volatility" wave illustration: defined-outcome smooths the ride. */
+  function volatilitySVG(){
+    const X0=78, X1=1268, MID=232, AMPc=158, AMPd=94, CYC=3, N=200, A='rgb(110,231,183)';
+    const sine=(amp)=>{ let s=''; for(let i=0;i<=N;i++){ const x=X0+(X1-X0)*i/N; const y=MID-amp*Math.sin(i/N*CYC*2*Math.PI); s+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' '; } return s; };
+    const dArrow=(x,yo,yi)=>{ const top=Math.min(yo,yi), bot=Math.max(yo,yi); return `<line x1="${x}" y1="${top+2}" x2="${x}" y2="${bot-2}" stroke="${A}" stroke-width="3"/>`
+      +`<path d="M${x-7} ${top+11} L${x} ${top+1} L${x+7} ${top+11}" fill="none" stroke="${A}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`
+      +`<path d="M${x-7} ${bot-11} L${x} ${bot-1} L${x+7} ${bot-11}" fill="none" stroke="${A}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`; };
+    let arrows=''; for(let k=0;k<CYC;k++){ const xp=X0+(X1-X0)*((k+0.25)/CYC), xt=X0+(X1-X0)*((k+0.75)/CYC); arrows+=dArrow(xp,MID-AMPc,MID-AMPd)+dArrow(xt,MID+AMPc,MID+AMPd); }
+    const cx=X0+(X1-X0)*((2+0.25)/CYC), cy=MID-AMPc;
+    return `<svg viewBox="0 0 1420 470" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" style="font-family:Inter;">`
+      +`<line x1="${X0}" y1="${MID}" x2="${X1}" y2="${MID}" stroke="rgba(75,85,99,0.7)" stroke-width="1.5"/>`
+      +`<circle cx="36" cy="${MID-AMPd}" r="16" fill="none" stroke="rgb(115,122,135)" stroke-width="2"/><text x="36" y="${MID-AMPd+8}" text-anchor="middle" fill="rgb(163,163,163)" font-size="26">+</text>`
+      +`<circle cx="36" cy="${MID+AMPd}" r="16" fill="none" stroke="rgb(115,122,135)" stroke-width="2"/><text x="36" y="${MID+AMPd+8}" text-anchor="middle" fill="rgb(163,163,163)" font-size="26">\u2212</text>`
+      +`<path d="${sine(AMPc)}" fill="none" stroke="rgb(130,140,155)" stroke-width="6" stroke-linejoin="round"/>`
+      +`<path d="${sine(AMPd)}" fill="none" stroke="rgb(52,211,153)" stroke-width="6" stroke-linejoin="round"/>`
+      +arrows
+      +`<path d="M${cx+6} ${cy-4} L ${cx+128} ${cy-54}" stroke="rgb(52,211,153)" stroke-width="2" fill="none"/>`
+      +`<text x="${cx+138}" y="${cy-48}" fill="rgb(52,211,153)" font-size="31" font-style="italic">Lower Volatility</text>`
+      +`</svg>`;
+  }
+  /* Monte Carlo slide — replaces the illustrative volatility page. Same data
+     as the Halo Guided Analysis flow: baseline vs 20% overlay of the top note. */
+  const MC_BASE_DIST = [1.6,2.4,3.6,5.2,7.4,9.8,12.0,13.4,12.8,11.0,8.6,6.2,3.8,2.2];
+  const MC_NOTE_DIST = [0.3,0.6,1.4,3.0,5.8,9.4,13.2,15.6,14.8,12.6,9.8,7.4,4.0,2.1];
+  const MC_W = 0.5; /* 20% overlay on the 5–40% pre-calculated range */
+  const MC_OVER_DIST = MC_BASE_DIST.map((v,i) => +(v*(1-MC_W) + MC_NOTE_DIST[i]*MC_W).toFixed(2));
+  const MC_X = [-30,-25,-20,-15,-10,-5,0,5,10,15,20,25,30,35];
+  const mcLerp = (a,b) => a + (b-a)*MC_W;
+  const MC_STATS = [
+    ['Expected return', '7.2%', mcLerp(7.2,7.9).toFixed(1)+'%', true],
+    ['Median return',   '6.6%', mcLerp(6.6,7.6).toFixed(1)+'%', true],
+    ['Sharpe ratio',    '0.52', mcLerp(0.52,0.71).toFixed(2), true],
+    ['Std deviation',   '14.8%', mcLerp(14.8,11.2).toFixed(1)+'%', true],
+    ['Portfolio income','1.3%', mcLerp(1.3,1.3).toFixed(1)+'%', false],
+    ['Negative years',  '24%', Math.round(mcLerp(24,14))+'%', true],
+  ];
+  const montecarlo = isPayoff ? `
+    <section data-screen-label="05 Monte Carlo">
+      <div class="eyebrow">The outcome</div>
+      <div class="slide-title">Monte Carlo — your portfolio with vs. without the note</div>
+      <div class="slide-sub">10,000 simulated 1-year paths on your actual holdings, with a 20% overlay of the ${esc(d.product)} on the ${esc(d.scope)} at-risk sleeve.</div>
+      <div style="display:grid; grid-template-columns:1.6fr 1fr; gap:40px; flex:1; min-height:0;">
+        <div class="card" style="padding:20px 26px; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; gap:32px; margin-bottom:6px;">
+            <div style="font-size:16px; letter-spacing:0.08em; text-transform:uppercase; color:rgb(163,163,163); flex:1;">Distribution of simulated returns</div>
+            <span style="font-size:17px; color:rgb(209,213,219);"><span class="legend-dot" style="background:rgb(120,130,140);"></span>Without note</span>
+            <span style="font-size:17px; color:rgb(209,213,219);"><span class="legend-dot" style="background:${P.br};"></span>With note</span>
+          </div>
+          <div id="mcChart" class="chart" style="flex:1; min-height:0;"></div>
+        </div>
+        <div style="display:grid; grid-template-rows:repeat(6, 1fr); gap:14px;">
+          ${MC_STATS.map(s => `<div class="card" style="padding:14px 22px; display:flex; align-items:center; gap:14px;">
+            <div style="flex:1; font-size:17px; color:rgb(163,163,163);">${s[0]}</div>
+            <div style="font-size:17px; color:rgb(107,114,128); text-decoration:line-through; font-variant-numeric:tabular-nums;">${s[1]}</div>
+            <div style="font-size:24px; font-weight:700; color:${s[3] ? P.br : 'rgb(249,250,251)'}; font-variant-numeric:tabular-nums; min-width:86px; text-align:right;">${s[2]}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+      <div class="footnote" style="margin-top:14px;">Forward-looking simulation using current capital market assumptions and your actual account holdings. For illustrative purposes only — not a guarantee of future results.</div>
+    </section>` : '';
+
+  /* Hindsight backtest — Field holds the account's actual history, so we can
+     show what the sleeve would have done had the note been in place. */
+  const HB_MONTHLY = [1.8,-0.9,2.4,1.1,-1.6,2.9,0.7,-2.2,1.9,2.6,-0.8,1.4, -3.1,-5.8,-7.9,-4.2,1.8,2.1,1.4,-2.6,1.2,0.8,1.7,1.9, 2.1,-1.4,2.8,1.6,-0.6,2.2,3.1,-1.8,1.2,2.4,1.7,2.0];
+  function hbSeries(){
+    const sleeve = parseFloat(String(d.scope).replace(/[^0-9.]/g,'')) || 10;
+    const act = [sleeve], note = [sleeve];
+    for (let y=0; y<3; y++){
+      const months = HB_MONTHLY.slice(y*12, y*12+12);
+      const idxYr = months.reduce((a,m)=>a*(1+m/100),1) - 1;
+      const noteYr = payoff(idxYr*100, d.payoff)/100;
+      const start = note[note.length-1];
+      let cum = 1;
+      months.forEach((m, mi) => {
+        act.push(+(act[act.length-1]*(1+m/100)).toFixed(3));
+        cum *= (1+m/100);
+        /* Within the term the note absorbs decline up to the protection level,
+           and lands exactly on the payoff at term end. */
+        let nr = cum - 1;
+        if (nr < 0){
+          const floor = d.payoff.buffer != null ? d.payoff.buffer/100 : (d.payoff.barrier != null ? d.payoff.barrier/100 : 0);
+          if (d.payoff.principalProtected) nr = 0;
+          else if (d.payoff.barrier != null) nr = (-nr <= floor) ? 0 : nr; /* barrier: intact or fully breached */
+          else nr = Math.min(0, nr + floor); /* buffer absorbs the first leg */
+        }
+        if (mi === 11) nr = noteYr;
+        note.push(+(start*(1+nr)).toFixed(3));
+      });
+    }
+    const maxDD = arr => { let peak=arr[0], dd=0; arr.forEach(v=>{ peak=Math.max(peak,v); dd=Math.min(dd,(v-peak)/peak); }); return dd*100; };
+    return { act, note, sleeve, ddAct:maxDD(act), ddNote:maxDD(note) };
+  }
+  const hb = isPayoff ? hbSeries() : null;
+  const hindsight = isPayoff ? `
+    <section data-screen-label="06 If You Had The Note">
+      <div class="eyebrow">Looking back</div>
+      <div class="slide-title">If you’d held this note for the last 3 years</div>
+      <div class="slide-sub">Field holds your account’s actual history — this is your real ${esc(d.scope)} sleeve, replayed with the ${esc(d.product)} terms in place through the same markets.</div>
+      <div style="display:grid; grid-template-columns:1.7fr 1fr; gap:40px; flex:1; min-height:0;">
+        <div class="card" style="padding:20px 26px; display:flex; flex-direction:column;">
+          <div style="display:flex; align-items:center; gap:32px; margin-bottom:6px;">
+            <div style="font-size:16px; letter-spacing:0.08em; text-transform:uppercase; color:rgb(163,163,163); flex:1;">Actual sleeve value · trailing 36 months</div>
+            <span style="font-size:17px; color:rgb(209,213,219);"><span class="legend-dot" style="background:rgb(120,130,140);"></span>What happened</span>
+            <span style="font-size:17px; color:rgb(209,213,219);"><span class="legend-dot" style="background:${P.br};"></span>With the note</span>
+          </div>
+          <div id="hbChart" class="chart" style="flex:1; min-height:0;"></div>
+        </div>
+        <div style="display:grid; grid-template-rows:repeat(3, 1fr); gap:16px;">
+          <div class="card glow" style="display:flex; flex-direction:column; justify-content:center; padding:22px 28px;">
+            <div style="font-size:16px; color:rgb(163,163,163); margin-bottom:10px;">Ending value with the note</div>
+            <div class="big-num">$${hb.note[hb.note.length-1].toFixed(1)}M <span style="font-size:22px; color:${P.br};">+$${(hb.note[hb.note.length-1]-hb.act[hb.act.length-1]).toFixed(1)}M</span></div>
+            <div style="font-size:15px; color:rgb(107,114,128); margin-top:8px;">vs. $${hb.act[hb.act.length-1].toFixed(1)}M as invested</div>
+          </div>
+          <div class="card" style="display:flex; flex-direction:column; justify-content:center; padding:22px 28px;">
+            <div style="font-size:16px; color:rgb(163,163,163); margin-bottom:10px;">Worst drawdown</div>
+            <div class="big-num" style="color:${P.br};">${hb.ddNote.toFixed(1)}%</div>
+            <div style="font-size:15px; color:rgb(107,114,128); margin-top:8px;">vs. ${hb.ddAct.toFixed(1)}% without protection</div>
+          </div>
+          <div class="card" style="display:flex; flex-direction:column; justify-content:center; padding:22px 28px;">
+            <div style="font-size:16px; color:rgb(163,163,163); margin-bottom:10px;">Where it mattered</div>
+            <div style="font-size:18px; color:rgb(209,213,219); line-height:1.5;">The ${d.payoff.principalProtected ? 'principal floor' : d.payoff.barrier != null ? esc(d.payoff.barrier)+'% barrier' : esc(d.payoff.buffer)+'% buffer'} absorbed the year-two correction — the note path never gave back the gains.</div>
+          </div>
+        </div>
+      </div>
+      <div class="footnote" style="margin-top:14px;">Hypothetical backtest applying today’s note terms to the account’s actual historical returns from Field’s custodian records. Past performance does not guarantee future results.</div>
+    </section>` : '';
+
+  document.getElementById('stage').innerHTML = cover + why + structure + illustration + montecarlo + hindsight + scenario + fit + close;
+
+  /* ====== Charts ====== */
+  Highcharts.setOptions({
+    chart:{ backgroundColor:'transparent', style:{ fontFamily:'Inter, sans-serif' }, animation:false },
+    title:{ text:null }, credits:{ enabled:false }, legend:{ enabled:false },
+    xAxis:{ lineColor:'rgba(75,85,99,0.6)', tickColor:'rgba(75,85,99,0.6)', gridLineColor:'rgba(75,85,99,0.18)', labels:{ style:{ color:'rgb(163,163,163)', fontSize:'15px' } }, title:{ style:{ color:'rgb(163,163,163)', fontSize:'14px' } } },
+    yAxis:{ lineColor:'rgba(75,85,99,0.6)', gridLineColor:'rgba(75,85,99,0.18)', labels:{ style:{ color:'rgb(163,163,163)', fontSize:'15px' } }, title:{ style:{ color:'rgb(163,163,163)', fontSize:'14px' } } },
+  });
+
+  function pieOpts(rows){
+    return {
+      chart:{ type:'pie', height:300 },
+      plotOptions:{ pie:{ innerSize:'62%', borderWidth:0, dataLabels:{ enabled:false } } },
+      tooltip:{ pointFormat:'<b>{point.y}%</b>' },
+      series:[{ data: rows.filter(r=>r[1]>0).map(r=>({ name:r[0], y:r[1], color:r[2] })) }],
+    };
+  }
+  function legendHTML(rows){
+    return rows.filter(r=>r[1]>0).map(r=>`<div style="display:flex; align-items:center; justify-content:space-between; padding:7px 4px; border-bottom:1px solid rgba(75,85,99,0.3); font-size:17px;">
+      <span style="color:rgb(209,213,219);"><span style="display:inline-block; width:11px; height:11px; border-radius:3px; background:${r[2]}; margin-right:10px;"></span>${esc(r[0])}</span>
+      <span style="font-weight:700; color:rgb(249,250,251); font-variant-numeric:tabular-nums;">${r[1]}%</span></div>`).join('');
+  }
+
+  /* CSS conic-gradient donut (captures reliably in screenshots / PDF / PPTX) */
+  function donutHTML(rows){
+    let acc = 0;
+    const stops = rows.filter(r=>r[1]>0).map(r => { const a = acc; acc += r[1]; return `${r[2]} ${a}% ${acc}%`; }).join(', ');
+    return `<div style="width:248px; height:248px; border-radius:9999px; margin:6px auto 0; background:conic-gradient(${stops}); display:flex; align-items:center; justify-content:center;">
+      <div style="width:150px; height:150px; border-radius:9999px; background:${P.slideBg};"></div></div>`;
+  }
+
+  /* Parse a scenario cell ('\u221225.0%', '+18.0% (cap)', '+9.2% coupon') to a number. */
+  function toNum(v){ const s = String(v); const m = s.match(/\d+(\.\d+)?/); let n = m ? parseFloat(m[0]) : 0; if (s.indexOf('\u2212') === 0 || /^-/.test(s)) n = -n; return n; }
+
+  /* CSS diverging bar chart for protected-vs-unprotected scenarios. */
+  function scenBarsHTML(scen, accent){
+    const MAX = 30;
+    const bar = (val, color, lbl) => {
+      const pct = Math.min(Math.abs(val) / MAX * 50, 50);
+      const neg = val < 0;
+      const side = neg ? `right:50%;` : `left:50%;`;
+      const lblSide = neg ? `right:calc(50% + ${pct}% + 10px); text-align:right;` : `left:calc(50% + ${pct}% + 10px);`;
+      return `<div style="position:relative; height:20px;">
+        <div style="position:absolute; ${side} top:2px; height:15px; width:${pct}%; background:${color}; border-radius:3px;"></div>
+        <div style="position:absolute; ${lblSide} top:0; font-size:14px; font-weight:600; color:rgb(229,231,235); white-space:nowrap;">${esc(lbl)}</div>
+      </div>`;
+    };
+    return `<div style="padding:18px 28px; display:flex; flex-direction:column; justify-content:center; height:100%; gap:20px;">`
+      + scen.map(s => `<div>
+          <div style="font-size:15px; color:rgb(163,163,163); margin-bottom:8px;">${esc(s[0])}</div>
+          <div style="position:relative;">
+            <div style="position:absolute; left:50%; top:-3px; bottom:-3px; width:1px; background:rgba(75,85,99,0.7);"></div>
+            ${bar(toNum(s[1]), 'rgb(120,130,140)', s[1])}
+            <div style="height:6px;"></div>
+            ${bar(toNum(s[2]), accent, s[2])}
+          </div>
+        </div>`).join('')
+      + `<div style="display:flex; gap:24px; margin-top:6px; padding-top:14px; border-top:1px solid rgba(75,85,99,0.4);">
+          <span style="font-size:15px; color:rgb(163,163,163);"><span class="legend-dot" style="background:rgb(120,130,140);"></span>Unprotected</span>
+          <span style="font-size:15px; color:rgb(163,163,163);"><span class="legend-dot" style="background:${accent};"></span>With ${esc(d.provider)}</span>
+        </div></div>`;
+  }
+
+  function renderCharts(){
+    if (isPayoff){
+      const p = d.payoff;
+      const xs = []; for (let r=-40; r<=40; r+=1) xs.push(r);
+      const noteData = xs.map(r => [r, +payoff(r, p).toFixed(2)]);
+      const idxData  = xs.map(r => [r, r]);
+      // protection band on x-axis
+      let bandFrom = null, bandTo = 0;
+      if (p.principalProtected) { bandFrom = -40; bandTo = 0; }
+      else if (p.barrier != null) { bandFrom = -p.barrier; bandTo = 0; }
+      else if (p.buffer != null) { bandFrom = -p.buffer; bandTo = 0; }
+      const plotBands = bandFrom != null ? [{ from:bandFrom, to:bandTo, color:P.accent.replace('rgb','rgba').replace(')',',0.12)'),
+        label:{ text:'Protection zone', style:{ color:P.br, fontSize:'13px', fontWeight:'600' }, y:-8 } }] : [];
+      const yPlotLines = (p.cap != null && p.barrier == null) ? [{ value:p.cap, color:P.br, dashStyle:'Dash', width:1.5,
+        label:{ text:`Cap ${p.cap}%`, style:{ color:P.br, fontSize:'13px' }, align:'right', x:-6 } }] : [];
+      Highcharts.chart('payoffChart', {
+        chart:{ type:'line', height:null, spacing:[10,8,6,6] },
+        xAxis:{ min:-40, max:40, tickInterval:20, plotBands, title:{ text:'Reference index return' },
+          plotLines:[{ value:0, color:'rgba(75,85,99,0.7)', width:1 }], labels:{ format:'{value}%' } },
+        yAxis:{ tickInterval:20, title:{ text:'Your return at maturity' },
+          plotLines:[{ value:0, color:'rgba(75,85,99,0.7)', width:1 }].concat(yPlotLines), labels:{ format:'{value}%' } },
+        tooltip:{ shared:true, valueSuffix:'%', backgroundColor:'rgb(17,24,39)', borderColor:'rgba(75,85,99,0.7)', style:{ color:'rgb(249,250,251)', fontSize:'14px' } },
+        series:[
+          { name:'Unprotected', data:idxData, color:'rgb(120,130,140)', dashStyle:'Dash', lineWidth:2, marker:{ enabled:false } },
+          { name:`With ${d.provider}`, data:noteData, color:P.accent, lineWidth:4, marker:{ enabled:false } },
+        ],
+      });
+      // Hindsight backtest — actual sleeve vs with-note replay
+      Highcharts.chart('hbChart', {
+        chart:{ type:'line', height:null, spacing:[14,10,6,6] },
+        xAxis:{ categories:hb.act.map((_,i)=>i), tickPositions:[0,12,24,36], labels:{ formatter(){ return ['3 yrs ago','2 yrs ago','1 yr ago','Today'][this.pos/12]; } } },
+        yAxis:{ title:{ text:null }, labels:{ format:'${value}M' } },
+        tooltip:{ shared:true, valuePrefix:'$', valueSuffix:'M', backgroundColor:'rgb(17,24,39)', borderColor:'rgba(75,85,99,0.7)', style:{ color:'rgb(249,250,251)', fontSize:'14px' } },
+        plotOptions:{ line:{ marker:{ enabled:false } } },
+        series:[
+          { name:'What happened', data:hb.act, color:'rgb(120,130,140)', dashStyle:'Dash', lineWidth:2.5 },
+          { name:'With the note', data:hb.note, color:P.br, lineWidth:4 },
+        ],
+      });
+      // Monte Carlo bell curves — with vs without the note
+      Highcharts.chart('mcChart', {
+        chart:{ type:'areaspline', height:null, spacing:[14,10,6,6] },
+        xAxis:{ tickInterval:10, title:{ text:'Simulated 1-yr return' }, labels:{ format:'{value}%' },
+          plotLines:[{ value:0, color:'rgba(75,85,99,0.7)', width:1 }] },
+        yAxis:{ title:{ text:'Frequency of outcomes' }, labels:{ enabled:false }, gridLineWidth:0 },
+        tooltip:{ shared:true, valueSuffix:'% of paths', backgroundColor:'rgb(17,24,39)', borderColor:'rgba(75,85,99,0.7)', style:{ color:'rgb(249,250,251)', fontSize:'14px' } },
+        plotOptions:{ areaspline:{ marker:{ enabled:false } } },
+        series:[
+          { name:'Without note', data:MC_X.map((x,i)=>[x, MC_BASE_DIST[i]]), color:'rgb(120,130,140)', dashStyle:'Dash', lineWidth:2.5, fillColor:'rgba(120,130,140,0.14)' },
+          { name:'With note', data:MC_X.map((x,i)=>[x, MC_OVER_DIST[i]]), color:P.br, lineWidth:4,
+            fillColor:{ linearGradient:{ x1:0,y1:0,x2:0,y2:1 }, stops:[[0,'rgba(52,211,153,0.32)'],[1,'rgba(52,211,153,0.02)']] } },
+        ],
+      });
+      // scenario comparison — CSS diverging bars (captures reliably everywhere)
+      document.getElementById('scenChart').innerHTML = scenBarsHTML(d.scen, P.accent);
+    } else {
+      document.getElementById('beforeChart').innerHTML = donutHTML(d.before);
+      document.getElementById('afterChart').innerHTML = donutHTML(d.after);
+      document.getElementById('beforeLegend').innerHTML = legendHTML(d.before);
+      document.getElementById('afterLegend').innerHTML = legendHTML(d.after);
+      const cats = ['Now','3 mo','6 mo','9 mo','12 mo'];
+      const lift = d.proj.after - d.proj.now;
+      const acted = [0,0.28,0.55,0.8,1].map(f => +(d.proj.now + lift*f).toFixed(3));
+      const base  = cats.map(()=>d.proj.now);
+      Highcharts.chart('projChart', {
+        chart:{ type:'area', height:null, spacing:[14,10,6,6] },
+        xAxis:{ categories:cats },
+        yAxis:{ title:{ text:null }, labels:{ format:'${value}M' } },
+        tooltip:{ shared:true, valuePrefix:'$', valueSuffix:'M', backgroundColor:'rgb(17,24,39)', borderColor:'rgba(75,85,99,0.7)', style:{ color:'rgb(249,250,251)' } },
+        plotOptions:{ area:{ marker:{ enabled:true, radius:4, fillColor:P.slideBg, lineWidth:2 } } },
+        series:[
+          { name:'No action', data:base, color:'rgb(120,130,140)', dashStyle:'Dash', lineWidth:2, fillColor:'transparent', marker:{ enabled:false } },
+          { name:'Act on insight', data:acted, color:P.accent, lineWidth:3,
+            fillColor:{ linearGradient:{ x1:0,y1:0,x2:0,y2:1 }, stops:[[0, P.accent.replace('rgb','rgba').replace(')',',0.35)')],[1, P.accent.replace('rgb','rgba').replace(')',',0)')]] },
+            marker:{ enabled:true, radius:4, fillColor:P.slideBg, lineColor:P.accent, lineWidth:2 } },
+        ],
+      });
+    }
+  }
+
+  // Render charts once Highcharts + DOM ready; re-render on slide change so a
+  // chart that was in a hidden slide sizes correctly when shown.
+  function boot(){ try { renderCharts(); } catch(e){ console.error(e); } }
+  if (document.readyState === 'complete') boot(); else window.addEventListener('load', boot);
+  // Re-render charts when a slide becomes active so charts that were laid out
+  // while their slide was hidden (zero-size) draw at the correct dimensions.
+  document.addEventListener('slidechange', () => { setTimeout(boot, 80); });
+  </script>
+</body>
+</html>

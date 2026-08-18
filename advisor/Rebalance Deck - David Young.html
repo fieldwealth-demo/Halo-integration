@@ -1,0 +1,480 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Portfolio Rebalancing Recommendation · David Young</title>
+  <link rel="stylesheet" href="../colors_and_type.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/highcharts@11.4.8/highcharts.js"></script>
+  <script src="deck-stage.js"></script>
+  <style>
+    html, body { background:#0a0e16; color:#f9fafb; font-family:'Inter', -apple-system, sans-serif; margin:0; padding:0; }
+    deck-stage > section {
+      width: 1920px; height: 1080px; box-sizing: border-box;
+      background: rgb(13, 22, 38); color: rgb(249,250,251);
+      padding: 80px 120px;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+    }
+    .slide-title {
+      font-family: 'Inter'; font-weight: 600; font-size: 32px;
+      color: rgb(249,250,251); letter-spacing: -0.01em;
+      padding-bottom: 18px; border-bottom: 1px solid rgba(75,85,99,0.5);
+      margin-bottom: 56px;
+    }
+    .slide-sub {
+      font-family: 'Inter'; font-size: 22px; color: rgb(209,213,219);
+      margin-top: -32px; margin-bottom: 44px; line-height: 1.5;
+    }
+    .accent-bar {
+      height: 6px; width: 80px; background: rgb(16,185,129); border-radius: 3px;
+      margin-bottom: 18px;
+    }
+    .pill-card {
+      padding: 28px 32px;
+      background: rgba(255,255,255,0.025);
+      border: 1px solid rgba(75,85,99,0.5);
+      border-radius: 14px;
+      position: relative;
+    }
+    .pill-card.green-stripe::before {
+      content: ''; position:absolute; top:-1px; left:-1px; right:-1px; height:6px;
+      background: rgb(16,185,129); border-radius: 14px 14px 0 0;
+    }
+    .pill-num {
+      font-weight: 700; font-size: 64px; line-height: 1;
+      color: rgba(75,85,99,0.7); font-variant-numeric: tabular-nums;
+    }
+    .alloc-card {
+      padding: 32px 36px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(75,85,99,0.4);
+      border-radius: 14px;
+    }
+    .alloc-label { font-size: 22px; color: rgb(209,213,219); margin-bottom: 8px; }
+    .alloc-pct   { font-weight: 700; font-size: 78px; color: rgb(249,250,251); letter-spacing:-0.02em; line-height:1; font-variant-numeric: tabular-nums; }
+    .alloc-delta { font-weight: 700; font-size: 22px; padding: 8px 14px; border-radius: 8px; }
+    .delta-pos { background: rgba(5,122,85,0.35); color: rgb(16,185,129); border: 1px solid rgba(5,122,85,0.55); }
+    .delta-neg { background: rgba(220,38,38,0.3);  color: rgb(248,113,113); border: 1px solid rgba(220,38,38,0.55); }
+  </style>
+</head>
+<body>
+  <deck-stage>
+
+    <!-- Slide 1: Cover -->
+    <section data-screen-label="01 Cover" style="padding:0; flex-direction:row;">
+      <div style="flex:1; min-width:0; position:relative; overflow:hidden;">
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&q=80" alt="Modern office buildings"
+             style="width:100%; height:100%; object-fit:cover;" />
+      </div>
+      <div style="width:920px; padding:120px 110px; display:flex; flex-direction:column; justify-content:space-between;">
+        <div></div>
+        <div>
+          <h1 style="font-weight:700; font-size:84px; line-height:1.05; letter-spacing:-0.03em; margin:0 0 24px;
+                     color:rgb(16,185,129);">
+            Portfolio<br/>Rebalancing<br/>Recommendation
+          </h1>
+          <div style="font-size:30px; color:rgb(209,213,219); margin-bottom:80px;">Opportunity Portfolio Review</div>
+          <div style="font-family:'Inter'; font-size:22px; color:rgb(229,231,235);">Prepared for David Young</div>
+        </div>
+        <div style="font-size:14px; color:rgb(107,114,128); line-height:1.5; max-width:620px;">
+          This recommendation is based on your stated investment objectives, risk tolerance, and current market conditions.<br/>
+          Please review carefully and contact me with any questions or concerns.
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 2: Why Portfolio Rebalancing Matters -->
+    <section data-screen-label="02 Why Rebalancing Matters">
+      <div class="slide-title">Why Portfolio Rebalancing Matters</div>
+      <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap: 56px 80px; margin-bottom: 56px;">
+        <!-- 1 -->
+        <div style="display:flex; gap:30px; align-items:flex-start;">
+          <div class="pill-num">1</div>
+          <div style="flex:1; padding-top:6px;">
+            <div style="font-weight:600; font-size:30px; color:rgb(249,250,251); margin-bottom:14px;">Risk Management</div>
+            <div style="font-size:20px; color:rgb(209,213,219); line-height:1.55;">Prevents portfolio drift that could expose you to unintended risk levels beyond your comfort zone</div>
+          </div>
+        </div>
+        <!-- 3 (column 2 row 1) -->
+        <div style="display:flex; gap:30px; align-items:flex-start;">
+          <div class="pill-num">3</div>
+          <div style="flex:1; padding-top:6px;">
+            <div style="font-weight:600; font-size:30px; color:rgb(249,250,251); margin-bottom:14px;">Disciplined Approach</div>
+            <div style="font-size:20px; color:rgb(209,213,219); line-height:1.55;">Maintains systematic buy-low, sell-high discipline by trimming overweight positions</div>
+          </div>
+        </div>
+        <!-- 2 -->
+        <div style="display:flex; gap:30px; align-items:flex-start;">
+          <div class="pill-num">2</div>
+          <div style="flex:1; padding-top:6px;">
+            <div style="font-weight:600; font-size:30px; color:rgb(249,250,251); margin-bottom:14px;">Return Optimization</div>
+            <div style="font-size:20px; color:rgb(209,213,219); line-height:1.55;">Ensures your asset allocation remains aligned with long-term growth objectives and market opportunities</div>
+          </div>
+        </div>
+        <!-- 4 -->
+        <div style="display:flex; gap:30px; align-items:flex-start;">
+          <div class="pill-num">4</div>
+          <div style="flex:1; padding-top:6px;">
+            <div style="font-weight:600; font-size:30px; color:rgb(249,250,251); margin-bottom:14px;">Tax Efficiency</div>
+            <div style="font-size:20px; color:rgb(209,213,219); line-height:1.55;">Optimizes after-tax returns through strategic harvesting and asset location strategies</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:auto;">
+        <div style="font-weight:600; font-size:26px; color:rgb(249,250,251); margin-bottom:8px;">September 2025 Market Assessment</div>
+        <div style="font-size:18px; color:rgb(209,213,219); margin-bottom:24px; line-height:1.5;">Current market conditions present unique opportunities for tactical rebalancing while maintaining strategic asset allocation discipline.</div>
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 18px;">
+          <div class="pill-card" style="padding:22px 24px;">
+            <div style="font-weight:600; font-size:22px; color:rgb(249,250,251); margin-bottom:10px;">Fixed Income:</div>
+            <div style="font-size:17px; color:rgb(209,213,219); line-height:1.45; margin-bottom:14px;">Yields stabilizing around 4.5-5% range</div>
+            <div style="font-size:17px; color:rgb(16,185,129); line-height:1.45;">Favorable for reduced allocation timing</div>
+          </div>
+          <div class="pill-card" style="padding:22px 24px;">
+            <div style="font-weight:600; font-size:22px; color:rgb(249,250,251); margin-bottom:10px;">Equity Markets:</div>
+            <div style="font-size:17px; color:rgb(209,213,219); line-height:1.45; margin-bottom:14px;">Moderate valuations with selective opportunities</div>
+            <div style="font-size:17px; color:rgb(16,185,129); line-height:1.45;">Supporting increased equity exposure</div>
+          </div>
+          <div class="pill-card" style="padding:22px 24px;">
+            <div style="font-weight:600; font-size:22px; color:rgb(249,250,251); margin-bottom:10px;">International:</div>
+            <div style="font-size:17px; color:rgb(209,213,219); line-height:1.45; margin-bottom:14px;">Emerging market recovery momentum</div>
+            <div style="font-size:17px; color:rgb(16,185,129); line-height:1.45;">Maintaining 20% allocation optimal</div>
+          </div>
+          <div class="pill-card" style="padding:22px 24px;">
+            <div style="font-weight:600; font-size:22px; color:rgb(249,250,251); margin-bottom:10px;">Volatility:</div>
+            <div style="font-size:17px; color:rgb(209,213,219); line-height:1.45; margin-bottom:14px;">VIX in normal range (15-20)</div>
+            <div style="font-size:17px; color:rgb(16,185,129); line-height:1.45;">Good environment for rebalancing</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 3: Recommended Portfolio Adjustments -->
+    <section data-screen-label="03 Recommended Adjustments">
+      <div class="slide-title">Recommended Portfolio Adjustments</div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr 100px 1fr; gap:32px; align-items:center; flex:1; padding-bottom:80px;">
+
+        <!-- Strategic Rationale -->
+        <div class="pill-card green-stripe" style="padding:40px 36px 36px;">
+          <div style="font-weight:600; font-size:28px; color:rgb(249,250,251); margin-bottom:24px;">Strategic Rationale</div>
+          <ul style="margin:0; padding-left:24px; color:rgb(209,213,219); font-size:18px; line-height:1.55; display:flex; flex-direction:column; gap:18px;">
+            <li>Reduce fixed income exposure from 22% to target 15% to optimize risk-adjusted returns</li>
+            <li>Maintain international equity exposure at 20% for optimal diversification benefits</li>
+            <li>Increase domestic equity allocation to 65% to better align with long-term growth objectives</li>
+            <li>Enhanced portfolio alignment with your moderate growth risk tolerance</li>
+            <li>Improved expected returns while maintaining prudent diversification</li>
+          </ul>
+        </div>
+
+        <!-- Current allocation column -->
+        <div>
+          <div style="text-align:center; font-size:18px; color:rgb(163,163,163); letter-spacing:0.04em; margin-bottom:14px;">Current Allocation</div>
+          <div style="display:flex; flex-direction:column; gap:18px;">
+            <div class="alloc-card">
+              <div class="alloc-label">Fixed Income</div>
+              <div class="alloc-pct">22%</div>
+            </div>
+            <div class="alloc-card">
+              <div class="alloc-label">Domestic Equity</div>
+              <div class="alloc-pct">58%</div>
+            </div>
+            <div class="alloc-card">
+              <div class="alloc-label">International Equity</div>
+              <div class="alloc-pct">20%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Arrow -->
+        <div style="display:flex; justify-content:center; align-items:center; height:100%;">
+          <svg width="100" height="320" viewBox="0 0 100 320" fill="none">
+            <path d="M 0 100 L 60 100 L 60 60 L 100 160 L 60 260 L 60 220 L 0 220 Z" fill="rgb(5,122,85)" />
+          </svg>
+        </div>
+
+        <!-- Recommended allocation column -->
+        <div>
+          <div style="text-align:center; font-size:18px; color:rgb(163,163,163); letter-spacing:0.04em; margin-bottom:14px;">Recommended Allocation</div>
+          <div style="display:flex; flex-direction:column; gap:18px;">
+            <div class="alloc-card" style="display:flex; align-items:center; justify-content:space-between; gap:14px;">
+              <div>
+                <div class="alloc-label">Fixed Income</div>
+                <div class="alloc-pct">15%</div>
+              </div>
+              <div class="alloc-delta delta-neg">-7%</div>
+            </div>
+            <div class="alloc-card" style="display:flex; align-items:center; justify-content:space-between; gap:14px;">
+              <div>
+                <div class="alloc-label">Domestic Equity</div>
+                <div class="alloc-pct">65%</div>
+              </div>
+              <div class="alloc-delta delta-pos">+7%</div>
+            </div>
+            <div class="alloc-card">
+              <div class="alloc-label">International Equity</div>
+              <div class="alloc-pct">20%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 4: Efficient Frontier -->
+    <section data-screen-label="04 Efficient Frontier">
+      <div class="slide-title">Efficient Frontier Analysis</div>
+      <div class="slide-sub">Optimizing your risk-adjusted returns through strategic rebalancing</div>
+      <div style="display:grid; grid-template-columns: 1.55fr 1fr; gap:42px; flex:1; min-height:0;">
+        <div class="pill-card" style="padding:28px;">
+          <div id="ef-chart" style="width:100%; height:100%;"></div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:24px;">
+          <div class="pill-card" style="padding:24px 26px;">
+            <div style="font-weight:600; font-size:22px; color:rgb(249,250,251); margin-bottom:18px;">Chart Legend</div>
+            <div style="display:flex; flex-direction:column; gap:12px; font-size:18px; color:rgb(209,213,219);">
+              <div style="display:flex; align-items:center; gap:12px;"><span style="width:14px;height:14px;border-radius:9999px;background:rgb(248,113,113);display:inline-block;"></span>Current Portfolio Position</div>
+              <div style="display:flex; align-items:center; gap:12px;"><span style="width:14px;height:14px;border-radius:9999px;background:rgb(16,185,129);display:inline-block;"></span>Rebalanced Portfolio Position</div>
+              <div style="display:flex; align-items:center; gap:12px;"><span style="width:14px;height:14px;border-radius:9999px;background:rgb(56,189,248);display:inline-block;"></span>Efficient Frontier Curve</div>
+            </div>
+          </div>
+          <div class="pill-card" style="padding:24px 26px; flex:1;">
+            <div style="font-weight:600; font-size:22px; color:rgb(249,250,251); margin-bottom:18px;">Portfolio Comparison</div>
+            <div style="display:grid; grid-template-columns: 1.4fr 1fr 1fr; gap:14px; padding-bottom:8px; border-bottom:1px solid rgba(75,85,99,0.5); font-size:13px; letter-spacing:0.1em; color:rgb(163,163,163); text-transform:uppercase;">
+              <div></div>
+              <div style="text-align:right; color:rgb(248,113,113);">CURRENT</div>
+              <div style="text-align:right; color:rgb(16,185,129);">REBALANCED</div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1.4fr 1fr 1fr; gap:14px; padding:18px 0; border-bottom:1px solid rgba(75,85,99,0.3); font-size:18px;">
+              <div style="color:rgb(209,213,219);">Expected Return</div>
+              <div style="text-align:right; font-variant-numeric:tabular-nums; font-weight:600;">7.2%</div>
+              <div style="text-align:right; font-variant-numeric:tabular-nums; font-weight:600;">8.8%</div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1.4fr 1fr 1fr; gap:14px; padding:18px 0; border-bottom:1px solid rgba(75,85,99,0.3); font-size:18px;">
+              <div style="color:rgb(209,213,219);">Standard Deviation</div>
+              <div style="text-align:right; font-variant-numeric:tabular-nums; font-weight:600;">11.8%</div>
+              <div style="text-align:right; font-variant-numeric:tabular-nums; font-weight:600;">10.2%</div>
+            </div>
+            <div style="display:grid; grid-template-columns: 1.4fr 1fr 1fr; gap:14px; padding:18px 0; font-size:18px;">
+              <div style="color:rgb(209,213,219);">Sharpe Ratio</div>
+              <div style="text-align:right; font-variant-numeric:tabular-nums; font-weight:600;">0.48</div>
+              <div style="text-align:right; font-variant-numeric:tabular-nums; font-weight:600;">0.67</div>
+            </div>
+          </div>
+          <div style="padding:20px 24px; background:rgba(5,122,85,0.12); border:1px solid rgba(5,122,85,0.5); border-radius:14px; text-align:center;">
+            <div style="font-size:13px; color:rgb(163,163,163); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:8px;">RISK-ADJUSTED IMPROVEMENT</div>
+            <div style="font-weight:700; font-size:54px; color:rgb(16,185,129); letter-spacing:-0.02em; margin-bottom:6px;">+40%</div>
+            <div style="font-size:16px; color:rgb(209,213,219);">Better return per unit of risk taken</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 5: Trade Cost Management -->
+    <section data-screen-label="05 Trade Cost Management">
+      <div class="slide-title">Trade Cost Management</div>
+      <div style="text-align:center; font-size:22px; color:rgb(209,213,219); line-height:1.5; max-width:1100px; margin: 0 auto 70px;">
+        Your rebalancing will be executed with careful attention to minimizing transaction costs while achieving optimal allocation targets.
+      </div>
+      <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:60px; align-items:start; flex:1;">
+        <div style="padding-left:40px;">
+          <div style="display:grid; grid-template-columns: 220px 160px 1fr; gap:24px; align-items:center; padding:22px 0; border-bottom:1px solid rgba(75,85,99,0.4); font-size:22px;">
+            <div style="color:rgb(209,213,219);">Commission Costs</div>
+            <div style="font-weight:700; color:rgb(249,250,251); font-variant-numeric:tabular-nums;">$0.00</div>
+            <div style="color:rgb(209,213,219);">Zero-commission platform trading</div>
+          </div>
+          <div style="display:grid; grid-template-columns: 220px 160px 1fr; gap:24px; align-items:center; padding:22px 0; border-bottom:1px solid rgba(75,85,99,0.4); font-size:22px;">
+            <div style="color:rgb(209,213,219);">Bid-Ask Spread</div>
+            <div style="font-weight:700; color:rgb(249,250,251); font-variant-numeric:tabular-nums;">~0.02%</div>
+            <div style="color:rgb(209,213,219);">ETF spreads on liquid holdings</div>
+          </div>
+          <div style="display:grid; grid-template-columns: 220px 160px 1fr; gap:24px; align-items:center; padding:22px 0; border-bottom:1px solid rgba(75,85,99,0.4); font-size:22px;">
+            <div style="color:rgb(209,213,219);">Market Impact</div>
+            <div style="font-weight:700; color:rgb(249,250,251);">Minimal</div>
+            <div style="color:rgb(209,213,219);">Gradual Execution over 2-3 days</div>
+          </div>
+          <div style="display:grid; grid-template-columns: 220px 160px 1fr; gap:24px; align-items:center; padding:22px 0; font-size:22px;">
+            <div style="color:rgb(209,213,219);">Total Estimated Cost</div>
+            <div style="font-weight:700; color:rgb(16,185,129); font-variant-numeric:tabular-nums;">~0.05%</div>
+            <div style="color:rgb(209,213,219);">Approximately $500 on $1M portfolio</div>
+          </div>
+        </div>
+        <div class="pill-card green-stripe" style="padding:40px 36px;">
+          <div style="font-weight:600; font-size:26px; color:rgb(249,250,251); margin-bottom:24px;">Cost Minimization Strategies:</div>
+          <ul style="margin:0; padding-left:24px; color:rgb(209,213,219); font-size:18px; line-height:1.55; display:flex; flex-direction:column; gap:18px;">
+            <li>Execute trades during high liquidity periods (10 AM - 3 PM EST)</li>
+            <li>Use limit orders to control execution prices</li>
+            <li>Split large orders to minimize market impact</li>
+            <li>Leverage tax-loss harvesting opportunities where applicable</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slide 6: Advisor + Strategy + Timeline + Next Steps -->
+    <section data-screen-label="06 Advisor and Next Steps" style="padding: 80px 100px;">
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 32px; height: 100%;">
+        <!-- Your Advisor -->
+        <div class="pill-card" style="padding:40px;">
+          <div style="font-weight:600; font-size:30px; padding-bottom:16px; border-bottom:1px solid rgba(75,85,99,0.5); margin-bottom:32px;">Your Advisor</div>
+          <div style="display:flex; gap:32px; align-items:center; margin-bottom:32px;">
+            <div style="width:130px; height:130px; border-radius:9999px; flex-shrink:0; overflow:hidden; background:linear-gradient(135deg, rgb(56,189,248), rgb(139,92,246)); display:flex; align-items:center; justify-content:center; font-weight:700; font-size:48px; color:#fff;">SB</div>
+            <div>
+              <div style="font-weight:700; font-size:36px; color:rgb(249,250,251); letter-spacing:-0.01em; margin-bottom:8px;">Sarah Berry, CFA</div>
+              <div style="font-size:20px; color:rgb(209,213,219); margin-bottom:14px;">Senior Wealth Advisor</div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <span style="display:inline-flex; padding:6px 14px; border-radius:9999px; background:rgba(5,122,85,0.22); color:rgb(16,185,129); border:1px solid rgba(5,122,85,0.5); font-weight:600; font-size:14px;">15+ Years Experience</span>
+                <span style="display:inline-flex; padding:6px 14px; border-radius:9999px; background:rgba(5,122,85,0.22); color:rgb(16,185,129); border:1px solid rgba(5,122,85,0.5); font-weight:600; font-size:14px;">CFP Professional</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; gap:48px; font-size:20px; color:rgb(209,213,219);">
+            <div style="display:inline-flex; align-items:center; gap:12px;">
+              <span style="width:32px; height:32px; border-radius:9999px; background:rgba(255,255,255,0.05); display:inline-flex; align-items:center; justify-content:center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </span>
+              (555) 123-4567
+            </div>
+            <div style="display:inline-flex; align-items:center; gap:12px;">
+              <span style="width:32px; height:32px; border-radius:9999px; background:rgba(255,255,255,0.05); display:inline-flex; align-items:center; justify-content:center;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </span>
+              sberry@field.com
+            </div>
+          </div>
+        </div>
+
+        <!-- Strategy -->
+        <div class="pill-card" style="padding:40px;">
+          <div style="font-weight:600; font-size:30px; padding-bottom:16px; border-bottom:1px solid rgba(75,85,99,0.5); margin-bottom:32px;">Strategy</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:28px; font-size:17px; color:rgb(209,213,219); line-height:1.55;">
+            <div>Reduce fixed income exposure from 22% to target 15% to optimize risk-adjusted returns</div>
+            <div>Maintain international equity exposure at 20% for optimal diversification benefits</div>
+            <div>Increase domestic equity allocation to 65% to better align with long-term growth objectives</div>
+            <div>Enhanced portfolio alignment with your moderate growth risk tolerance</div>
+          </div>
+        </div>
+
+        <!-- Implementation Timeline -->
+        <div class="pill-card" style="padding:40px;">
+          <div style="font-weight:600; font-size:30px; padding-bottom:16px; border-bottom:1px solid rgba(75,85,99,0.5); margin-bottom:32px;">Implementation Timeline</div>
+          <div style="display:flex; flex-direction:column; gap:24px;">
+            <div style="display:flex; gap:18px; align-items:flex-start;">
+              <span style="width:14px; height:14px; border-radius:9999px; background:rgb(16,185,129); margin-top:8px; flex-shrink:0;"></span>
+              <div>
+                <div style="font-weight:600; font-size:20px; color:rgb(249,250,251);">Immediate (0-30 days)</div>
+                <div style="font-size:17px; color:rgb(209,213,219); margin-top:4px;">Review and approve the recommended allocation changes</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:18px; align-items:flex-start;">
+              <span style="width:14px; height:14px; border-radius:9999px; background:rgb(16,185,129); margin-top:8px; flex-shrink:0;"></span>
+              <div>
+                <div style="font-weight:600; font-size:20px; color:rgb(249,250,251);">Short-term (1-3 months)</div>
+                <div style="font-size:17px; color:rgb(209,213,219); margin-top:4px;">Execute rebalancing trades during optimal market conditions</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:18px; align-items:flex-start;">
+              <span style="width:14px; height:14px; border-radius:9999px; background:rgb(16,185,129); margin-top:8px; flex-shrink:0;"></span>
+              <div>
+                <div style="font-weight:600; font-size:20px; color:rgb(249,250,251);">Medium-term (3-6 months)</div>
+                <div style="font-size:17px; color:rgb(209,213,219); margin-top:4px;">Monitor portfolio performance over the next 30 days</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:18px; align-items:flex-start;">
+              <span style="width:14px; height:14px; border-radius:9999px; background:rgb(16,185,129); margin-top:8px; flex-shrink:0;"></span>
+              <div>
+                <div style="font-weight:600; font-size:20px; color:rgb(249,250,251);">Long-term (6-12 months)</div>
+                <div style="font-size:17px; color:rgb(209,213,219); margin-top:4px;">Complete implementation and conduct comprehensive performance review</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Next Steps -->
+        <div class="pill-card" style="padding:40px; display:flex; flex-direction:column;">
+          <div style="font-weight:600; font-size:30px; padding-bottom:16px; border-bottom:1px solid rgba(75,85,99,0.5); margin-bottom:32px;">Next Steps</div>
+          <div style="font-size:18px; color:rgb(209,213,219); line-height:1.6; flex:1;">
+            Our expert team will manage the entire transition process, ensuring a seamless shift toward your optimized allocation without requiring your ongoing involvement. Your signature is all we need to begin maximizing your returns while minimizing risk.
+          </div>
+          <div style="display:flex; gap:14px; margin-top:32px;">
+            <button style="padding:14px 28px; background:rgb(5,122,85); border:1px solid rgb(16,185,129); color:#fff; border-radius:8px; font-weight:600; font-size:18px; cursor:pointer; box-shadow: 0 4px 12px rgba(5,122,85,0.4);">Get Started</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </deck-stage>
+
+  <!-- Efficient Frontier chart render -->
+  <script>
+    (function () {
+      function renderEf() {
+        if (typeof Highcharts === 'undefined' || !document.getElementById('ef-chart')) {
+          return setTimeout(renderEf, 100);
+        }
+        // Apply field theme manually since HC.jsx is JSX
+        Highcharts.setOptions({
+          colors: ['rgb(56,189,248)','rgb(16,185,129)','rgb(248,113,113)'],
+          chart:{ backgroundColor:'transparent', style:{ fontFamily:'Inter, sans-serif' } },
+          title:{ style:{ color:'rgb(249,250,251)' } },
+          xAxis:{ gridLineColor:'rgba(75,85,99,0.25)', lineColor:'rgba(75,85,99,0.5)', tickColor:'rgba(75,85,99,0.5)', labels:{ style:{ color:'rgb(163,163,163)', fontSize:'14px' } }, title:{ style:{ color:'rgb(163,163,163)', fontSize:'14px' } } },
+          yAxis:{ gridLineColor:'rgba(75,85,99,0.25)', lineColor:'rgba(75,85,99,0.5)', tickColor:'rgba(75,85,99,0.5)', labels:{ style:{ color:'rgb(163,163,163)', fontSize:'14px' } }, title:{ style:{ color:'rgb(163,163,163)', fontSize:'14px' } } },
+          tooltip:{ backgroundColor:'rgb(17,24,39)', borderColor:'rgb(75,85,99)', style:{ color:'rgb(229,231,235)' } },
+          legend:{ itemStyle:{ color:'rgb(229,231,235)' } },
+          credits:{ enabled:false },
+        });
+
+        Highcharts.chart('ef-chart', {
+          chart:{ type:'spline', backgroundColor:'transparent' },
+          title:{ text:null },
+          xAxis:{ title:{ text:'RISK (STANDARD DEVIATION) →' }, min:6, max:16, tickInterval:2, labels:{ format:'{value}%' } },
+          yAxis:{ title:{ text:'EXPECTED RETURN →' }, min:4, max:13, tickInterval:2, labels:{ format:'{value}%' } },
+          legend:{ enabled:false },
+          tooltip:{ enabled:true },
+          plotOptions:{
+            spline:{ marker:{ enabled:false }, lineWidth:3, color:'rgb(16,185,129)' },
+            scatter:{ marker:{ symbol:'circle', radius:10, lineWidth:2, lineColor:'rgb(13,22,38)' } },
+          },
+          series:[
+            // Efficient frontier curve
+            { type:'spline', name:'Efficient Frontier',
+              data:[[6,4.8],[7,6.2],[8,7.5],[9,8.6],[10,9.5],[11,10.5],[12,11.2],[13,11.6],[14,11.9],[15,12.0],[16,12.1]],
+              color:'rgb(16,185,129)',
+              fillOpacity:0.18,
+              type:'areaspline',
+              fillColor:{ linearGradient:{ x1:0,x2:0,y1:0,y2:1 }, stops:[[0,'rgba(16,185,129,0.35)'],[1,'rgba(16,185,129,0.02)']] },
+              enableMouseTracking:false,
+            },
+            // Inefficient cloud points
+            { type:'scatter', name:'Other portfolios',
+              data:[[10.2,6.4],[11.5,5.8],[12.3,7.1],[13.5,6.8],[12.8,8.4],[10.8,5.4]],
+              color:'rgba(107,114,128,0.6)',
+              marker:{ radius:6, lineWidth:0 },
+              enableMouseTracking:false,
+            },
+            // Current portfolio (red)
+            { type:'scatter', name:'Current Portfolio',
+              data:[{ x:11.8, y:7.2, dataLabels:{ enabled:true, format:'<b>Current</b><br/>Portfolio', style:{ fontSize:'15px', fontWeight:'600', color:'rgb(249,250,251)', textOutline:'none' }, align:'left', verticalAlign:'middle', x:18 } }],
+              color:'rgb(248,113,113)',
+              marker:{ radius:11, lineColor:'rgb(13,22,38)', lineWidth:3 },
+            },
+            // Rebalanced portfolio (green)
+            { type:'scatter', name:'Rebalanced Portfolio',
+              data:[{ x:10.2, y:8.8, dataLabels:{ enabled:true, format:'<b>Rebalanced</b><br/>Portfolio', style:{ fontSize:'15px', fontWeight:'600', color:'rgb(249,250,251)', textOutline:'none' }, align:'right', verticalAlign:'top', y:-22, x:-4 } }],
+              color:'rgb(16,185,129)',
+              marker:{ radius:11, lineColor:'rgb(13,22,38)', lineWidth:3 },
+            },
+            // Connecting dashed line
+            { type:'line', data:[[11.8,7.2],[10.2,8.8]],
+              color:'rgba(229,231,235,0.55)', lineWidth:2, dashStyle:'Dash',
+              marker:{ enabled:false }, enableMouseTracking:false,
+            },
+          ],
+        });
+      }
+      renderEf();
+    })();
+  </script>
+</body>
+</html>
