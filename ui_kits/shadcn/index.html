@@ -1,0 +1,79 @@
+<!doctype html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Field Shadcn — UI Kit Demo</title>
+  <link rel="stylesheet" href="../../colors_and_type.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+    html, body { margin:0; padding:0; color: rgb(249,250,251); min-height: 100vh; font-family: Inter, sans-serif; }
+    body { background-color: rgb(14,26,42); background-image: var(--app-bg-image); background-attachment: fixed; }
+    * { font-family: Inter, sans-serif !important; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+  <script src="https://kit.fontawesome.com/a08997c4a1.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" src="faCls.jsx"></script>
+  <script type="text/babel" src="Button.jsx"></script>
+  <script type="text/babel" src="Form.jsx"></script>
+  <script type="text/babel" src="Card.jsx"></script>
+  <script type="text/babel" src="Table.jsx"></script>
+  <script type="text/babel" src="Chart.jsx"></script>
+  <script type="text/babel" src="Sidebar.jsx"></script>
+  <script type="text/babel" src="Dashboard.jsx"></script>
+  <script type="text/babel" src="Login.jsx"></script>
+  <script type="text/babel">
+    function App() {
+      const [screen, setScreen] = React.useState(localStorage.getItem('fs_screen') || 'login');
+      const [active, setActive] = React.useState('dashboard');
+
+      React.useEffect(() => { localStorage.setItem('fs_screen', screen); }, [screen]);
+
+      const nav = [
+        { id:'dashboard', label:'Dashboard', icon:'layout-dashboard' },
+        { id:'tasks', label:'Tasks', icon:'check-square', badge: 5 },
+        { id:'playground', label:'Playground', icon:'terminal' },
+        { id:'billing', label:'Billing', icon:'credit-card' },
+        { id:'team', label:'Team', icon:'users' },
+        { id:'settings', label:'Settings', icon:'settings' },
+      ];
+
+      if (screen === 'login') {
+        return <Login onLogin={() => setScreen('app')} />;
+      }
+
+      return (
+        <div style={{ display:'flex', minHeight:'100vh', background:'transparent' }}>
+          <Sidebar items={nav} active={active} onSelect={setActive} />
+          <div style={{ flex:1, display:'flex', flexDirection:'column', minWidth:0 }}>
+            <Topbar
+              breadcrumbs={['Field Inc.', 'Building Your Application', active[0].toUpperCase() + active.slice(1)]}
+              actions={
+                <>
+                  <Button variant="ghost" size="icon" icon="bell" />
+                  <Button variant="outline" size="sm" onClick={() => setScreen('login')}>Sign out</Button>
+                </>
+              }
+            />
+            <main style={{ flex:1, overflow:'auto' }}>
+              {active === 'dashboard' && <Dashboard />}
+              {active !== 'dashboard' && (
+                <div style={{ padding: 40, color:'rgb(163,163,163)', fontFamily:'Inter' }}>
+                  <h2 style={{ fontFamily:'Inter', color:'rgb(249,250,251)' }}>{active[0].toUpperCase() + active.slice(1)}</h2>
+                  <p>Demo screen. Use Dashboard for the full composition.</p>
+                </div>
+              )}
+            </main>
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
