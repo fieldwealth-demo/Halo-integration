@@ -24,7 +24,7 @@
 function Topbar({
   title,
   subtitle,
-  searchPlaceholder = 'Search',
+  searchPlaceholder = null,
   onBack,
   actions,
   activeSelections,
@@ -58,15 +58,17 @@ function Topbar({
         </div>
 
         <div style={{ flex:1, display:'flex', justifyContent:'center', minWidth:0 }}>
-          <div style={{
-            display:'flex', alignItems:'center', gap:8, height:32, width:'100%', maxWidth:420, padding:'0 12px',
-            borderRadius:8, background:'rgba(0,0,0,0.35)', border:'1px solid rgba(75,85,99,0.5)',
-            fontFamily:'Inter', fontSize:12, color:'rgb(163,163,163)',
-            overflow:'hidden', whiteSpace:'nowrap',
-          }}>
-            <i className="fa-solid fa-magnifying-glass" style={{ fontSize:11, flexShrink:0 }} />
-            <span style={{ overflow:'hidden', textOverflow:'ellipsis' }}>{searchPlaceholder}</span>
-          </div>
+          {searchPlaceholder && (
+            <div style={{
+              display:'flex', alignItems:'center', gap:8, height:32, width:'100%', maxWidth:420, padding:'0 12px',
+              borderRadius:8, background:'rgba(0,0,0,0.35)', border:'1px solid rgba(75,85,99,0.5)',
+              fontFamily:'Inter', fontSize:12, color:'rgb(163,163,163)',
+              overflow:'hidden', whiteSpace:'nowrap',
+            }}>
+              <i className="fa-solid fa-magnifying-glass" style={{ fontSize:11, flexShrink:0 }} />
+              <span style={{ overflow:'hidden', textOverflow:'ellipsis' }}>{searchPlaceholder}</span>
+            </div>
+          )}
         </div>
 
         {actions && <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>{actions}</div>}
