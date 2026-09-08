@@ -1,4 +1,21 @@
-/* Halo integration tiles: Portfolio Lifecycle, Journal (+ article page), Watchlist page. */
+/* Halo integration tiles: Portfolio Lifecycle, Journal (+ article page), Watchlist page.
+   The three full pages are reachable only from their dashboard tiles ("See more"),
+   so each one carries a back-to-dashboard control. */
+function BackToDashboard() {
+  return (
+    <button onClick={() => window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'dashboard' } }))}
+      style={{
+        height:30, padding:'0 12px 0 10px', borderRadius:8, cursor:'pointer', marginBottom:16,
+        background:'rgba(255,255,255,0.04)', border:'1px solid rgb(75,85,99)', color:'rgb(229,231,235)',
+        fontFamily:'Inter', fontSize:12, display:'inline-flex', alignItems:'center', gap:8,
+      }}
+      onMouseEnter={(e)=>{ e.currentTarget.style.borderColor='rgb(5,122,85)'; e.currentTarget.style.color='rgb(94,214,164)'; }}
+      onMouseLeave={(e)=>{ e.currentTarget.style.borderColor='rgb(75,85,99)'; e.currentTarget.style.color='rgb(229,231,235)'; }}>
+      <i className="fa-solid fa-chevron-left" style={{ fontSize:10 }} /> Back to dashboard
+    </button>
+  );
+}
+
 const haloTone = {
   warning: { bg:'rgba(234,179,8,0.14)', fg:'rgb(253,224,71)', ring:'rgba(234,179,8,0.45)' },
   success: { bg:'rgba(5,122,85,0.18)',  fg:'rgb(52,211,153)', ring:'rgba(5,122,85,0.5)' },
@@ -153,6 +170,7 @@ function LifecyclePage() {
   ];
   return (
     <div style={{ padding:'24px 32px 56px', fontFamily:'Inter' }}>
+      <BackToDashboard />
       <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:16, marginBottom:16 }}>
         {kpis.map(([lbl, val, sub], i) => (
           <div key={lbl} style={{ ...CARD, padding:'14px 18px' }}>
@@ -410,6 +428,8 @@ function JournalArticlePage({ articleId, onBack }) {
     <div style={{ padding:'28px 32px 64px', fontFamily:'Inter' }}>
       <div style={{ maxWidth:1060, margin:'0 auto' }}>
         <div style={{ display:'flex', alignItems:'center', gap:8, fontSize:12.5, fontFamily:'Inter', marginBottom:22 }}>
+          <a onClick={() => window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'dashboard' } }))} style={{ color:'rgb(5,122,85)', fontWeight:500, cursor:'pointer' }}>Dashboard</a>
+          <i className="fa-solid fa-chevron-right" style={{ width:10, height:10, color:'rgb(107,114,128)' }} />
           <a onClick={onBack} style={{ color:'rgb(5,122,85)', fontWeight:500, cursor:'pointer' }}>Journals</a>
           <i className="fa-solid fa-chevron-right" style={{ width:10, height:10, color:'rgb(107,114,128)' }} />
           <span style={{ color:'rgb(163,163,163)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:420 }}>{a.t}</span>
@@ -582,6 +602,7 @@ function WatchlistPage() {
   const SUB = { fontFamily:'Inter', fontSize:12, color:'rgb(163,163,163)' };
   return (
     <div style={{ padding:'28px 32px 56px', fontFamily:'Inter' }}>
+      <BackToDashboard />
       <div style={{ display:'flex', alignItems:'baseline', gap:12, marginBottom:14 }}>
         <div style={HEAD}>Watchlist</div>
         <span style={SUB}>{watchedRows.length} notes you're watching</span>
@@ -643,6 +664,8 @@ function NotePostPage({ noteId, onBack }) {
     <div style={{ padding:'28px 32px 64px', fontFamily:'Inter' }}>
       <div style={{ maxWidth:860, margin:'0 auto' }}>
         <div style={{ display:'flex', alignItems:'center', gap:8, fontSize:12.5, marginBottom:22 }}>
+          <a onClick={() => window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'dashboard' } }))} style={{ color:'rgb(5,122,85)', fontWeight:500, cursor:'pointer' }}>Dashboard</a>
+          <i className="fa-solid fa-chevron-right" style={{ width:10, height:10, color:'rgb(107,114,128)' }} />
           <a onClick={onBack} style={{ color:'rgb(5,122,85)', fontWeight:500, cursor:'pointer' }}>Watchlist</a>
           <i className="fa-solid fa-chevron-right" style={{ width:10, height:10, color:'rgb(107,114,128)' }} />
           <span style={{ color:'rgb(163,163,163)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:460 }}>{r.post}</span>
@@ -680,6 +703,7 @@ function JournalsPage() {
   const more = JOURNAL_ARTICLES.slice(4);
   return (
     <div style={{ padding:'28px 32px 56px', fontFamily:'Inter' }}>
+      <BackToDashboard />
       <div style={{ display:'grid', gridTemplateColumns:'1.2fr 1fr', gap:16, marginBottom:16 }}>
         <div style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgb(75,85,99)', borderRadius:12, overflow:'hidden', display:'flex', flexDirection:'column' }}
           onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(5,122,85)'; }}
@@ -738,4 +762,4 @@ function JournalsPage() {
   );
 }
 
-Object.assign(window, { PortfolioLifecycle, JournalTile, JournalArticlePage, WatchlistPage, JournalsPage, NotePostPage, WatchlistTile, LifecyclePage });
+Object.assign(window, { PortfolioLifecycle, JournalTile, JournalArticlePage, WatchlistPage, JournalsPage, NotePostPage, WatchlistTile, LifecyclePage, JOURNAL_ARTICLES, WATCHLIST_ROWS });

@@ -171,23 +171,6 @@
 
   function load() {
     if (loadP) return loadP;
-    // Inline-state fallback: a bundled/standalone page carries the sidecar
-    // as <script type="application/json" id="__image_slots_state">.
-    const inlineEl = document.getElementById('__image_slots_state');
-    if (inlineEl) {
-      try {
-        const j = JSON.parse(inlineEl.textContent);
-        if (j && typeof j === 'object') {
-          const merged = Object.assign({}, j, slots);
-          tombstones.forEach((id) => { delete merged[id]; });
-          slots = merged;
-        }
-      } catch (e) {}
-      loaded = true;
-      subs.forEach((fn) => { try { fn(); } catch (e) {} });
-      loadP = Promise.resolve();
-      return loadP;
-    }
     loadP = fetch(STATE_FILE)
       .then((r) => (r.ok ? r.json() : null))
       .then((j) => {

@@ -357,6 +357,46 @@ function CashPanel({ prompt, onClient }) {
   );
 }
 
+function InsightPanel({ prompt, onClient }) {
+  const rows = (window.FIELD_INSIGHTS || []).slice(0, 4);
+  const build = (id) => window.dispatchEvent(new CustomEvent('insight:open', { detail:{ id } }));
+  return (
+    <AipPanelShell prompt={prompt}
+      summary={<>Connected providers have pushed <b style={{ color:AIP_INK }}>{(window.FIELD_INSIGHTS||[]).length} insights</b> into your book. These four rank highest on suitability fit and estimated value.</>}>
+      <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+        {rows.map(r => (
+          <AipClientRow key={r.id} onClick={()=>build(r.id)}>
+            {(hover) => (
+              <div style={{ display:'grid', gridTemplateColumns:'34px 1fr auto auto 14px', alignItems:'center', gap:13, padding:'11px 14px' }}>
+                <AipAvatar init={r.initials} bg={AIP_BRAND_LT} />
+                <div style={{ minWidth:0 }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:2 }}>
+                    <span style={{ fontFamily:'Inter', fontSize:13, fontWeight:500, color:AIP_INK }}>{r.client}</span>
+                    <span style={{ fontFamily:'Inter', fontSize:9.5, color:AIP_MUTED, padding:'1px 5px', border:`1px solid ${AIP_LINE}`, borderRadius:3 }}>{r.provider}</span>
+                  </div>
+                  <div style={{ fontFamily:'Inter', fontSize:11, color:AIP_MUTED }}>
+                    {r.signal}<span style={{ color:AIP_DIM, margin:'0 6px' }}>·</span>{r.product} · {r.term}
+                  </div>
+                </div>
+                <div style={{ textAlign:'right' }}>
+                  <div style={{ fontFamily:'Inter', fontSize:9.5, color:AIP_DIM, textTransform:'uppercase', letterSpacing:'0.06em', marginBottom:2 }}>Est. value</div>
+                  <div style={{ fontFamily:'Inter Display, Inter', fontSize:14, fontWeight:500, color:AIP_INK }}>{r.est}</div>
+                </div>
+                <span style={{ fontFamily:'Inter', fontSize:11, color:AIP_INK_2 }}>Fit {r.fit}</span>
+                <i className="fa-solid fa-chevron-right" style={{ fontSize:10, color: hover ? AIP_BRAND_LT : AIP_DIM, transform: hover ? 'translateX(2px)' : 'none', transition:'transform .14s ease, color .14s ease' }} />
+              </div>
+            )}
+          </AipClientRow>
+        ))}
+      </div>
+      <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
+        <AipAction icon="file-lines" label="Build the top proposal" sub={rows[0] ? `${rows[0].client} · ${rows[0].product}` : ''} primary onClick={()=>rows[0] && build(rows[0].id)} />
+        <AipAction icon="lightbulb" label="Open the insights page" sub="Filter by provider or type" onClick={()=>window.dispatchEvent(new CustomEvent('insights:scan'))} />
+      </div>
+    </AipPanelShell>
+  );
+}
+
 /* =====================================================================
    FLOW REGISTRY + routing
    ===================================================================== */
@@ -387,6 +427,14 @@ const AIP_FLOWS = {
     ],
     Panel: DriftPanel,
   },
+  insight: {
+    tools: [
+      { tool:'providers.sync', label:'Syncing connected provider feeds', detail:'Halo · BlackRock · PIMCO · Blackstone · Nuveen' },
+      { tool:'book.match',     label:'Matching insights to households',  detail:'Held and held-away positions' },
+      { tool:'rank.fit',       label:'Ranking by suitability fit',       detail:'Weighted by scope & estimated value', long:true },
+    ],
+    Panel: InsightPanel,
+  },
   cash: {
     tools: [
       { tool:'positions.cash',  label:'Pulling cash balances',          detail:'Sweep + money-market sleeves' },
@@ -401,6 +449,7 @@ function aipPickFlow(text) {
   const t = (text || '').toLowerCase();
   if (t.includes('david young') || t.includes('brief') || t.includes('prep') || (t.includes('meeting') && !t.includes('haven'))) return 'brief';
   if (t.includes('drift') || t.includes('rebalance') || t.includes('5%') || t.includes('allocation') || t.includes('off-model')) return 'drift';
+  if (t.includes('insight') || t.includes('protection') || t.includes('proposal') || t.includes('provider') || t.includes('halo') || t.includes('concentrat')) return 'insight';
   if (t.includes('cash') || t.includes('deploy') || t.includes('idle') || t.includes('invest')) return 'cash';
   return 'overdue';
 }
@@ -563,12 +612,7 @@ function AipPill({ children, onClick, active }) {
    MAIN PAGE
    ===================================================================== */
 
-const AIP_SUGGESTIONS = [
-  { icon:'phone',          text:"Which clients haven't I talked to in a while?" },
-  { icon:'file-lines',     text:'Prepare a meeting brief for David Young' },
-  { icon:'arrow-trend-up', text:'Which portfolios drifted over 5% this quarter?' },
-  { icon:'droplet',        text:'Who has cash to deploy right now?' },
-];
+const AIP_SUGGESTIONS = [];
 
 function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
   const [active, setActive]   = React.useState(false);
@@ -598,6 +642,20 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
 
   const handleClient = (name) => { if (onOpenClient) onOpenClient(name); };
 
+  const [scrolled, setScrolled] = React.useState(false);
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 190);
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  React.useEffect(() => {
+    const onAsk = (e) => { const t = (e.detail || {}).text; if (t) submit(t); };
+    window.addEventListener('ai:ask', onAsk);
+    return () => window.removeEventListener('ai:ask', onAsk);
+  }, []);
+
   React.useEffect(() => {
     if (!scrollerRef.current) return;
     const el = scrollerRef.current;
@@ -610,11 +668,49 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
   /* ---------- Greeting (empty) state ---------- */
   if (!active) {
     return (
-      <main style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:'0 40px 96px', gap:30, background:'transparent' }}>
+      <main style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', padding:'48px 40px 96px', gap:28, background:'transparent' }}>
         <style>{aipKeyframes}</style>
+        <div style={{
+          position:'sticky', top:56, zIndex:20, width:'auto', maxWidth:'none', alignSelf:'stretch',
+          display:'flex', alignItems:'center', gap:16, padding:'10px 16px',
+          background:'rgba(16,25,40,0.86)', backdropFilter:'blur(14px)', WebkitBackdropFilter:'blur(14px)',
+          borderBottom:`1px solid ${AIP_LINE}`, margin:'-48px -40px -57px', height:57, boxSizing:'border-box',
+          opacity: scrolled ? 1 : 0, pointerEvents: scrolled ? 'auto' : 'none',
+          transform: scrolled ? 'translateY(0)' : 'translateY(-6px)',
+          transition:'opacity 180ms ease, transform 180ms ease',
+        }}>
+          <div style={{ display:'inline-flex', alignItems:'center', gap:9, flexShrink:0 }}>
+            <i className="fa-solid fa-house" style={{ fontSize:12, color:AIP_BRAND_LT }} />
+            <span style={{ fontFamily:'Inter', fontSize:13, fontWeight:600, color:AIP_INK }}>Your day</span>
+          </div>
+          <div style={{ flex:1, display:'flex', justifyContent:'center', minWidth:0 }}>
+            <div style={{
+              display:'flex', alignItems:'center', gap:10, width:'100%', maxWidth:470,
+              padding:'0 8px 0 12px', height:34, borderRadius:9999,
+              background:'rgba(255,255,255,0.05)', border:`1px solid ${AIP_LINE}`,
+            }}>
+              <i className="fa-solid fa-wand-magic-sparkles" style={{ fontSize:12, color:AIP_BRAND_LT, flexShrink:0 }} />
+              <input value={msg} onChange={e=>setMsg(e.target.value)}
+                onKeyDown={e=>{ if(e.key==='Enter'){ e.preventDefault(); submit(msg); } }}
+                placeholder="Ask about your book…"
+                style={{ flex:1, minWidth:0, background:'transparent', border:'none', color:AIP_INK, fontFamily:'Inter', fontSize:12.5, outline:'none' }} />
+              <button onClick={()=>submit(msg)} title="Send" style={{ width:24, height:24, borderRadius:9999, border:'none', background: msg.trim() ? AIP_BRAND : 'rgba(5,122,85,0.3)', color:'#fff', cursor: msg.trim() ? 'pointer' : 'default', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+                <i className="fa-solid fa-arrow-up" style={{ fontSize:10 }} />
+              </button>
+            </div>
+          </div>
+          <button onClick={()=>window.scrollTo({ top:0, behavior:'smooth' })} style={{
+            height:30, padding:'0 12px', borderRadius:9999, cursor:'pointer', flexShrink:0,
+            background:'rgba(255,255,255,0.04)', border:`1px solid ${AIP_LINE}`, color:AIP_INK_2,
+            fontFamily:'Inter', fontSize:12, display:'inline-flex', alignItems:'center', gap:7,
+          }}>
+            <i className="fa-solid fa-arrow-up" style={{ fontSize:10 }} /> Top
+          </button>
+        </div>
+        <div style={{ minHeight:'calc(42vh - 250px)' }}></div>
         <div style={{ textAlign:'center' }}>
           <h1 style={{ fontFamily:'Inter Display, Inter', fontWeight:500, fontSize:46, color:AIP_INK, margin:0, letterSpacing:'-0.02em' }}>How can I help, Avery?</h1>
-          <p style={{ fontFamily:'Inter', fontSize:14, color:AIP_MUTED, marginTop:12, lineHeight:1.55, maxWidth:480 }}>
+          <p style={{ fontFamily:'Inter', fontSize:14, color:AIP_MUTED, margin:'12px auto 0', lineHeight:1.55, maxWidth:480 }}>
             I can pull from your book, prep meeting materials, flag portfolio drift, and draft client outreach.
           </p>
         </div>
@@ -635,19 +731,9 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
           </div>
         </div>
 
-        <div style={{ display:'flex', flexDirection:'column', gap:10, alignItems:'center' }}>
-          {AIP_SUGGESTIONS.map((s, i) => (
-            <button key={i} onClick={()=>submit(s.text)} className="aip-suggest" style={{
-              height:34, padding:'0 16px', borderRadius:9999,
-              background:'rgba(255,255,255,0.035)', border:`1px solid ${AIP_LINE}`,
-              color:'rgb(209,213,219)', fontFamily:'Inter', fontSize:12.5, fontWeight:400, cursor:'pointer',
-              display:'inline-flex', alignItems:'center', gap:9,
-              transition:'background 150ms ease, border-color 150ms ease, color 150ms ease',
-            }}>
-              <i className={`fa-solid fa-${s.icon}`} style={{ fontSize:11, color:AIP_BRAND_LT }} />
-              {s.text}
-            </button>
-          ))}
+
+        <div style={{ width:920, maxWidth:'100%', marginTop:'clamp(24px, 9vh, 90px)' }}>
+          {window.AipHomeFeed ? React.createElement(window.AipHomeFeed) : null}
         </div>
       </main>
     );
