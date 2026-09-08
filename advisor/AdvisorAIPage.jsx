@@ -642,12 +642,21 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
 
   const handleClient = (name) => { if (onOpenClient) onOpenClient(name); };
 
+  const sentinelRef = React.useRef(null);
   const [scrolled, setScrolled] = React.useState(false);
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 190);
-    window.addEventListener('scroll', onScroll, { passive:true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
+    // Neither scroll events nor IntersectionObserver fire reliably in every
+    // host, but scrollTop always reads true — poll it on a rAF loop and only
+    // set state when the boolean flips.
+    let raf = 0, last = null;
+    const tick = () => {
+      const y = window.scrollY || (document.scrollingElement || document.documentElement).scrollTop || 0;
+      const next = y > 190;
+      if (next !== last) { last = next; setScrolled(next); }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, []);
 
   React.useEffect(() => {
@@ -699,7 +708,7 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
               </button>
             </div>
           </div>
-          <button onClick={()=>window.scrollTo({ top:0, behavior:'smooth' })} style={{
+          <button onClick={()=>{ const s=document.scrollingElement||document.documentElement; s.scrollTop=0; window.scrollTo({ top:0, behavior:'smooth' }); }} style={{
             height:30, padding:'0 12px', borderRadius:9999, cursor:'pointer', flexShrink:0,
             background:'rgba(255,255,255,0.04)', border:`1px solid ${AIP_LINE}`, color:AIP_INK_2,
             fontFamily:'Inter', fontSize:12, display:'inline-flex', alignItems:'center', gap:7,
@@ -707,6 +716,7 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
             <i className="fa-solid fa-arrow-up" style={{ fontSize:10 }} /> Top
           </button>
         </div>
+        <div ref={sentinelRef} style={{ height:1, flexShrink:0 }}></div>
         <div style={{ minHeight:'calc(42vh - 250px)' }}></div>
         <div style={{ textAlign:'center' }}>
           <h1 style={{ fontFamily:'Inter Display, Inter', fontWeight:500, fontSize:46, color:AIP_INK, margin:0, letterSpacing:'-0.02em' }}>How can I help, Avery?</h1>
