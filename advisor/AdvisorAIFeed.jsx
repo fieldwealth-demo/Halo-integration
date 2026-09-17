@@ -1,4 +1,4 @@
-/* Field AI home feed — one mixed stream under the composer, laid out as
+/* Halo + AI home feed — one mixed stream under the composer, laid out as
    social-style posts: source header, copy, large media (chart or image),
    then actions. Data comes from the app's existing sources:
    window.FIELD_INSIGHTS, window.WATCHLIST_ROWS, window.JOURNAL_ARTICLES. */
@@ -8,16 +8,18 @@ const AF_INK_2 = 'rgb(229,231,235)';
 const AF_MUTED = 'rgb(163,163,163)';
 const AF_DIM   = 'rgb(115,115,115)';
 const AF_LINE  = 'rgba(75,85,99,0.45)';
-const AF_GREEN = 'rgb(52,211,153)';
+const AF_GREEN = 'rgb(128,152,234)';
 const AF_BLUE  = 'rgb(96,165,250)';
 const AF_VIO   = 'rgb(167,139,250)';
 const AF_RED   = 'rgb(248,113,113)';
 
 const AF_KINDS = {
-  answer:    { label:'Field AI',  icon:'wand-magic-sparkles', color:AF_GREEN },
+  answer:    { label:'Halo + AI',  icon:'wand-magic-sparkles', color:AF_GREEN },
   insight:   { label:'Insight',   icon:'lightbulb',      color:AF_GREEN },
   watchlist: { label:'Watchlist', icon:'arrow-trend-up', color:AF_BLUE  },
   journal:   { label:'Journal',   icon:'file-lines',     color:AF_VIO   },
+  research:  { label:'Manager research', icon:'building-columns', color:AF_INK_2 },
+  shared:    { label:'Shared with your practice', icon:'paper-plane', color:AF_GREEN },
 };
 
 /* ---- deterministic series so a card looks the same on every render ---- */
@@ -77,10 +79,10 @@ function AfProtectionChart({ id, term, fit }) {
   const vals = afWalk(id, 40, -0.002);
   const W = 100, H = 130;
   return (
-    <div style={{ borderRadius:10, overflow:'hidden', border:`1px solid ${AF_LINE}`, background:'rgba(5,122,85,0.05)' }}>
+    <div style={{ borderRadius:10, overflow:'hidden', border:`1px solid ${AF_LINE}`, background:'rgba(35,89,255,0.05)' }}>
       <div style={{ position:'relative', height:H }}>
         <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" style={{ position:'absolute', inset:0, width:'100%', height:'100%' }}>
-          <rect x="0" y={H * 0.66} width={W} height={H * 0.34} fill="rgba(52,211,153,0.14)" />
+          <rect x="0" y={H * 0.66} width={W} height={H * 0.34} fill="rgba(128,152,234,0.14)" />
           <path d={afPath(vals, W, H, 16)} fill="none" stroke={AF_GREEN} strokeWidth="1.6" vectorEffect="non-scaling-stroke" />
           <line x1="0" y1={H * 0.16} x2={W} y2={H * 0.16} stroke={AF_GREEN} strokeWidth="1" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" opacity="0.75" />
         </svg>
@@ -95,25 +97,25 @@ function AfProtectionChart({ id, term, fit }) {
   );
 }
 
-/* Answers Field AI already ran across the book — these replace the old
+/* Answers Halo + AI already ran across the book — these replace the old
    prompt chips. Opening one re-runs the full flow in the conversation view. */
 const AF_ANSWERS = [
-  { id:'overdue', who:'Field AI · Relationship cadence', eyebrow:'Answered for your book',
+  { id:'overdue', who:'Halo + AI · Relationship cadence', eyebrow:'Answered for your book',
     title:'5 relationships are overdue for a touchpoint',
     body:'Three are Tier 1 — the segment most sensitive to engagement gaps. Margaret Holloway is the highest priority at 127 days with no spring review booked.',
     stats:[{ k:'AUM affected', v:'$42.3M' }, { k:'Clients', v:'5' }, { k:'Longest gap', v:'168 days' }],
     ask:"Which clients haven't I talked to in a while?" },
-  { id:'drift', who:'Field AI · IPS monitoring', eyebrow:'Answered for your book',
+  { id:'drift', who:'Halo + AI · IPS monitoring', eyebrow:'Answered for your book',
     title:'4 portfolios drifted past their ±5% rebalance band',
     body:'Two drifted on single names, so a trim-and-diversify motion addresses drift and concentration together. Three hold offsetting losses in taxable sleeves.',
     stats:[{ k:'Off-model', v:'$34.7M' }, { k:'Largest drift', v:'+6.4%' }, { k:'Portfolios', v:'4' }],
     ask:'Which portfolios drifted over 5% this quarter?' },
-  { id:'protection', who:'Field AI · Provider insights', eyebrow:'Answered for your book',
+  { id:'protection', who:'Halo + AI · Provider insights', eyebrow:'Answered for your book',
     title:'Protection ideas are waiting on 3 concentrated positions',
     body:'Buffered and defined-outcome structures cover the concentrated sleeves without forcing a taxable sale. Watson ranks highest on suitability fit.',
     stats:[{ k:'Est. value', v:'$168K' }, { k:'Top fit', v:'94' }, { k:'Providers', v:'5' }],
     ask:'Show me protection ideas for concentrated positions' },
-  { id:'brief', who:'Field AI · Meeting prep', eyebrow:'Answered for your book',
+  { id:'brief', who:'Halo + AI · Meeting prep', eyebrow:'Answered for your book',
     title:'Meeting brief is ready for David Young',
     body:'Tomorrow 10:30am, in-office, 60 minutes. Portfolio is +6.4% over equity target and two follow-ups are still open from Q4.',
     stats:[{ k:'Household', v:'$14.2M' }, { k:'Open items', v:'2' }, { k:'Deck', v:'6 slides' }],
@@ -132,7 +134,7 @@ function afAnswerItems() {
 
 function AfStats({ stats }) {
   return (
-    <div style={{ display:'grid', gridTemplateColumns:`repeat(${stats.length}, 1fr)`, border:`1px solid ${AF_LINE}`, borderRadius:10, overflow:'hidden', background:'rgba(5,122,85,0.05)' }}>
+    <div style={{ display:'grid', gridTemplateColumns:`repeat(${stats.length}, 1fr)`, border:`1px solid ${AF_LINE}`, borderRadius:10, overflow:'hidden', background:'rgba(35,89,255,0.05)' }}>
       {stats.map((s, i) => (
         <div key={s.k} style={{ padding:'14px 16px', borderLeft: i ? `1px solid ${AF_LINE}` : 'none' }}>
           <div style={{ fontFamily:'Inter', fontSize:10, color:AF_DIM, letterSpacing:'0.06em', textTransform:'uppercase' }}>{s.k}</div>
@@ -141,6 +143,54 @@ function AfStats({ stats }) {
       ))}
     </div>
   );
+}
+
+/* Opportunities an asset manager sent to this practice (written by the
+   distribution portal). These lead the feed while they are new. */
+function afSharedItems() {
+  let log = [];
+  try { log = JSON.parse(localStorage.getItem('halo.shared') || '[]'); } catch (e) { log = []; }
+  return log.slice(0, 3).map(s => ({
+    kind:'shared', id:'shr-'+s.id, when:'Today',
+    who: s.from || 'Asset manager', eyebrow: s.practice ? 'Sent to ' + s.practice : 'Sent to your practice',
+    initials:'BR',
+    title:'Three ideas shared with your practice',
+    body:'Private credit, an interval fund and an equity SMA \u2014 sized for the households flagged in your book. Terms, liquidity and fee schedules are attached to each.',
+    stats:(s.items || []).map(i => ({ k:i.k, v:i.v })),
+    meta:(s.items || []).map(i => i.note).filter(Boolean),
+    action:'Review the ideas',
+    open:()=>window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'insights' } })),
+  }));
+}
+
+/* Asset-manager house views, surfaced next to the provider insights so the
+   feed carries market context and not only firm-generated signals. */
+const AF_RESEARCH = [
+  { id:'blackrock-fi', who:'BlackRock \u00b7 Fundamental Fixed Income', initials:'BR', eyebrow:'Fixed income',
+    title:'Front-end yields still pay for patience',
+    body:'The house view favors high-quality duration in the 3\u20135 year part of the curve, where carry is competitive with cash and the roll-down adds return if policy rates fall.',
+    stats:[{ k:'Preferred duration', v:'3\u20135 yr' }, { k:'Credit stance', v:'Up in quality' }, { k:'Cash vs. bonds', v:'Bonds' }],
+    meta:['Fixed income', 'Rates & duration', 'Published today'] },
+  { id:'blackstone', who:'Blackstone \u00b7 Private Wealth Solutions', initials:'BX', eyebrow:'Private markets',
+    title:'Private credit spreads still clear the public-bond hurdle',
+    body:'Direct lending continues to price above comparable public credit, and the firm\u2019s view is that disciplined underwriting matters more than vintage timing for long-horizon households.',
+    stats:[{ k:'Target yield', v:'~9%' }, { k:'Sleeve size', v:'5\u201310%' }, { k:'Horizon', v:'Long' }],
+    meta:['Private credit', 'Alternatives', 'Published today'] },
+  { id:'blackrock', who:'BlackRock \u00b7 Investment Institute', initials:'BR', eyebrow:'Asset allocation',
+    title:'Staying pro-risk, with tighter guardrails',
+    body:'Equity exposure stays overweight on earnings breadth, paired with an explicit hedging sleeve \u2014 a fit for the concentrated households already flagged in your book.',
+    stats:[{ k:'Equities', v:'Overweight' }, { k:'Duration', v:'Neutral' }, { k:'Hedged sleeve', v:'Add' }],
+    meta:['Asset allocation', 'Tactical views', 'Published today'] },
+];
+
+function afResearchItems() {
+  return AF_RESEARCH.map(r => ({
+    kind:'research', id:'res-'+r.id, when:'Today',
+    who:r.who, eyebrow:r.eyebrow, initials:r.initials,
+    title:r.title, body:r.body, stats:r.stats, meta:r.meta,
+    action:'Read the view',
+    open:()=>window.dispatchEvent(new CustomEvent('ai:ask', { detail:{ text:`Summarize the latest ${r.who.split(' \u00b7 ')[0]} view for my book` } })),
+  }));
 }
 
 function afInsightItems() {
@@ -191,10 +241,15 @@ function afJournalItems() {
 /* Interleave so the stream never reads as three stacked sections. */
 function afBuildFeed() {
   const cols = [afInsightItems(), afWatchItems(), afJournalItems(), afAnswerItems()];
-  const out = [];
+  const research = afResearchItems();
+  const out = afSharedItems();
   // Answer first, then a note and an article inside the first screenful, so the
   // stream never reads as four stacked sections.
-  for (let i = 0; i < 5; i++) cols.forEach(c => { if (c[i]) out.push(c[i]); });
+  for (let i = 0; i < 5; i++) {
+    cols.forEach(c => { if (c[i]) out.push(c[i]); });
+    // Manager research sits directly under the Halo / Watson insight cards.
+    if (research[i]) out.splice(out.length - (cols.length - 1), 0, research[i]);
+  }
   return out;
 }
 
@@ -213,7 +268,7 @@ function AfPost({ item }) {
   return (
     <article onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}
       style={{
-        border: hover ? '1px solid rgba(5,122,85,0.35)' : `1px solid ${AF_LINE}`,
+        border: hover ? '1px solid rgba(35,89,255,0.35)' : `1px solid ${AF_LINE}`,
         borderRadius:14, background:'rgba(255,255,255,0.025)',
         transition:'border-color .14s ease', overflow:'hidden',
       }}>
@@ -252,7 +307,7 @@ function AfPost({ item }) {
         <div onClick={item.open} style={{ padding:'0 18px 14px', cursor:'pointer' }}><AfStats stats={item.stats} /></div>
       ) : item.hero ? (
         <div onClick={item.open} style={{ height:340, cursor:'pointer', borderTop:`1px solid ${AF_LINE}`, borderBottom:`1px solid ${AF_LINE}` }}>
-          <image-slot id={item.hero} shape="rect" placeholder="Drop article image"></image-slot>
+          <img src="assets/journal.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
         </div>
       ) : (
         <div onClick={item.open} style={{ padding:'0 18px 14px', cursor:'pointer' }}>{item.chart}</div>
@@ -266,8 +321,8 @@ function AfPost({ item }) {
         <button onClick={item.open} style={{
           height:30, padding:'0 14px', borderRadius:8, cursor:'pointer', whiteSpace:'nowrap',
           fontFamily:'Inter', fontSize:12, fontWeight:500,
-          background: hover ? 'rgba(5,122,85,0.18)' : 'rgba(255,255,255,0.04)',
-          border: hover ? '1px solid rgba(5,122,85,0.45)' : `1px solid ${AF_LINE}`,
+          background: hover ? 'rgba(35,89,255,0.18)' : 'rgba(255,255,255,0.04)',
+          border: hover ? '1px solid rgba(35,89,255,0.45)' : `1px solid ${AF_LINE}`,
           color: hover ? AF_GREEN : AF_INK_2,
           display:'inline-flex', alignItems:'center', gap:8,
           transition:'background .14s ease, border-color .14s ease, color .14s ease',
@@ -285,10 +340,32 @@ function AfFilter({ label, active, onClick }) {
     <button onClick={onClick} style={{
       height:26, padding:'0 11px', borderRadius:9999, cursor:'pointer',
       fontFamily:'Inter', fontSize:11.5, fontWeight:500,
-      background: active ? 'rgba(5,122,85,0.16)' : 'transparent',
-      border: active ? '1px solid rgba(5,122,85,0.40)' : `1px solid ${AF_LINE}`,
+      background: active ? 'rgba(35,89,255,0.16)' : 'transparent',
+      border: active ? '1px solid rgba(35,89,255,0.40)' : `1px solid ${AF_LINE}`,
       color: active ? AF_GREEN : AF_MUTED,
     }}>{label}</button>
+  );
+}
+
+/* An approved item reports back here: the card confirms, then leaves the feed. */
+function AfLeaving({ item, state }) {
+  const gone = state === 'leaving';
+  return (
+    <div style={{
+      maxHeight: gone ? 0 : 1400, opacity: gone ? 0 : 1,
+      transform: gone ? 'translateY(-8px) scale(0.98)' : 'none',
+      overflow:'hidden', transition:'max-height 620ms cubic-bezier(.4,0,.2,1), opacity 420ms ease, transform 620ms cubic-bezier(.4,0,.2,1)',
+    }}>
+      <div style={{
+        display:'flex', alignItems:'center', gap:10, padding:'10px 16px', marginBottom:8,
+        borderRadius:10, background:'rgba(35,89,255,0.14)', border:'1px solid rgba(35,89,255,0.4)',
+        fontFamily:'Inter', fontSize:12.5, color:AF_INK,
+      }}>
+        <i className="fa-solid fa-circle-check" style={{ fontSize:13, color:AF_GREEN }} />
+        <span>Approved and sent to execution · clearing from your feed</span>
+      </div>
+      <div style={{ filter:'saturate(0.6)', opacity:0.75 }}><AfPost item={item} /></div>
+    </div>
   );
 }
 
@@ -296,18 +373,35 @@ function AipHomeFeed() {
   const all = React.useMemo(afBuildFeed, []);
   const [filter, setFilter] = React.useState('all');
   const [limit, setLimit] = React.useState(6);
-  const rows = filter === 'all' ? all : all.filter(r => r.kind === filter);
+  const [state, setState] = React.useState({}); // id -> 'approved' | 'leaving' | 'gone'
+  React.useEffect(() => {
+    const onDone = (e) => {
+      const raw = (e.detail && e.detail.id) || 'opp-young-rebalance';
+      const hit = all.find(r => r.id === raw || r.id.endsWith('-' + raw))
+        || (raw.indexOf('young') >= 0 ? all.find(r => r.id === 'ins-young') : null)
+        || all[0];
+      if (!hit) return;
+      setState(s => ({ ...s, [hit.id]:'approved' }));
+      setTimeout(() => setState(s => ({ ...s, [hit.id]:'leaving' })), 1500);
+      setTimeout(() => setState(s => ({ ...s, [hit.id]:'gone' })), 2250);
+    };
+    window.addEventListener('opportunity:done', onDone);
+    return () => window.removeEventListener('opportunity:done', onDone);
+  }, [all]);
+  const rows = (filter === 'all' ? all : all.filter(r => r.kind === filter)).filter(r => state[r.id] !== 'gone');
   const shown = rows.slice(0, limit);
   return (
     <section style={{ width:'100%', maxWidth:680, margin:'0 auto', display:'flex', flexDirection:'column', gap:14 }}>
       <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', padding:'0 2px 4px' }}>
         <div style={{ fontFamily:'Inter', fontSize:12, fontWeight:600, color:AF_INK_2, letterSpacing:'0.04em', textTransform:'uppercase' }}>For you</div>
         <div style={{ flex:1 }} />
-        {[['all','All'],['insight','Insights'],['watchlist','Watchlist'],['journal','Journal']].map(([id,label]) => (
+        {[['all','All'],['shared','Shared'],['insight','Insights'],['research','Research'],['watchlist','Watchlist'],['journal','Journal']].map(([id,label]) => (
           <AfFilter key={id} label={label} active={filter===id} onClick={()=>{ setFilter(id); setLimit(6); }} />
         ))}
       </div>
-      {shown.map(item => <AfPost key={item.id} item={item} />)}
+      {shown.map(item => state[item.id]
+        ? <AfLeaving key={item.id} item={item} state={state[item.id]} />
+        : <AfPost key={item.id} item={item} />)}
       {rows.length > shown.length && (
         <button onClick={()=>setLimit(n => n + 9)} style={{
           alignSelf:'center', height:32, padding:'0 18px', borderRadius:9999,

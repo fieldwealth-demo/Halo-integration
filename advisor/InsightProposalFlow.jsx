@@ -11,10 +11,10 @@
 
 const IPF_PROVIDER = {
   'Halo':       { accent:'rgb(168,85,247)', bright:'rgb(192,132,252)', soft:'rgba(168,85,247,0.06)', bd:'rgba(168,85,247,0.3)', brand:'rgb(124,58,237)', abbr:'HALO' },
-  'BlackRock':  { accent:'rgb(5,122,85)',   bright:'rgb(110,231,183)', soft:'rgba(5,122,85,0.06)',  bd:'rgba(5,122,85,0.3)',   brand:'rgb(17,24,32)',  abbr:'BLK' },
+  'BlackRock':  { accent:'rgb(35,89,255)',   bright:'rgb(168,185,241)', soft:'rgba(35,89,255,0.06)',  bd:'rgba(35,89,255,0.3)',   brand:'rgb(17,24,32)',  abbr:'BLK' },
   'PIMCO':      { accent:'rgb(37,99,235)',  bright:'rgb(120,160,230)', soft:'rgba(37,99,235,0.06)', bd:'rgba(37,99,235,0.3)',  brand:'rgb(0,46,110)',  abbr:'PIM' },
   'Blackstone': { accent:'rgb(202,138,4)',  bright:'rgb(245,200,90)',  soft:'rgba(202,138,4,0.06)', bd:'rgba(202,138,4,0.3)',  brand:'rgb(38,38,38)',  abbr:'BX' },
-  'Nuveen':     { accent:'rgb(190,24,93)',  bright:'rgb(244,164,200)', soft:'rgba(190,24,93,0.06)', bd:'rgba(190,24,93,0.3)',  brand:'rgb(13,123,138)',abbr:'NUV' },
+  'Nuveen':     { accent:'rgb(190,24,93)',  bright:'rgb(244,164,200)', soft:'rgba(190,24,93,0.06)', bd:'rgba(190,24,93,0.3)',  brand:'rgb(58,100,236)',abbr:'NUV' },
 };
 
 /* Protected-vs-unprotected scenario tables for the structured (payoff) Halo
@@ -88,7 +88,7 @@ function InsightProposalFlow() {
 
   // Field house theming for the flow + CTAs (all green); providers differ only by their badge monogram.
   const pmBase = r ? (IPF_PROVIDER[r.provider] || IPF_PROVIDER['Halo']) : IPF_PROVIDER['Halo'];
-  const pm = { ...pmBase, accent:'rgb(5,122,85)', bright:'rgb(52,211,153)', soft:'rgba(5,122,85,0.06)', bd:'rgba(5,122,85,0.3)' };
+  const pm = { ...pmBase, accent:'rgb(35,89,255)', bright:'rgb(128,152,234)', soft:'rgba(35,89,255,0.06)', bd:'rgba(35,89,255,0.3)' };
   const isPayoff = r && IPF_SCENARIOS[r.id];
 
   const lines = React.useMemo(() => {
@@ -146,7 +146,7 @@ function InsightProposalFlow() {
     try {
       const reply = await window.claude.complete({
         messages: [{ role:'user', content:
-          `You are Field Intelligence helping a financial advisor evaluate a ${r.provider} insight for the ${r.client} household (${r.aum}, ${r.risk} risk). Signal "${r.signal}": ${r.signalDetail} Recommended: ${r.product} (${r.term}), ${r.scope} in scope. Answer the advisor's follow-up concisely (2-4 sentences, professional, no disclaimers): ${q}` }],
+          `You are Halo + Intelligence helping a financial advisor evaluate a ${r.provider} insight for the ${r.client} household (${r.aum}, ${r.risk} risk). Signal "${r.signal}": ${r.signalDetail} Recommended: ${r.product} (${r.term}), ${r.scope} in scope. Answer the advisor's follow-up concisely (2-4 sentences, professional, no disclaimers): ${q}` }],
       });
       setFollowUps(prev => prev.map((m, i) => i === prev.length - 1 ? { role:'assistant', text:reply, streaming:false } : m));
     } catch (err) {
@@ -187,7 +187,7 @@ function InsightProposalFlow() {
               <span style={{ fontFamily:'Inter', fontWeight:800, fontSize:11, color:'#fff' }}>{pm.abbr}</span>
             </div>
             <div style={{ flex:1, minWidth:0 }}>
-              <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:14, color:'rgb(249,250,251)' }}>Field Intelligence · {r.provider}</div>
+              <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:14, color:'rgb(249,250,251)' }}>Halo + Intelligence · {r.provider}</div>
               <div style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(163,163,163)' }}>Building a proposal for {r.client}</div>
             </div>
           </React.Fragment>
@@ -260,7 +260,7 @@ function InsightProposalFlow() {
                       <div key={i} style={{ display:'grid', gridTemplateColumns:'1.4fr 1fr 1fr', alignItems:'center', borderTop:'1px solid rgba(75,85,99,0.4)', fontFamily:'Inter', fontSize:13.5 }}>
                         <div style={{ padding:'12px 16px', color:'rgb(229,231,235)' }}>{s.move}</div>
                         <div style={{ padding:'12px 16px', textAlign:'right', color:'rgb(163,163,163)', fontVariantNumeric:'tabular-nums' }}>{s.un}</div>
-                        <div style={{ padding:'12px 16px', textAlign:'right', fontWeight:600, fontVariantNumeric:'tabular-nums', color: s.good ? 'rgb(110,231,183)' : pm.bright }}>{s.pr}</div>
+                        <div style={{ padding:'12px 16px', textAlign:'right', fontWeight:600, fontVariantNumeric:'tabular-nums', color: s.good ? 'rgb(168,185,241)' : pm.bright }}>{s.pr}</div>
                       </div>
                     ))}
                   </div>

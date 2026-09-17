@@ -15,8 +15,8 @@ const ADV_NAME = 'Avery Chen';
 const ADV_ROLE = 'Senior Advisor';
 
 /* ── shared tokens ─────────────────────────────────────────────────── */
-const SW_GREEN  = 'rgb(5,122,85)';
-const SW_GREENB = 'rgb(16,185,129)';
+const SW_GREEN  = 'rgb(35,89,255)';
+const SW_GREENB = 'rgb(84,121,240)';
 const SW_INK    = 'rgb(249,250,251)';
 const SW_MUTE   = 'rgb(163,163,163)';
 const SW_SUB    = 'rgb(209,213,219)';
@@ -63,7 +63,7 @@ function Icon({ name, size=14, color='currentColor', strokeWidth=2, style }) {
 function FirmMark({ size=26, radius=7 }) {
   return (
     <span style={{ width:size, height:size, borderRadius:radius, flexShrink:0,
-      background:'linear-gradient(135deg, rgb(16,185,129), rgb(5,122,85))',
+      background:'linear-gradient(135deg, rgb(84,121,240), rgb(35,89,255))',
       display:'inline-flex', alignItems:'center', justifyContent:'center',
       color:'#fff', fontFamily:'Inter', fontWeight:700, fontSize:size*0.5, letterSpacing:'-0.02em' }}>
       {ADV_FIRM[0]}
@@ -99,7 +99,7 @@ function MPCard({ icon, title, onTap, children }) {
       <div style={{ display:'flex', alignItems:'center', gap:9, marginBottom:11 }}>
         <span style={{
           width:26, height:26, borderRadius:8, flexShrink:0,
-          background:'rgba(5,122,85,0.16)', border:'1px solid rgba(16,185,129,0.35)',
+          background:'rgba(35,89,255,0.16)', border:'1px solid rgba(84,121,240,0.35)',
           display:'inline-flex', alignItems:'center', justifyContent:'center' }}>
           <Icon name={icon} size={13} color={SW_GREENB} /></span>
         <span style={{ flex:1, fontFamily:'Inter', fontSize:14, fontWeight:600, color:SW_INK }}>{title}</span>
@@ -128,7 +128,7 @@ function MPSpark() {
     yAxis:{ visible:false },
     tooltip:{ backgroundColor:'rgba(17,24,39,0.95)', borderColor:'rgb(75,85,99)', style:{ color:SW_INK, fontSize:'11px' },
       formatter:function(){ return `<b>${this.x}</b><br/>$${(this.y/1000).toFixed(2)}M`; } },
-    plotOptions:{ area:{ fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(5,122,85,0.35)'],[1,'rgba(5,122,85,0)']] },
+    plotOptions:{ area:{ fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(35,89,255,0.35)'],[1,'rgba(35,89,255,0)']] },
       lineWidth:2, color:SW_GREEN, marker:{ enabled:false } } },
     series:[{ data:[5760,5830,5920,6020,6124] }],
     legend:{ enabled:false }, credits:{ enabled:false },
@@ -138,12 +138,12 @@ function MPSpark() {
 
 /* donut for allocation */
 const MP_ALLOC = [
-  { name:'Domestic Stock', y:35, dot:'rgb( 94,214,164)', fill:'rgba( 94,214,164,0.55)' },
+  { name:'Domestic Stock', y:35, dot:'rgb(151,171,238)', fill:'rgba(151,171,238,0.55)' },
   { name:'Bond Funds',     y:25, dot:'rgb(120,160,230)', fill:'rgba(120,160,230,0.55)' },
   { name:'International',   y:18, dot:'rgb(180,150,235)', fill:'rgba(180,150,235,0.55)' },
   { name:'Alternatives',   y:10, dot:'rgb(245,200, 90)', fill:'rgba(245,200, 90,0.55)' },
   { name:'Real Estate',    y:7,  dot:'rgb(240,140,120)', fill:'rgba(240,140,120,0.55)' },
-  { name:'Cash',           y:5,  dot:'rgb(120,200,210)', fill:'rgba(120,200,210,0.55)' },
+  { name:'Cash',           y:5,  dot:'rgb(162,180,240)', fill:'rgba(162,180,240,0.55)' },
 ];
 function MPDonut({ height=128 }) {
   const opts = React.useMemo(() => ({
@@ -165,7 +165,7 @@ function MPPerfBars() {
     yAxis:{ visible:false },
     plotOptions:{ column:{ borderWidth:1.2, pointPadding:0.06, groupPadding:0.18, borderRadius:2 } },
     series:[
-      { name:'Portfolio', data:[13.2,12.7,68.1], color:'rgba( 94,214,164,0.6)', borderColor:'rgb( 94,214,164)' },
+      { name:'Portfolio', data:[13.2,12.7,68.1], color:'rgba(151,171,238,0.6)', borderColor:'rgb(151,171,238)' },
       { name:'S&P 500',   data:[9.8,14.2,52.4],  color:'rgba(245,200, 90,0.55)', borderColor:'rgb(245,200, 90)' },
     ],
     tooltip:{ valueSuffix:'%' }, legend:{ enabled:false }, credits:{ enabled:false },
@@ -233,7 +233,7 @@ function MPDetail({ section }) {
         <div style={{ background:MP_TILE, border:`1px solid ${MP_BORDER}`, borderRadius:16, padding:'12px 16px 14px' }}>
           <div style={{ display:'flex', gap:14, marginBottom:6 }}>
             <span style={{ display:'inline-flex', alignItems:'center', gap:6, fontFamily:'Inter', fontSize:12, color:SW_SUB }}>
-              <span style={{ width:8, height:8, borderRadius:9, background:'rgb( 94,214,164)' }} /> Portfolio</span>
+              <span style={{ width:8, height:8, borderRadius:9, background:'rgb(151,171,238)' }} /> Portfolio</span>
             <span style={{ display:'inline-flex', alignItems:'center', gap:6, fontFamily:'Inter', fontSize:12, color:SW_SUB }}>
               <span style={{ width:8, height:8, borderRadius:9, background:'rgb(245,200, 90)' }} /> S&P 500</span>
           </div>
@@ -332,8 +332,8 @@ function MobilePortal({ client, visible }) {
               <div style={{ fontFamily:'Inter', fontSize:11, color:SW_MUTE }}>Client portal</div>
             </div>
             <span style={{ display:'inline-flex', alignItems:'center', gap:5, padding:'5px 9px', borderRadius:999, flexShrink:0,
-              background:'rgba(5,122,85,0.16)', border:'1px solid rgba(16,185,129,0.35)', fontFamily:'Inter', fontSize:10.5, fontWeight:600, color:'rgb(110,231,183)' }}>
-              <Icon name="lock" size={10} color="rgb(110,231,183)" /> Secure
+              background:'rgba(35,89,255,0.16)', border:'1px solid rgba(84,121,240,0.35)', fontFamily:'Inter', fontSize:10.5, fontWeight:600, color:'rgb(168,185,241)' }}>
+              <Icon name="lock" size={10} color="rgb(168,185,241)" /> Secure
             </span>
           </React.Fragment>
         ) : (
@@ -356,13 +356,13 @@ function MobilePortal({ client, visible }) {
 
           {/* hero net worth — generous spacing */}
           <div style={{
-            background:'linear-gradient(135deg, rgba(5,122,85,0.24), rgba(20,24,31,0.55))',
-            border:'1px solid rgba(16,185,129,0.35)', borderRadius:20, padding:'24px 22px', marginBottom:18,
+            background:'linear-gradient(135deg, rgba(35,89,255,0.24), rgba(20,24,31,0.55))',
+            border:'1px solid rgba(84,121,240,0.35)', borderRadius:20, padding:'24px 22px', marginBottom:18,
           }}>
-            <div style={{ fontFamily:'Inter', fontSize:12, fontWeight:500, letterSpacing:'0.02em', color:'rgb(167,243,208)', marginBottom:12 }}>Total net worth</div>
+            <div style={{ fontFamily:'Inter', fontSize:12, fontWeight:500, letterSpacing:'0.02em', color:'rgb(202,213,248)', marginBottom:12 }}>Total net worth</div>
             <div style={{ fontFamily:'Inter', fontSize:38, fontWeight:700, letterSpacing:'-0.025em', lineHeight:1 }}>$6,124,145</div>
-            <div style={{ display:'inline-flex', alignItems:'center', gap:6, marginTop:14, fontFamily:'Inter', fontSize:13, color:'rgb(110,231,183)', fontWeight:600 }}>
-              <Icon name="arrowUp" size={12} color="rgb(110,231,183)" />6.33% year to date</div>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:6, marginTop:14, fontFamily:'Inter', fontSize:13, color:'rgb(168,185,241)', fontWeight:600 }}>
+              <Icon name="arrowUp" size={12} color="rgb(168,185,241)" />6.33% year to date</div>
           </div>
 
           <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
@@ -511,7 +511,7 @@ function ShareWithClient() {
 
       {/* header */}
       <div style={{ display:'flex', alignItems:'center', gap:13, padding:'17px 26px', borderBottom:`1px solid ${SW_LINE}`, flexShrink:0 }}>
-        <span style={{ width:32, height:32, borderRadius:9, background:'rgba(5,122,85,0.18)', border:'1px solid rgba(16,185,129,0.4)',
+        <span style={{ width:32, height:32, borderRadius:9, background:'rgba(35,89,255,0.18)', border:'1px solid rgba(84,121,240,0.4)',
           display:'inline-flex', alignItems:'center', justifyContent:'center' }}>
           <Icon name="share" size={15} color={SW_GREENB} />
         </span>
@@ -548,12 +548,12 @@ function ShareWithClient() {
               <span style={{ flex:1, minWidth:0, fontSize:12.5, color:SW_SUB, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', fontVariantNumeric:'tabular-nums' }}>{link}</span>
               <button onClick={copy} style={{
                 height:32, padding:'0 12px', borderRadius:7, flexShrink:0, cursor:'pointer',
-                background: copied ? 'rgba(5,122,85,0.2)' : 'rgba(255,255,255,0.06)',
-                border:`1px solid ${copied ? 'rgba(16,185,129,0.5)' : SW_LINE}`,
-                color: copied ? 'rgb(110,231,183)' : SW_SUB, fontSize:12, fontWeight:600,
+                background: copied ? 'rgba(35,89,255,0.2)' : 'rgba(255,255,255,0.06)',
+                border:`1px solid ${copied ? 'rgba(84,121,240,0.5)' : SW_LINE}`,
+                color: copied ? 'rgb(168,185,241)' : SW_SUB, fontSize:12, fontWeight:600,
                 display:'inline-flex', alignItems:'center', gap:6,
               }}>
-                <Icon name={copied ? 'check' : 'copy'} size={12} color={copied ? 'rgb(110,231,183)' : SW_SUB} />
+                <Icon name={copied ? 'check' : 'copy'} size={12} color={copied ? 'rgb(168,185,241)' : SW_SUB} />
                 {copied ? 'Copied' : 'Copy'}
               </button>
             </div>
@@ -570,9 +570,9 @@ function ShareWithClient() {
                     {['7 days','30 days','90 days'].map(o => (
                       <button key={o} onClick={() => setExpiry(o)} style={{
                         padding:'5px 9px', borderRadius:7, cursor:'pointer', fontSize:11.5, fontWeight:600,
-                        background: expiry===o ? 'rgba(5,122,85,0.2)' : 'transparent',
-                        border:`1px solid ${expiry===o ? 'rgba(16,185,129,0.5)' : SW_LINE}`,
-                        color: expiry===o ? 'rgb(110,231,183)' : SW_MUTE,
+                        background: expiry===o ? 'rgba(35,89,255,0.2)' : 'transparent',
+                        border:`1px solid ${expiry===o ? 'rgba(84,121,240,0.5)' : SW_LINE}`,
+                        color: expiry===o ? 'rgb(168,185,241)' : SW_MUTE,
                       }}>{o.replace(' days','d')}</button>
                     ))}
                   </div>
@@ -591,8 +591,8 @@ function ShareWithClient() {
                 return (
                   <button key={s.key} onClick={() => toggleSection(s.key)} style={{
                     display:'flex', alignItems:'center', gap:9, padding:'10px 11px', borderRadius:10, cursor:'pointer', textAlign:'left',
-                    background: on ? 'rgba(5,122,85,0.1)' : 'rgba(255,255,255,0.02)',
-                    border:`1px solid ${on ? 'rgba(16,185,129,0.4)' : SW_LINE}`,
+                    background: on ? 'rgba(35,89,255,0.1)' : 'rgba(255,255,255,0.02)',
+                    border:`1px solid ${on ? 'rgba(84,121,240,0.4)' : SW_LINE}`,
                   }}>
                     <Icon name={s.icon} size={14} color={on ? SW_GREENB : SW_MUTE} />
                     <span style={{ flex:1, fontSize:12.5, fontWeight:500, color: on ? SW_INK : SW_MUTE }}>{s.label}</span>
@@ -607,16 +607,16 @@ function ShareWithClient() {
           <div style={{ marginTop:26 }}>
             {!sent ? (
               <button onClick={() => setSent(true)} style={{
-                width:'100%', height:46, borderRadius:11, cursor:'pointer', border:'1px solid rgba(16,185,129,0.6)',
-                background:'linear-gradient(180deg, rgb(7,140,98), rgb(5,110,76))', color:'#fff', fontSize:14, fontWeight:600,
+                width:'100%', height:46, borderRadius:11, cursor:'pointer', border:'1px solid rgba(84,121,240,0.6)',
+                background:'linear-gradient(180deg, rgb(48,94,245), rgb(28,79,245))', color:'#fff', fontSize:14, fontWeight:600,
                 display:'inline-flex', alignItems:'center', justifyContent:'center', gap:9,
-                boxShadow:'0 8px 24px rgba(5,122,85,0.32)',
+                boxShadow:'0 8px 24px rgba(35,89,255,0.32)',
               }}>
                 <Icon name="send" size={15} color="#fff" />
                 Send secure link to {firstName}
               </button>
             ) : (
-              <div style={{ borderRadius:13, border:'1px solid rgba(16,185,129,0.45)', background:'rgba(5,122,85,0.12)', padding:'18px', animation:'mp-slide 300ms ease-out' }}>
+              <div style={{ borderRadius:13, border:'1px solid rgba(84,121,240,0.45)', background:'rgba(35,89,255,0.12)', padding:'18px', animation:'mp-slide 300ms ease-out' }}>
                 <div style={{ display:'flex', alignItems:'center', gap:11 }}>
                   <span style={{ width:36, height:36, borderRadius:999, background:SW_GREEN, display:'inline-flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                     <Icon name="check" size={17} color="#fff" />
@@ -645,7 +645,7 @@ function ShareWithClient() {
         </div>
 
         {/* RIGHT — phone preview */}
-        <div style={{ position:'relative', display:'flex', flexDirection:'column', minWidth:0, minHeight:0, background:'radial-gradient(circle at 50% 30%, rgba(5,122,85,0.1), transparent 60%)' }}>
+        <div style={{ position:'relative', display:'flex', flexDirection:'column', minWidth:0, minHeight:0, background:'radial-gradient(circle at 50% 30%, rgba(35,89,255,0.1), transparent 60%)' }}>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, padding:'16px 0 4px', fontFamily:'Inter', fontSize:12, color:SW_MUTE, flexShrink:0 }}>
             <Icon name="smartphone" size={13} color={SW_MUTE} />
             Client preview — what {firstName} sees on mobile

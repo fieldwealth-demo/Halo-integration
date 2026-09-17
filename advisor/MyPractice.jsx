@@ -38,7 +38,7 @@ function MPExportFooter() {
 
 /* Generic KPI tile ------------------------------------------------------- */
 function MPKpi({ label, value, delta, deltaTone = 'success', sub }) {
-  const deltaColor = deltaTone === 'success' ? 'rgb(16,185,129)' :
+  const deltaColor = deltaTone === 'success' ? 'rgb(84,121,240)' :
   deltaTone === 'danger' ? 'rgb(248,113,113)' :
   'rgb(163,163,163)';
   return (
@@ -76,8 +76,8 @@ function MPTabs({ value, onChange }) {
             background: 'transparent', border: 'none', cursor: 'pointer',
             padding: '10px 2px', marginBottom: -1,
             fontFamily: 'Inter', fontWeight: 600, fontSize: 12.5,
-            color: active ? 'rgb(16,185,129)' : 'rgb(163,163,163)',
-            borderBottom: `2px solid ${active ? 'rgb(5,122,85)' : 'transparent'}`
+            color: active ? 'rgb(84,121,240)' : 'rgb(163,163,163)',
+            borderBottom: `2px solid ${active ? 'rgb(35,89,255)' : 'transparent'}`
           }}>{t.label}</button>);
 
       })}
@@ -117,12 +117,12 @@ const CA_OCC_AUM = { cats: ['Business\nOwners', 'Executives', 'Union/Gov', 'Empl
 const CA_TIERS = [
 { label: '< $250K', count: 68, aumLabel: '$12M', aum: 12, color: 'rgb(56,189,248)' },
 { label: '$250K - $500K', count: 84, aumLabel: '$32M', aum: 32, color: 'rgb(96,165,250)' },
-{ label: '$1M - $3M', count: 76, aumLabel: '$124M', aum: 124, color: 'rgb(16,185,129)' },
+{ label: '$1M - $3M', count: 76, aumLabel: '$124M', aum: 124, color: 'rgb(84,121,240)' },
 { label: '$3M - $5M', count: 28, aumLabel: '$98M', aum: 98, color: 'rgb(139,92,246)' },
 { label: '$5M+', count: 14, aumLabel: '$188M', aum: 188, color: 'rgb(234,88,12)' }];
 
 const CA_SERVICES = [
-{ name: 'Investment', clients: 358, pct: 45, color: 'rgb(16,185,129)' },
+{ name: 'Investment', clients: 358, pct: 45, color: 'rgb(84,121,240)' },
 { name: 'Financial Planning', clients: 286, pct: 20, color: 'rgb(56,189,248)' },
 { name: 'Tax Services', clients: 185, pct: 20, color: 'rgb(139,92,246)' },
 { name: 'Estate', clients: 142, pct: 15, color: 'rgb(234,179,8)' }];
@@ -462,8 +462,8 @@ function MPClientAnalysisTab() {
           cols={['Years', 'Clients']}
           rows={CA_OPEN_ROWS.map((r) => [r.years, r.clients])}
           chartData={CA_OPEN_AUM}
-          color="rgb(16,185,129)"
-          assetsColor="rgb(110,231,183)" />
+          color="rgb(84,121,240)"
+          assetsColor="rgb(168,185,241)" />
         
       </div>
       <div style={{ gridColumn: 'span 6' }}>

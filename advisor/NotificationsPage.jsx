@@ -7,7 +7,7 @@
 const NOTIF_TONES = {
   danger:  { border:'rgb(220,38,38)',   iconBg:'rgba(220,38,38,0.14)',   iconFg:'rgb(248,113,113)', dot:'rgb(220,38,38)',  tag:{bg:'rgba(220,38,38,0.18)', fg:'rgb(248,113,113)', border:'1px solid rgba(220,38,38,0.45)'} },
   warning: { border:'rgb(234,179,8)',   iconBg:'rgba(234,179,8,0.14)',   iconFg:'rgb(253,224,71)',  dot:'rgb(234,179,8)',  tag:{bg:'rgba(234,179,8,0.18)', fg:'rgb(253,224,71)', border:'1px solid rgba(234,179,8,0.5)'} },
-  success: { border:'rgb(5,122,85)',    iconBg:'rgba(5,122,85,0.18)',    iconFg:'rgb(16,185,129)',  dot:'rgb(5,122,85)',   tag:{bg:'rgba(5,122,85,0.22)', fg:'rgb(16,185,129)', border:'1px solid rgba(5,122,85,0.5)'} },
+  success: { border:'rgb(35,89,255)',    iconBg:'rgba(35,89,255,0.18)',    iconFg:'rgb(84,121,240)',  dot:'rgb(35,89,255)',   tag:{bg:'rgba(35,89,255,0.22)', fg:'rgb(84,121,240)', border:'1px solid rgba(35,89,255,0.5)'} },
   info:    { border:'rgb(56,189,248)',  iconBg:'rgba(56,189,248,0.14)',  iconFg:'rgb(56,189,248)',  dot:'rgb(56,189,248)', tag:{bg:'rgba(56,189,248,0.18)', fg:'rgb(56,189,248)', border:'1px solid rgba(56,189,248,0.5)'} },
   violet:  { border:'rgb(139,92,246)',  iconBg:'rgba(139,92,246,0.14)',  iconFg:'rgb(167,139,250)', dot:'rgb(139,92,246)', tag:{bg:'rgba(139,92,246,0.2)',  fg:'rgb(196,181,253)', border:'1px solid rgba(139,92,246,0.5)'} },
   mute:    { border:'rgba(75,85,99,0.8)', iconBg:'rgba(255,255,255,0.05)', iconFg:'rgb(163,163,163)', dot:'rgb(107,114,128)', tag:{bg:'rgba(17,24,39,0.8)', fg:'rgb(229,231,235)', border:'1px solid rgb(75,85,99)'} },
@@ -57,7 +57,7 @@ function NPMetaChip({ children, tone='mute' }) {
 
 function NPButton({ variant='primary', children, onClick, noHint }) {
   const styles = variant === 'primary' ? {
-    background:'rgb(5,122,85)', color:'#fff', border:'1px solid rgb(5,122,85)',
+    background:'rgb(35,89,255)', color:'#fff', border:'1px solid rgb(35,89,255)',
   } : variant === 'violet' ? {
     background:'rgb(139,92,246)', color:'#fff', border:'1px solid rgb(139,92,246)',
   } : {
@@ -346,8 +346,8 @@ function NotificationsPage() {
             <button key={f.id} onClick={()=>setFilter(f.id)} style={{
               fontFamily:'Inter', fontWeight:600, fontSize:11.5,
               padding:'7px 14px', borderRadius:6, cursor:'pointer',
-              border: active ? '1px solid rgb(5,122,85)' : '1px solid rgba(75,85,99,0.7)',
-              background: active ? 'rgb(5,122,85)' : 'rgba(255,255,255,0.04)',
+              border: active ? '1px solid rgb(35,89,255)' : '1px solid rgba(75,85,99,0.7)',
+              background: active ? 'rgb(35,89,255)' : 'rgba(255,255,255,0.04)',
               color: active ? '#fff' : 'rgb(209,213,219)',
               letterSpacing:'0.01em',
             }}>{f.label}</button>

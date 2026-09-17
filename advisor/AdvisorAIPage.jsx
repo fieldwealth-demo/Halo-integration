@@ -1,4 +1,4 @@
-/* Field AI — full-page assistant (Advisor) ----------------------------
+/* Halo + AI — full-page assistant (Advisor) ----------------------------
    A dedicated LLM workspace page (mirrors the Asset-Manager home, recast
    for the advisor's book). Greeting → composer → suggestion chips. On
    submit, runs a short streamed "working" sequence (tool calls) and then
@@ -6,10 +6,10 @@
    the left and a sticky follow-up composer lives at the bottom. Clicking a
    client opens that client's profile; deck actions open the rebalance deck. */
 
-const AIP_BRAND      = 'rgb(5,122,85)';
-const AIP_BRAND_LT   = 'rgb(52,211,153)';
-const AIP_BRAND_SOFT = 'rgba(5,122,85,0.16)';
-const AIP_BRAND_RING = 'rgba(5,122,85,0.40)';
+const AIP_BRAND      = 'rgb(35,89,255)';
+const AIP_BRAND_LT   = 'rgb(128,152,234)';
+const AIP_BRAND_SOFT = 'rgba(35,89,255,0.16)';
+const AIP_BRAND_RING = 'rgba(35,89,255,0.40)';
 const AIP_INK        = 'rgb(249,250,251)';
 const AIP_INK_2      = 'rgb(229,231,235)';
 const AIP_MUTED      = 'rgb(163,163,163)';
@@ -24,11 +24,11 @@ const AIP_BLUE       = 'rgb(96,165,250)';
    ===================================================================== */
 
 const AIP_OVERDUE_CLIENTS = [
+  { name:'David Young',       firm:'Young Holdings LLC',    city:'Austin, TX',    tier:'Tier 1', init:'DY', bg:'rgb(128,152,234)',  last:'47 days',  aum:'$14.2M', priority:'High',   pDot:AIP_RED,   flag:'Drift +6.4% · review booked tomorrow' },
   { name:'Margaret Holloway', firm:'Holloway Family Trust', city:'Greenwich, CT', tier:'Tier 1', init:'MH', bg:'rgb(96,165,250)',  last:'127 days', aum:'$18.4M', priority:'High',   pDot:AIP_RED,   flag:'No spring review · top-decile AUM' },
-  { name:'David Young',       firm:'Young Holdings LLC',    city:'Austin, TX',    tier:'Tier 1', init:'DY', bg:'rgb(52,211,153)',  last:'47 days',  aum:'$14.2M', priority:'High',   pDot:AIP_RED,   flag:'Drift +6.4% · review booked tomorrow' },
   { name:'The Chen Family',   firm:'Chen Family Office',    city:'San Jose, CA',  tier:'Tier 1', init:'CF', bg:'rgb(167,139,250)', last:'104 days', aum:'$9.1M',  priority:'High',   pDot:AIP_RED,   flag:'Liquidity event closing in ~30 days' },
   { name:'Robert Patel',      firm:'Patel & Co.',           city:'Chicago, IL',   tier:'Tier 2', init:'RP', bg:'rgb(251,146,60)',  last:'168 days', aum:'$3.8M',  priority:'Medium', pDot:AIP_AMBER, flag:'No reply to last 2 outreach emails' },
-  { name:'Sarah Whitman',     firm:'Whitman Revocable',     city:'Denver, CO',    tier:'Tier 2', init:'SW', bg:'rgb(45,212,191)',  last:'142 days', aum:'$2.6M',  priority:'Medium', pDot:AIP_AMBER, flag:'Birthday last week — no card sent' },
+  { name:'Sarah Whitman',     firm:'Whitman Revocable',     city:'Denver, CO',    tier:'Tier 2', init:'SW', bg:'rgb(124,150,234)',  last:'142 days', aum:'$2.6M',  priority:'Medium', pDot:AIP_AMBER, flag:'Birthday last week — no card sent' },
 ];
 
 const AIP_OVERDUE_INSIGHTS = [
@@ -38,7 +38,7 @@ const AIP_OVERDUE_INSIGHTS = [
 ];
 
 const AIP_DRIFT_ROWS = [
-  { name:'David Young',       init:'DY', bg:'rgb(52,211,153)',  sleeve:'Equity', target:'60%', current:'66.4%', drift:'+6.4%', dDot:AIP_RED,   note:'Tech overweight after Q1 run-up' },
+  { name:'David Young',       init:'DY', bg:'rgb(128,152,234)',  sleeve:'Equity', target:'60%', current:'66.4%', drift:'+6.4%', dDot:AIP_RED,   note:'Tech overweight after Q1 run-up' },
   { name:'Margaret Holloway', init:'MH', bg:'rgb(96,165,250)',  sleeve:'Equity', target:'55%', current:'61.2%', drift:'+6.2%', dDot:AIP_RED,   note:'No rebalance since last August' },
   { name:'The Okafor Trust',  init:'OT', bg:'rgb(167,139,250)', sleeve:'Fixed Income', target:'35%', current:'28.5%', drift:'-6.5%', dDot:AIP_AMBER, note:'Bond ladder rolled off, not replaced' },
   { name:'Linda Park',        init:'LP', bg:'rgb(251,146,60)',  sleeve:'Equity', target:'50%', current:'55.4%', drift:'+5.4%', dDot:AIP_AMBER, note:'Concentrated single-stock position' },
@@ -104,13 +104,13 @@ function AipAction({ icon, label, sub, onClick, primary }) {
         padding:'12px 14px', borderRadius:10, cursor:'pointer', textAlign:'left',
         fontFamily:'Inter', transition:'background .14s ease, border-color .14s ease, transform .14s ease',
         transform: hover ? 'translateY(-1px)' : 'none',
-        background: primary ? (hover ? 'rgba(5,122,85,0.20)' : 'rgba(5,122,85,0.13)') : (hover ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.025)'),
+        background: primary ? (hover ? 'rgba(35,89,255,0.20)' : 'rgba(35,89,255,0.13)') : (hover ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.025)'),
         border: primary ? `1px solid ${AIP_BRAND_RING}` : `1px solid ${AIP_LINE}`,
       }}>
       <div style={{
         width:32, height:32, borderRadius:8, flexShrink:0,
-        background: primary ? 'rgba(5,122,85,0.20)' : 'rgba(255,255,255,0.04)',
-        border: primary ? '1px solid rgba(5,122,85,0.35)' : `1px solid ${AIP_LINE}`,
+        background: primary ? 'rgba(35,89,255,0.20)' : 'rgba(255,255,255,0.04)',
+        border: primary ? '1px solid rgba(35,89,255,0.35)' : `1px solid ${AIP_LINE}`,
         display:'flex', alignItems:'center', justifyContent:'center',
       }}>
         <i className={`fa-solid fa-${icon}`} style={{ fontSize:13, color: primary ? AIP_BRAND_LT : AIP_INK_2 }} />
@@ -134,7 +134,7 @@ function AipPanelShell({ prompt, summary, children }) {
       <div style={{ display:'flex', alignItems:'flex-start', gap:12 }}>
         <div style={{
           width:30, height:30, borderRadius:8, flexShrink:0,
-          background:'linear-gradient(135deg, rgba(5,122,85,0.35), rgba(5,122,85,0.10))',
+          background:'linear-gradient(135deg, rgba(35,89,255,0.35), rgba(35,89,255,0.10))',
           border:`1px solid ${AIP_BRAND_RING}`,
           display:'flex', alignItems:'center', justifyContent:'center',
         }}>
@@ -174,7 +174,7 @@ function AipClientRow({ children, onClick }) {
       onKeyDown={(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); onClick&&onClick(); } }}
       onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}
       style={{
-        background: hover ? 'rgba(5,122,85,0.07)' : 'rgba(255,255,255,0.02)',
+        background: hover ? 'rgba(35,89,255,0.07)' : 'rgba(255,255,255,0.02)',
         border: hover ? `1px solid ${AIP_BRAND_RING}` : `1px solid ${AIP_LINE}`,
         borderRadius:10, cursor:'pointer',
         transition:'background .14s ease, border-color .14s ease, transform .14s ease',
@@ -257,9 +257,9 @@ function BriefPanel({ prompt, onClient, onDeck }) {
       </div>
       <div style={{
         display:'flex', alignItems:'center', gap:12, padding:'12px 14px',
-        background:'rgba(5,122,85,0.07)', border:`1px solid ${AIP_BRAND_RING}`, borderRadius:10,
+        background:'rgba(35,89,255,0.07)', border:`1px solid ${AIP_BRAND_RING}`, borderRadius:10,
       }}>
-        <div style={{ width:34, height:34, borderRadius:8, background:'rgba(5,122,85,0.18)', border:'1px solid rgba(5,122,85,0.35)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+        <div style={{ width:34, height:34, borderRadius:8, background:'rgba(35,89,255,0.18)', border:'1px solid rgba(35,89,255,0.35)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
           <i className="fa-solid fa-file-lines" style={{ fontSize:14, color:AIP_BRAND_LT }} />
         </div>
         <div style={{ flex:1, minWidth:0 }}>
@@ -462,13 +462,13 @@ function AipToolChip({ step, done }) {
   return (
     <div style={{
       display:'flex', alignItems:'center', gap:10, padding:'8px 11px', borderRadius:9,
-      background: done ? 'rgba(255,255,255,0.025)' : 'rgba(5,122,85,0.08)',
+      background: done ? 'rgba(255,255,255,0.025)' : 'rgba(35,89,255,0.08)',
       border:`1px solid ${done ? AIP_LINE : AIP_BRAND_RING}`,
       transition:'background 200ms ease, border-color 200ms ease',
     }}>
       <div style={{
         width:18, height:18, borderRadius:9999, flexShrink:0,
-        background: done ? 'rgba(5,122,85,0.18)' : 'transparent',
+        background: done ? 'rgba(35,89,255,0.18)' : 'transparent',
         border: done ? `1px solid ${AIP_BRAND}` : `1.5px solid ${AIP_BRAND_RING}`,
         display:'flex', alignItems:'center', justifyContent:'center', color:AIP_BRAND,
       }}>
@@ -577,7 +577,7 @@ function AipHistoryRail({ items, activeText, onPick, onClose, onClear }) {
             <button key={i} onClick={()=>onPick(it.text)} style={{
               textAlign:'left', cursor:'pointer', display:'flex', flexDirection:'column', gap:3,
               padding:'9px 10px', borderRadius:8, fontFamily:'Inter',
-              background: isActive ? 'rgba(5,122,85,0.10)' : 'transparent',
+              background: isActive ? 'rgba(35,89,255,0.10)' : 'transparent',
               border: isActive ? `1px solid ${AIP_BRAND_RING}` : '1px solid transparent',
             }}
             onMouseEnter={e=>{ if(!isActive) e.currentTarget.style.background='rgba(255,255,255,0.04)'; }}
@@ -599,7 +599,7 @@ function AipPill({ children, onClick, active }) {
   return (
     <button onClick={onClick} style={{
       height:28, padding:'0 12px', borderRadius:9999, cursor:'pointer',
-      background: active ? 'rgba(5,122,85,0.16)' : 'rgba(255,255,255,0.04)',
+      background: active ? 'rgba(35,89,255,0.16)' : 'rgba(255,255,255,0.04)',
       border: active ? `1px solid ${AIP_BRAND_RING}` : `1px solid ${AIP_LINE}`,
       color: active ? AIP_BRAND_LT : AIP_INK_2,
       fontFamily:'Inter', fontSize:11.5, fontWeight:500,
@@ -703,7 +703,7 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
                 onKeyDown={e=>{ if(e.key==='Enter'){ e.preventDefault(); submit(msg); } }}
                 placeholder="Ask about your book…"
                 style={{ flex:1, minWidth:0, background:'transparent', border:'none', color:AIP_INK, fontFamily:'Inter', fontSize:12.5, outline:'none' }} />
-              <button onClick={()=>submit(msg)} title="Send" style={{ width:24, height:24, borderRadius:9999, border:'none', background: msg.trim() ? AIP_BRAND : 'rgba(5,122,85,0.3)', color:'#fff', cursor: msg.trim() ? 'pointer' : 'default', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
+              <button onClick={()=>submit(msg)} title="Send" style={{ width:24, height:24, borderRadius:9999, border:'none', background: msg.trim() ? AIP_BRAND : 'rgba(35,89,255,0.3)', color:'#fff', cursor: msg.trim() ? 'pointer' : 'default', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                 <i className="fa-solid fa-arrow-up" style={{ fontSize:10 }} />
               </button>
             </div>
@@ -717,12 +717,9 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
           </button>
         </div>
         <div ref={sentinelRef} style={{ height:1, flexShrink:0 }}></div>
-        <div style={{ minHeight:'calc(42vh - 250px)' }}></div>
+        <div style={{ minHeight:80 }}></div>
         <div style={{ textAlign:'center' }}>
           <h1 style={{ fontFamily:'Inter Display, Inter', fontWeight:500, fontSize:46, color:AIP_INK, margin:0, letterSpacing:'-0.02em' }}>How can I help, Avery?</h1>
-          <p style={{ fontFamily:'Inter', fontSize:14, color:AIP_MUTED, margin:'12px auto 0', lineHeight:1.55, maxWidth:480 }}>
-            I can pull from your book, prep meeting materials, flag portfolio drift, and draft client outreach.
-          </p>
         </div>
 
         <div style={{ width:640, maxWidth:'100%', background:'rgba(255,255,255,0.04)', border:`1px solid ${AIP_LINE}`, borderRadius:14, padding:'16px 16px 12px', display:'flex', flexDirection:'column', gap:12, boxShadow:'0 8px 30px -12px rgba(0,0,0,0.5)' }}>
@@ -735,14 +732,14 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
               <i className="fa-solid fa-folder" style={{ fontSize:13 }} />
             </button>
             <div style={{ flex:1 }} />
-            <button onClick={()=>submit(msg)} title="Send" style={{ width:32, height:32, borderRadius:8, border:'none', background: msg.trim() ? AIP_BRAND : 'rgba(5,122,85,0.3)', color:'#fff', cursor: msg.trim() ? 'pointer' : 'default', display:'flex', alignItems:'center', justifyContent:'center', transition:'background 150ms ease' }}>
+            <button onClick={()=>submit(msg)} title="Send" style={{ width:32, height:32, borderRadius:8, border:'none', background: msg.trim() ? AIP_BRAND : 'rgba(35,89,255,0.3)', color:'#fff', cursor: msg.trim() ? 'pointer' : 'default', display:'flex', alignItems:'center', justifyContent:'center', transition:'background 150ms ease' }}>
               <i className="fa-solid fa-arrow-up" style={{ fontSize:12 }} />
             </button>
           </div>
         </div>
 
 
-        <div style={{ width:920, maxWidth:'100%', marginTop:'clamp(24px, 9vh, 90px)' }}>
+        <div style={{ width:920, maxWidth:'100%', marginTop:40 }}>
           {window.AipHomeFeed ? React.createElement(window.AipHomeFeed) : null}
         </div>
       </main>
@@ -763,7 +760,7 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
           {!historyOpen && (
             <AipPill onClick={()=>setHistoryOpen(true)}>
               <i className="fa-solid fa-clock-3" style={{ fontSize:10 }} /> History
-              {history.length > 0 && <span style={{ marginLeft:2, padding:'1px 6px', borderRadius:9999, background:'rgba(5,122,85,0.18)', color:AIP_BRAND_LT, fontSize:10, fontWeight:600 }}>{history.length}</span>}
+              {history.length > 0 && <span style={{ marginLeft:2, padding:'1px 6px', borderRadius:9999, background:'rgba(35,89,255,0.18)', color:AIP_BRAND_LT, fontSize:10, fontWeight:600 }}>{history.length}</span>}
             </AipPill>
           )}
           <div style={{ flex:1 }} />
@@ -797,13 +794,13 @@ function AdvisorAIPage({ onOpenClient, onOpenDeck, onNav }) {
                   <button key={i} onClick={()=>setChatMsg(p)} style={{ height:24, padding:'0 10px', borderRadius:9999, background:'rgba(255,255,255,0.025)', border:`1px solid ${AIP_LINE}`, color:AIP_MUTED, fontFamily:'Inter', fontSize:11, cursor:'pointer' }}>{p}</button>
                 ))}
               </div>
-              <button onClick={()=>submit(chatMsg)} title="Send" style={{ width:28, height:28, borderRadius:7, border:'none', background: chatMsg.trim() ? AIP_BRAND : 'rgba(5,122,85,0.3)', color:'#fff', cursor: chatMsg.trim() ? 'pointer' : 'default', display:'flex', alignItems:'center', justifyContent:'center' }}>
+              <button onClick={()=>submit(chatMsg)} title="Send" style={{ width:28, height:28, borderRadius:7, border:'none', background: chatMsg.trim() ? AIP_BRAND : 'rgba(35,89,255,0.3)', color:'#fff', cursor: chatMsg.trim() ? 'pointer' : 'default', display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <i className="fa-solid fa-arrow-up" style={{ fontSize:11 }} />
               </button>
             </div>
           </div>
           <div style={{ fontFamily:'Inter', fontSize:10, color:AIP_DIM, marginTop:8, textAlign:'center' }}>
-            Field AI can take actions on your behalf · review results before sending to clients
+            Halo + AI can take actions on your behalf · review results before sending to clients
           </div>
         </div>
       </div>
@@ -859,7 +856,7 @@ const aipKeyframes = `
   @keyframes aipPulse { 0%,100% { opacity:0.25; transform:translateY(0); } 50% { opacity:1; transform:translateY(-2px); } }
   @keyframes aipStepIn { from { transform:translateY(6px); } to { transform:translateY(0); } }
   .aip-step { animation: aipStepIn 280ms ease; }
-  .aip-suggest:hover { background: rgba(5,122,85,0.10) !important; border-color: ${AIP_BRAND_RING} !important; color: ${AIP_INK} !important; }
+  .aip-suggest:hover { background: rgba(35,89,255,0.10) !important; border-color: ${AIP_BRAND_RING} !important; color: ${AIP_INK} !important; }
 `;
 
 window.AdvisorAIPage = AdvisorAIPage;

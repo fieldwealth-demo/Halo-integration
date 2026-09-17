@@ -8,7 +8,7 @@ const AS_KPIS = [
 ];
 
 const AS_ALLOCATION = [
-  { label:'Public Equity',    value:'$9,093,793', pct:'55%', amount:9.09, color:'rgb(16,185,129)' },
+  { label:'Public Equity',    value:'$9,093,793', pct:'55%', amount:9.09, color:'rgb(84,121,240)' },
   { label:'Fixed Income',     value:'$4,960,251', pct:'30%', amount:4.96, color:'rgb(56,189,248)' },
   { label:'Real Assets',      value:'$1,157,392', pct:'7%',  amount:1.16, color:'rgb(234,88,12)'  },
   { label:'Private Equity',   value:'$720,000',   pct:'4%',  amount:0.72, color:'rgb(139,92,246)' },
@@ -32,7 +32,7 @@ const AS_POSITIONS = [
   { code:'BND',  color:'rgb(56,189,248)', name:'Vanguard Total Bond Market ETF',  sub:'BND', cls:'Fixed Income',  clsTone:'info',    fairValue:'$2,156,780', cost:'$2,234,560', gl:'-$77,780', glTone:'danger',  allocation:13 },
   { code:'SPY',  color:'rgb(234,179,8)',  name:'SPDR S&P 500 ETF Trust',          sub:'SPY', cls:'Equity',        clsTone:'success', fairValue:'$1,923,450', cost:'$1,654,320', gl:'+$269,130', glTone:'success', allocation:11.6 },
   { code:'AGG',  color:'rgb(139,92,246)', name:'iShares Core US Aggregate Bond',  sub:'AGG', cls:'Fixed Income',  clsTone:'info',    fairValue:'$1,567,890', cost:'$1,612,340', gl:'-$44,450', glTone:'danger',  allocation:9.5 },
-  { code:'QQQ',  color:'rgb(16,185,129)', name:'Invesco QQQ Trust',               sub:'QQQ', cls:'Equity',        clsTone:'success', fairValue:'$1,423,670', cost:'$1,156,890', gl:'+$266,780', glTone:'success', allocation:8.6 },
+  { code:'QQQ',  color:'rgb(84,121,240)', name:'Invesco QQQ Trust',               sub:'QQQ', cls:'Equity',        clsTone:'success', fairValue:'$1,423,670', cost:'$1,156,890', gl:'+$266,780', glTone:'success', allocation:8.6 },
   { code:'VNQ',  color:'rgb(248,113,113)',name:'Vanguard Real Estate ETF',        sub:'VNQ', cls:'Real Estate',   clsTone:'warning', fairValue:'$1,157,392', cost:'$1,089,450', gl:'+$67,942',  glTone:'success', allocation:7 },
   { code:'EFA',  color:'rgb(56,189,248)', name:'iShares Core MSCI EAFE ETF',      sub:'EFA', cls:'Equity',        clsTone:'success', fairValue:'$997,650',   cost:'$923,780',   gl:'+$63,870',  glTone:'success', allocation:6 },
   { code:'PDBC', color:'rgb(139,92,246)', name:'Invesco Optimum Yield Diversified', sub:'PDBC', cls:'Alternatives', clsTone:'violet', fairValue:'$826,708',  cost:'$798,340',   gl:'+$28,368', glTone:'success', allocation:5 },
@@ -40,7 +40,7 @@ const AS_POSITIONS = [
 ];
 
 const AS_CLS_TONES = {
-  success: { bg:'rgba(16,185,129,0.18)', fg:'rgb(16,185,129)', border:'1px solid rgba(16,185,129,0.4)' },
+  success: { bg:'rgba(84,121,240,0.18)', fg:'rgb(84,121,240)', border:'1px solid rgba(84,121,240,0.4)' },
   info:    { bg:'rgba(56,189,248,0.18)', fg:'rgb(56,189,248)', border:'1px solid rgba(56,189,248,0.4)' },
   warning: { bg:'rgba(234,88,12,0.18)',  fg:'rgb(251,146,60)', border:'1px solid rgba(234,88,12,0.45)' },
   violet:  { bg:'rgba(139,92,246,0.18)', fg:'rgb(196,181,253)', border:'1px solid rgba(139,92,246,0.45)' },
@@ -92,12 +92,12 @@ function ASAllocation() {
           </span>
         </div>
         <div style={{ display:'flex', height:10, borderRadius:5, overflow:'hidden', background:'rgba(255,255,255,0.05)' }}>
-          <div style={{ width:'69%', background:'rgb(16,185,129)' }} />
+          <div style={{ width:'69%', background:'rgb(84,121,240)' }} />
           <div style={{ width:'31%', background:'rgb(234,88,12)' }} />
         </div>
         <div style={{ display:'flex', gap:18, marginTop:8 }}>
           <span style={{ display:'inline-flex', alignItems:'center', gap:6, fontFamily:'Inter', fontSize:11, color:'rgb(209,213,219)' }}>
-            <span style={{ width:9, height:9, borderRadius:9999, background:'rgb(16,185,129)' }} /> Assets Under Management (69%)
+            <span style={{ width:9, height:9, borderRadius:9999, background:'rgb(84,121,240)' }} /> Assets Under Management (69%)
           </span>
           <span style={{ display:'inline-flex', alignItems:'center', gap:6, fontFamily:'Inter', fontSize:11, color:'rgb(209,213,219)' }}>
             <span style={{ width:9, height:9, borderRadius:9999, background:'rgb(234,88,12)' }} /> Assets Held Away (31%)
@@ -113,7 +113,7 @@ function ASTopManagers() {
     <div style={MP_CARD}>
       <div style={{ ...MP_HEAD, justifyContent:'space-between', alignItems:'center' }}>
         <div style={{ display:'flex', alignItems:'center' }}><div style={MP_TITLE}>Top Asset Managers</div><TileInfo title="Top Asset Managers" /></div>
-        <span style={{ fontFamily:'Inter', fontSize:11, color:'rgb(16,185,129)', cursor:'pointer', fontWeight:600 }}>See all</span>
+        <span style={{ fontFamily:'Inter', fontSize:11, color:'rgb(84,121,240)', cursor:'pointer', fontWeight:600 }}>See all</span>
       </div>
       <div style={{ padding:'2px 18px 14px', display:'flex', flexDirection:'column', gap:10 }}>
         {AS_TOP_MANAGERS.map((m, i) => (
@@ -129,7 +129,7 @@ function ASTopManagers() {
             </div>
             <div style={{ textAlign:'right' }}>
               <div style={{ fontFamily:'Inter', fontWeight:700, fontSize:13.5, fontVariantNumeric:'tabular-nums' }}>{m.aum}</div>
-              <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(16,185,129)', fontWeight:600 }}>↑ {m.delta}</div>
+              <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(84,121,240)', fontWeight:600 }}>↑ {m.delta}</div>
             </div>
           </div>
         ))}
@@ -148,9 +148,9 @@ function ASGrowth() {
     legend:{ enabled:false },
     tooltip:{ pointFormat:'<b>${point.y}M</b>' },
     plotOptions:{ areaspline:{
-      fillColor:{ linearGradient:{ x1:0,x2:0,y1:0,y2:1 }, stops:[[0,'rgba(16,185,129,0.32)'],[1,'rgba(16,185,129,0.02)']] },
-      lineColor:'rgb(16,185,129)', lineWidth:2.5,
-      marker:{ enabled:true, radius:3.5, fillColor:'rgb(16,185,129)', lineColor:'rgb(14,26,42)', lineWidth:2 },
+      fillColor:{ linearGradient:{ x1:0,x2:0,y1:0,y2:1 }, stops:[[0,'rgba(84,121,240,0.32)'],[1,'rgba(84,121,240,0.02)']] },
+      lineColor:'rgb(84,121,240)', lineWidth:2.5,
+      marker:{ enabled:true, radius:3.5, fillColor:'rgb(84,121,240)', lineColor:'rgb(14,26,42)', lineWidth:2 },
     } },
     series:[{ name:'Managed Assets', data: AS_GROWTH_VALUES }],
   }), []);
@@ -164,7 +164,7 @@ function ASGrowth() {
               <button key={r} data-no-hint onClick={()=>setRange(r)} style={{
                 fontFamily:'Inter', fontWeight:600, fontSize:10.5,
                 padding:'4px 10px', borderRadius:5, cursor:'pointer', border:'none',
-                background: range === r ? 'rgb(5,122,85)' : 'transparent',
+                background: range === r ? 'rgb(35,89,255)' : 'transparent',
                 color: range === r ? '#fff' : 'rgb(163,163,163)',
               }}>{r}</button>
             ))}
@@ -277,11 +277,11 @@ function ASPositions() {
             <span style={{ textAlign:'right', fontVariantNumeric:'tabular-nums', color:'rgb(209,213,219)' }}>{r.cost}</span>
             <span style={{
               textAlign:'right', fontVariantNumeric:'tabular-nums', fontWeight:700,
-              color: r.glTone === 'success' ? 'rgb(16,185,129)' : 'rgb(248,113,113)',
+              color: r.glTone === 'success' ? 'rgb(84,121,240)' : 'rgb(248,113,113)',
             }}>{r.gl}</span>
             <div style={{ display:'flex', alignItems:'center', gap:8, justifyContent:'flex-end' }}>
               <div style={{ width:60, height:5, borderRadius:9999, background:'rgba(255,255,255,0.06)', overflow:'hidden' }}>
-                <div style={{ width: `${Math.min(100, r.allocation * 5)}%`, height:'100%', background:'rgb(16,185,129)' }} />
+                <div style={{ width: `${Math.min(100, r.allocation * 5)}%`, height:'100%', background:'rgb(84,121,240)' }} />
               </div>
               <span style={{ fontVariantNumeric:'tabular-nums', fontWeight:600, minWidth:40, textAlign:'right' }}>{r.allocation}%</span>
             </div>

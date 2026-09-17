@@ -1,0 +1,1813 @@
+<!doctype html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Advisor Dashboard · Halo +</title>
+  <link rel="stylesheet" href="colors_and_type.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    html, body { margin:0; padding:0; color: rgb(249,250,251); min-height:100vh; font-family: Inter, sans-serif; }
+    body { background-color: rgb(14,26,42); background-image: var(--app-bg-image); background-attachment: fixed; }
+    * { font-family: Inter, sans-serif !important; }
+    /* Font Awesome must win over the global Inter override */
+    i.fa, i.fas, i.far, i.fab, i.fa-solid, i.fa-regular, i.fa-brands,
+    i.fa::before, i.fas::before, i.far::before, i.fab::before,
+    i.fa-solid::before, i.fa-regular::before, i.fa-brands::before {
+      font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+    }
+    i.fa-brands, i.fab, i.fa-brands::before, i.fab::before { font-family: "Font Awesome 6 Brands" !important; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @keyframes sbTipIn { from { opacity: 0; transform: translateY(-50%) translateX(-4px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
+    @keyframes sbFlyoutIn { from { opacity: 0; transform: translateX(-4px); } to { opacity: 1; transform: translateX(0); } }
+    /* Sidebar tooltip (collapsed) */
+    .sb-item { position: relative; }
+    .sb-item[data-tip]::after {
+      content: attr(data-tip);
+      position: absolute; left: calc(100% + 10px); top: 50%; transform: translateY(-50%) translateX(-4px);
+      background: rgb(17,24,39); color: rgb(249,250,251);
+      border: 1px solid rgb(75,85,99); border-radius: 6px;
+      padding: 4px 8px; font-size: 11.5px; font-weight: 500; white-space: nowrap;
+      opacity: 0; pointer-events: none; transition: opacity 120ms ease, transform 120ms ease;
+      box-shadow: 0 6px 16px -4px rgba(0,0,0,0.5); z-index: 60;
+    }
+    .sb-item[data-tip]:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
+    .adv-grid { display:grid; grid-template-columns: repeat(12, 1fr); gap:16px; grid-auto-flow: row; align-items: stretch; }
+    .adv-grid > * { align-self: stretch; }
+    /* --- Edit-mode tile wrapper --- */
+    .edit-tile { position:relative; transition: outline-color 150ms ease, transform 150ms ease, opacity 150ms ease; }
+    .edit-tile.is-editing { outline: 1px dashed rgba(75,85,99,0.7); outline-offset: 4px; border-radius: 14px; cursor: grab; }
+    .edit-tile.is-editing:hover { outline-color: rgb(35,89,255); }
+    .edit-tile.is-dragging { opacity: 0.4; }
+    .edit-tile.drop-target { outline: 2px solid rgb(35,89,255); outline-offset: 4px; }
+    @keyframes edit-shake {
+      0%,100% { transform: rotate(0deg); }
+      25% { transform: rotate(-0.35deg); }
+      75% { transform: rotate(0.35deg); }
+    }
+    .edit-tile.is-editing > * { animation: edit-shake 2.6s ease-in-out infinite; }
+    .edit-tile.is-editing > .edit-menu-wrap,
+    .edit-tile.is-editing > .ai-drawer,
+    .edit-tile.is-editing > .ai-drawer-backdrop { animation: none; }
+    /* Hide the original in-header ellipsis — replaced by our own ellipsis +
+       dropdown (idle state) and inline edit/delete actions (Edit-Dashboard
+       mode). The Tile component sets display:inline-flex inline so we need
+       !important here. */
+    .tile-overflow-btn { display: none !important; }
+    /* Info icon (data provenance) next to each tile title */
+    .tile-info-btn:hover { color: rgb(151,171,238) !important; }
+    /* Inline action icons / ellipsis (overlay where the original ellipsis lives) */
+    .edit-menu-wrap {
+      position: absolute; top: 10px; right: 12px; z-index: 6;
+      display: inline-flex; align-items: center; gap: 2px;
+    }
+    /* Idle ellipsis fades up subtly only on hover so unhovered tiles stay
+       calm; in edit mode the action icons are always visible. */
+    .edit-tile:not(.is-editing) .edit-menu-wrap { opacity: 0.85; transition: opacity 120ms ease; }
+    .edit-tile:not(.is-editing):hover .edit-menu-wrap { opacity: 1; }
+    .edit-tile.is-editing .edit-menu-wrap { opacity: 1; }
+    .edit-menu-btn {
+      width: 26px; height: 26px; border-radius: 6px;
+      background: transparent; border: none;
+      color: rgb(163,163,163); cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .edit-menu-btn:hover { color: rgb(249,250,251); background: rgba(255,255,255,0.06); }
+    .edit-menu-btn.move-btn { cursor: grab; }
+    .edit-menu-btn.move-btn:active { cursor: grabbing; }
+    .edit-menu-btn.danger:hover { color: rgb(248,113,113); background: rgba(220,38,38,0.15); }
+    .edit-menu-btn.ai:hover { color: rgb(168,185,241); background: rgba(35,89,255,0.18); }
+    /* Tooltip */
+    .edit-menu-btn[data-tip]::after {
+      content: attr(data-tip);
+      position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%) translateY(4px);
+      background: rgb(17,24,39); color: rgb(249,250,251);
+      border: 1px solid rgb(75,85,99); border-radius: 6px;
+      padding: 3px 7px; font-size: 11px; font-weight: 500; white-space: nowrap;
+      opacity: 0; pointer-events: none; transition: opacity 120ms ease, transform 120ms ease;
+      box-shadow: 0 6px 16px -4px rgba(0,0,0,0.5); z-index: 70;
+    }
+    .edit-menu-btn[data-tip]:hover::after { opacity: 1; transform: translateX(-50%) translateY(0); }
+    /* Dropdown */
+    .edit-menu {
+      position: absolute; top: calc(100% + 6px); right: 0; z-index: 50;
+      min-width: 160px; padding: 6px; border-radius: 10px;
+      background: rgb(17,24,39); border: 1px solid rgb(75,85,99);
+      box-shadow: 0 18px 40px -12px rgba(0,0,0,0.7);
+      font-family: Inter; font-size: 12.5px; color: rgb(249,250,251);
+    }
+    .edit-menu-item {
+      display: flex; align-items: center; gap: 10px;
+      width: 100%; padding: 7px 10px; border-radius: 6px;
+      background: transparent; border: none; color: inherit;
+      font-family: inherit; font-size: inherit; cursor: pointer; text-align: left;
+    }
+    .edit-menu-item:hover { background: rgba(255,255,255,0.06); }
+    .edit-menu-item.danger { color: rgb(248,113,113); }
+    .edit-menu-item.danger:hover { background: rgba(220,38,38,0.15); }
+    .edit-menu-item .mi-ic { width: 14px; display: inline-flex; align-items: center; justify-content: center; color: rgb(163,163,163); }
+    .edit-menu-item.danger .mi-ic { color: rgb(248,113,113); }
+    .edit-menu-item.move-item { cursor: grab; }
+    .edit-menu-item.move-item:active { cursor: grabbing; }
+    /* AI edit slide-out drawer (right side) */
+    .ai-drawer-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+      opacity: 0; pointer-events: none; transition: opacity 180ms ease; z-index: 90;
+    }
+    .ai-drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+    .ai-drawer {
+      position: fixed; top: 0; right: 0; height: 100vh; width: 400px; max-width: min(92vw, 400px);
+      background: rgb(17,24,39); border-left: 1px solid rgb(75,85,99);
+      box-shadow: -20px 0 60px -20px rgba(0,0,0,0.7);
+      transform: translateX(100%); transition: transform 240ms cubic-bezier(.2,.8,.2,1);
+      z-index: 95; display: flex; flex-direction: column;
+      box-sizing: border-box;
+    }
+    .ai-drawer * { box-sizing: border-box; }
+    .ai-drawer.open { transform: translateX(0); }
+    .ai-drawer-head { padding: 16px 18px; border-bottom: 1px solid rgba(75,85,99,0.5); display: flex; align-items: center; gap: 10px; }
+    .ai-drawer-body { padding: 16px 18px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 14px; }
+    .ai-drawer-foot { padding: 12px 18px 16px; border-top: 1px solid rgba(75,85,99,0.5); display: flex; align-items: center; gap: 10px; }
+    .ai-prompt-chip {
+      text-align: left; padding: 10px 12px; border-radius: 10px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(75,85,99,0.5);
+      color: rgb(209,213,219); font-family: Inter; font-size: 12.5px; cursor: pointer;
+      transition: background 120ms ease, border-color 120ms ease;
+    }
+    .ai-prompt-chip:hover { background: rgba(35,89,255,0.12); border-color: rgb(35,89,255); color: rgb(249,250,251); }
+    .cd-sidebar-scroll::-webkit-scrollbar { width:6px; }
+    .cd-sidebar-scroll::-webkit-scrollbar-track { background:transparent; }
+    .cd-sidebar-scroll::-webkit-scrollbar-thumb { background:rgba(75,85,99,0.6); border-radius:9999px; }
+    .cd-sidebar-scroll::-webkit-scrollbar-thumb:hover { background:rgba(107,114,128,0.8); }
+    .cd-sidebar-scroll { scrollbar-width:thin; scrollbar-color:rgba(75,85,99,0.6) transparent; }
+    .col-3 { grid-column: span 3; } .col-4 { grid-column: span 4; }
+    .col-5 { grid-column: span 5; } .col-6 { grid-column: span 6; }
+    .col-7 { grid-column: span 7; } .col-8 { grid-column: span 8; }
+    .col-12 { grid-column: 1 / -1; }
+    /* Explicit row assignment prevents tall tiles from stealing width on the next row */
+    .row-1 { grid-row: 1; } .row-2 { grid-row: 2; } .row-3 { grid-row: 3; }
+    .row-4 { grid-row: 4; } .row-5 { grid-row: 5; } .row-6 { grid-row: 6; }
+  </style>
+  <style>
+    /* Inline SVG icon shim — renders Lucide-style icons for fa-* class names.
+       No CDN dependency. Icons are embedded as url-encoded SVG masks. */
+    i[class*="fa-"] { display:inline-flex; align-items:center; justify-content:center; vertical-align:-0.125em; }
+    i[class*="fa-"]::before {
+      content:""; display:inline-block;
+      width:1em; height:1em;
+      background-color: currentColor;
+      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+      -webkit-mask-position: center; mask-position: center;
+      -webkit-mask-size: contain; mask-size: contain;
+    }
+    /* Lucide icon paths — stroke="currentColor" fill="none" stroke-width="2" */
+    .__ic(svg) { }
+    i.fa-angles-left::before      { -webkit-mask-image: var(--ic-angles-left);      mask-image: var(--ic-angles-left); }
+    i.fa-angles-right::before     { -webkit-mask-image: var(--ic-angles-right);     mask-image: var(--ic-angles-right); }
+    i.fa-chevron-left::before     { -webkit-mask-image: var(--ic-chevron-left);     mask-image: var(--ic-chevron-left); }
+    i.fa-chevron-right::before    { -webkit-mask-image: var(--ic-chevron-right);    mask-image: var(--ic-chevron-right); }
+    i.fa-chevron-up::before       { -webkit-mask-image: var(--ic-chevron-up);       mask-image: var(--ic-chevron-up); }
+    i.fa-chevron-down::before     { -webkit-mask-image: var(--ic-chevron-down);     mask-image: var(--ic-chevron-down); }
+    i.fa-arrow-up::before         { -webkit-mask-image: var(--ic-arrow-up);         mask-image: var(--ic-arrow-up); }
+    i.fa-arrow-down::before       { -webkit-mask-image: var(--ic-arrow-down);       mask-image: var(--ic-arrow-down); }
+    i.fa-arrow-right::before      { -webkit-mask-image: var(--ic-arrow-right);      mask-image: var(--ic-arrow-right); }
+    i.fa-arrow-trend-up::before   { -webkit-mask-image: var(--ic-trending-up);      mask-image: var(--ic-trending-up); }
+    i.fa-arrow-trend-down::before { -webkit-mask-image: var(--ic-trending-down);    mask-image: var(--ic-trending-down); }
+    i.fa-up-down::before          { -webkit-mask-image: var(--ic-chevrons-up-down); mask-image: var(--ic-chevrons-up-down); }
+    i.fa-gear::before             { -webkit-mask-image: var(--ic-settings);         mask-image: var(--ic-settings); }
+    i.fa-magnifying-glass::before { -webkit-mask-image: var(--ic-search);           mask-image: var(--ic-search); }
+    i.fa-download::before         { -webkit-mask-image: var(--ic-download);         mask-image: var(--ic-download); }
+    i.fa-wand-magic-sparkles::before { -webkit-mask-image: var(--ic-sparkles);      mask-image: var(--ic-sparkles); }
+    i.fa-envelope::before         { -webkit-mask-image: var(--ic-mail);             mask-image: var(--ic-mail); }
+    i.fa-xmark::before            { -webkit-mask-image: var(--ic-x);                mask-image: var(--ic-x); }
+    i.fa-ellipsis::before         { -webkit-mask-image: var(--ic-ellipsis);         mask-image: var(--ic-ellipsis); }
+    i.fa-grip::before             { -webkit-mask-image: var(--ic-grip);             mask-image: var(--ic-grip); }
+    i.fa-pen-to-square::before    { -webkit-mask-image: var(--ic-pen-square);       mask-image: var(--ic-pen-square); }
+    i.fa-trash-can::before        { -webkit-mask-image: var(--ic-trash);            mask-image: var(--ic-trash); }
+    i.fa-bars::before             { -webkit-mask-image: var(--ic-menu);             mask-image: var(--ic-menu); }
+    i.fa-bell::before             { -webkit-mask-image: var(--ic-bell);             mask-image: var(--ic-bell); }
+    i.fa-plus::before             { -webkit-mask-image: var(--ic-plus);             mask-image: var(--ic-plus); }
+    i.fa-check::before            { -webkit-mask-image: var(--ic-check);            mask-image: var(--ic-check); }
+    i.fa-circle-check::before     { -webkit-mask-image: var(--ic-circle-check);     mask-image: var(--ic-circle-check); }
+    i.fa-calendar::before         { -webkit-mask-image: var(--ic-calendar);         mask-image: var(--ic-calendar); }
+    i.fa-spinner::before          { -webkit-mask-image: var(--ic-loader);           mask-image: var(--ic-loader); }
+    i.fa-spin::before             { animation: spin 1s linear infinite; }
+    i.fa-users::before            { -webkit-mask-image: var(--ic-users);            mask-image: var(--ic-users); }
+    i.fa-shield::before           { -webkit-mask-image: var(--ic-shield);           mask-image: var(--ic-shield); }
+    i.fa-shield-halved::before    { -webkit-mask-image: var(--ic-shield);           mask-image: var(--ic-shield); }
+    i.fa-bullseye::before         { -webkit-mask-image: var(--ic-target);           mask-image: var(--ic-target); }
+    i.fa-briefcase::before        { -webkit-mask-image: var(--ic-briefcase);        mask-image: var(--ic-briefcase); }
+    i.fa-droplet::before          { -webkit-mask-image: var(--ic-droplet);          mask-image: var(--ic-droplet); }
+    i.fa-percent::before          { -webkit-mask-image: var(--ic-percent);          mask-image: var(--ic-percent); }
+    i.fa-triangle-exclamation::before { -webkit-mask-image: var(--ic-alert-triangle); mask-image: var(--ic-alert-triangle); }
+    i.fa-table-columns::before    { -webkit-mask-image: var(--ic-layout-dashboard); mask-image: var(--ic-layout-dashboard); }
+    i.fa-square-check::before     { -webkit-mask-image: var(--ic-check-square);     mask-image: var(--ic-check-square); }
+    i.fa-terminal::before         { -webkit-mask-image: var(--ic-terminal);         mask-image: var(--ic-terminal); }
+    i.fa-credit-card::before      { -webkit-mask-image: var(--ic-credit-card);      mask-image: var(--ic-credit-card); }
+    i.fa-chart-column::before     { -webkit-mask-image: var(--ic-bar-chart);        mask-image: var(--ic-bar-chart); }
+    i.fa-layer-group::before      { -webkit-mask-image: var(--ic-layers);           mask-image: var(--ic-layers); }
+    i.fa-message::before          { -webkit-mask-image: var(--ic-message-circle);   mask-image: var(--ic-message-circle); }
+    i.fa-folder::before           { -webkit-mask-image: var(--ic-folder);           mask-image: var(--ic-folder); }
+    i.fa-arrow-up-right-from-square::before { -webkit-mask-image: var(--ic-external-link); mask-image: var(--ic-external-link); }
+    i.fa-share-from-square::before { -webkit-mask-image: var(--ic-share); mask-image: var(--ic-share); }
+    i.fa-share-nodes::before      { -webkit-mask-image: var(--ic-share); mask-image: var(--ic-share); }
+    i.fa-house::before            { -webkit-mask-image: var(--ic-home);             mask-image: var(--ic-home); }
+    i.fa-phone::before            { -webkit-mask-image: var(--ic-phone);            mask-image: var(--ic-phone); }
+    i.fa-filter::before           { -webkit-mask-image: var(--ic-filter);           mask-image: var(--ic-filter); }
+    i.fa-file-lines::before       { -webkit-mask-image: var(--ic-file-text);        mask-image: var(--ic-file-text); }
+    i.fa-file-invoice-dollar::before { -webkit-mask-image: var(--ic-receipt);       mask-image: var(--ic-receipt); }
+    i.fa-calendar-circle-user::before { -webkit-mask-image: var(--ic-calendar-user); mask-image: var(--ic-calendar-user); }
+    i.fa-file-signature::before   { -webkit-mask-image: var(--ic-file-signature);   mask-image: var(--ic-file-signature); }
+    i.fa-circle-plus::before      { -webkit-mask-image: var(--ic-circle-plus);      mask-image: var(--ic-circle-plus); }
+    i.fa-circle-info::before      { -webkit-mask-image: var(--ic-circle-info);      mask-image: var(--ic-circle-info); }
+    i.fa-database::before         { -webkit-mask-image: var(--ic-database);         mask-image: var(--ic-database); }
+    i.fa-function::before         { -webkit-mask-image: var(--ic-function);         mask-image: var(--ic-function); }
+    i.fa-clock-3::before          { -webkit-mask-image: var(--ic-clock-3);          mask-image: var(--ic-clock-3); }
+
+    :root {
+      --ic-angles-left:      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m11 17-5-5 5-5'/><path d='m18 17-5-5 5-5'/></svg>");
+      --ic-angles-right:     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 17 5-5-5-5'/><path d='m13 17 5-5-5-5'/></svg>");
+      --ic-chevron-left:     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m15 18-6-6 6-6'/></svg>");
+      --ic-chevron-right:    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m9 18 6-6-6-6'/></svg>");
+      --ic-chevron-up:       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m18 15-6-6-6 6'/></svg>");
+      --ic-chevron-down:     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m6 9 6 6 6-6'/></svg>");
+      --ic-arrow-up:         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 19V5'/><path d='m5 12 7-7 7 7'/></svg>");
+      --ic-arrow-down:       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 5v14'/><path d='m19 12-7 7-7-7'/></svg>");
+      --ic-arrow-right:      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/><path d='m12 5 7 7-7 7'/></svg>");
+      --ic-trending-up:      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='22 7 13.5 15.5 8.5 10.5 2 17'/><polyline points='16 7 22 7 22 13'/></svg>");
+      --ic-trending-down:    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='22 17 13.5 8.5 8.5 13.5 2 7'/><polyline points='16 17 22 17 22 11'/></svg>");
+      --ic-chevrons-up-down: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m7 15 5 5 5-5'/><path d='m7 9 5-5 5 5'/></svg>");
+      --ic-settings:         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z'/><circle cx='12' cy='12' r='3'/></svg>");
+      --ic-search:           url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>");
+      --ic-download:         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4'/><polyline points='7 10 12 15 17 10'/><line x1='12' x2='12' y1='15' y2='3'/></svg>");
+      --ic-sparkles:         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z'/><path d='M20 3v4'/><path d='M22 5h-4'/><path d='M4 17v2'/><path d='M5 18H3'/></svg>");
+      --ic-mail:             url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='20' height='16' x='2' y='4' rx='2'/><path d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7'/></svg>");
+      --ic-x:                url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M18 6 6 18'/><path d='m6 6 12 12'/></svg>");
+      --ic-ellipsis:         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='1'/><circle cx='19' cy='12' r='1'/><circle cx='5' cy='12' r='1'/></svg>");
+      --ic-grip:             url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='9' cy='5' r='1'/><circle cx='9' cy='12' r='1'/><circle cx='9' cy='19' r='1'/><circle cx='15' cy='5' r='1'/><circle cx='15' cy='12' r='1'/><circle cx='15' cy='19' r='1'/></svg>");
+      --ic-pen-square:       url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/><path d='M18.375 2.625a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4z'/></svg>");
+      --ic-trash:            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 6h18'/><path d='M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6'/><path d='M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'/><line x1='10' x2='10' y1='11' y2='17'/><line x1='14' x2='14' y1='11' y2='17'/></svg>");
+      --ic-menu:             url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><line x1='4' x2='20' y1='12' y2='12'/><line x1='4' x2='20' y1='6' y2='6'/><line x1='4' x2='20' y1='18' y2='18'/></svg>");
+      --ic-bell:             url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9'/><path d='M10.3 21a1.94 1.94 0 0 0 3.4 0'/></svg>");
+      --ic-plus:             url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M5 12h14'/><path d='M12 5v14'/></svg>");
+      --ic-check:            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+      --ic-circle-check:     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='m9 12 2 2 4-4'/></svg>");
+      --ic-calendar:         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='18' height='18' x='3' y='4' rx='2'/><path d='M16 2v4'/><path d='M8 2v4'/><path d='M3 10h18'/></svg>");
+      --ic-loader:           url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 12a9 9 0 1 1-6.219-8.56'/></svg>");
+      --ic-users:            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/><circle cx='9' cy='7' r='4'/><path d='M22 21v-2a4 4 0 0 0-3-3.87'/><path d='M16 3.13a4 4 0 0 1 0 7.75'/></svg>");
+      --ic-shield:           url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/></svg>");
+      --ic-target:           url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><circle cx='12' cy='12' r='6'/><circle cx='12' cy='12' r='2'/></svg>");
+      --ic-briefcase:        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='20' height='14' x='2' y='7' rx='2' ry='2'/><path d='M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16'/></svg>");
+      --ic-droplet:          url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5S5 13 5 15a7 7 0 0 0 7 7z'/></svg>");
+      --ic-percent:          url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><line x1='19' x2='5' y1='5' y2='19'/><circle cx='6.5' cy='6.5' r='2.5'/><circle cx='17.5' cy='17.5' r='2.5'/></svg>");
+      --ic-alert-triangle:   url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3'/><path d='M12 9v4'/><path d='M12 17h.01'/></svg>");
+      --ic-layout-dashboard: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='7' height='9' x='3' y='3' rx='1'/><rect width='7' height='5' x='14' y='3' rx='1'/><rect width='7' height='9' x='14' y='12' rx='1'/><rect width='7' height='5' x='3' y='16' rx='1'/></svg>");
+      --ic-check-square:     url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m9 11 3 3L22 4'/><path d='M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11'/></svg>");
+      --ic-terminal:         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='4 17 10 11 4 5'/><line x1='12' x2='20' y1='19' y2='19'/></svg>");
+      --ic-credit-card:      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect width='20' height='14' x='2' y='5' rx='2'/><line x1='2' x2='22' y1='10' y2='10'/></svg>");
+      --ic-bar-chart:        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><line x1='12' x2='12' y1='20' y2='10'/><line x1='18' x2='18' y1='20' y2='4'/><line x1='6' x2='6' y1='20' y2='16'/></svg>");
+      --ic-layers:           url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z'/><path d='m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65'/><path d='m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65'/></svg>");
+      --ic-message-circle:   url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M7.9 20A9 9 0 1 0 4 16.1L2 22z'/></svg>");
+      --ic-folder:           url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z'/></svg>");
+      --ic-external-link:    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 3h6v6'/><path d='M10 14 21 3'/><path d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/></svg>");
+      --ic-share:            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='18' cy='5' r='3'/><circle cx='6' cy='12' r='3'/><circle cx='18' cy='19' r='3'/><line x1='8.59' x2='15.42' y1='13.51' y2='17.49'/><line x1='15.41' x2='8.59' y1='6.51' y2='10.49'/></svg>");
+      --ic-home:             url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/><polyline points='9 22 9 12 15 12 15 22'/></svg>");
+      --ic-phone:            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z'/></svg>");
+      --ic-filter:           url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3'/></svg>");
+      --ic-file-text:        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='16' y1='13' x2='8' y2='13'/><line x1='16' y1='17' x2='8' y2='17'/><polyline points='10 9 9 9 8 9'/></svg>");
+      --ic-receipt:          url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z'/><path d='M14 8H8'/><path d='M16 12H8'/><path d='M13 16H8'/></svg>");
+      --ic-calendar-user:    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 13V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8'/><path d='M16 2v4'/><path d='M8 2v4'/><path d='M3 10h18'/><circle cx='18' cy='18' r='4'/><circle cx='18' cy='17' r='1.1'/><path d='M16.3 20.6c.2-.9 1-1.6 1.7-1.6s1.5.7 1.7 1.6'/></svg>");
+      --ic-file-signature:   url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8'/><path d='M14 2v6h6'/><path d='M10.42 12.61a2.1 2.1 0 1 1 2.97 2.97L8 21l-4 1 1-4z'/></svg>");
+      --ic-circle-plus:      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M8 12h8'/><path d='M12 8v8'/></svg>");
+      --ic-circle-info:      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M12 16v-4'/><path d='M12 8h.01'/></svg>");
+      --ic-database:         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><ellipse cx='12' cy='5' rx='9' ry='3'/><path d='M3 5v14a9 3 0 0 0 18 0V5'/><path d='M3 12a9 3 0 0 0 18 0'/></svg>");
+      --ic-function:         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M9 17c2 0 2.8-1 3.5-2.5L14 10c.7-1.5 1.5-2.5 3.5-2.5'/><path d='M7 12h6'/></svg>");
+      --ic-clock-3:          url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M12 6v6l3 1.5'/></svg>");
+    }
+  </style>
+  <script src="https://unpkg.com/highcharts@11.4.8/highcharts.js"></script>
+  <script src="https://unpkg.com/highcharts@11.4.8/highcharts-more.js"></script>
+  <!-- Real Font Awesome 6 (kit) — used by the canonical Sidebar/Topbar -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/fontawesome.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/solid.min.css" />
+  <style>
+    /* The page-wide icon shim renders Lucide-style SVG masks for fa-* classes
+       via background-color + mask-image on ::before. Inside the canonical
+       <Sidebar>/<Topbar>, we want real Font Awesome glyphs instead — disable
+       only the mask + background bits and let FA inject its own ::before
+       content normally. */
+    aside i[class*="fa-"]::before,
+    header i[class*="fa-"]::before {
+      -webkit-mask-image: none !important; mask-image: none !important;
+      background-color: transparent !important;
+      width: auto !important;
+      height: auto !important;
+      display: inline !important;
+    }
+    /* The shim hard-codes content:"" on every fa-*::before, which beats FA's
+       external stylesheet. Restore the right glyph for the icons we use in
+       the chrome (sidebar + topbar). Codepoints from FA6 Free Solid. */
+    aside i.fa-bars::before,          header i.fa-bars::before          { content: "\f0c9 " !important; }
+    aside i.fa-table-columns::before, header i.fa-table-columns::before { content: "\f0db " !important; }
+    aside i.fa-users::before,         header i.fa-users::before         { content: "\f0c0 " !important; }
+    aside i.fa-bell::before,          header i.fa-bell::before          { content: "\f0f3 " !important; }
+    aside i.fa-briefcase::before,     header i.fa-briefcase::before     { content: "\f0b1 " !important; }
+    aside i.fa-angles-left::before,   header i.fa-angles-left::before   { content: "\f100 " !important; }
+    aside i.fa-angles-right::before,  header i.fa-angles-right::before  { content: "\f101 " !important; }
+    aside i.fa-magnifying-glass::before, header i.fa-magnifying-glass::before { content: "\f002 " !important; }
+    aside i.fa-chevron-left::before,  header i.fa-chevron-left::before  { content: "\f053 " !important; }
+    aside i.fa-chevron-right::before, header i.fa-chevron-right::before { content: "\f054 " !important; }
+    aside i.fa-chevron-down::before,  header i.fa-chevron-down::before  { content: "\f078 " !important; }
+    aside i.fa-chevron-up::before,    header i.fa-chevron-up::before    { content: "\f077 " !important; }
+    aside i.fa-xmark::before,         header i.fa-xmark::before         { content: "\f00d " !important; }
+    aside i.fa-filter::before,        header i.fa-filter::before        { content: "\f0b0 " !important; }
+    aside i.fa-download::before,      header i.fa-download::before      { content: "\f019 " !important; }
+    aside i.fa-arrow-up-from-bracket::before, header i.fa-arrow-up-from-bracket::before { content: "\e09a " !important; }
+    aside i.fa-link::before,          header i.fa-link::before          { content: "\f0c1 " !important; }
+    aside i.fa-plug::before,          header i.fa-plug::before          { content: "\f1e6 " !important; }
+    aside i.fa-address-book::before,  header i.fa-address-book::before  { content: "\f2b9 " !important; }
+    aside i.fa-file-signature::before,header i.fa-file-signature::before{ content: "\f573 " !important; }
+    aside i.fa-cloud::before,         header i.fa-cloud::before         { content: "\f0c2 " !important; }
+    aside i.fa-building-columns::before, header i.fa-building-columns::before { content: "\f19c " !important; }
+    aside i.fa-shield-halved::before, header i.fa-shield-halved::before { content: "\f3ed " !important; }
+    aside i.fa-envelope::before,      header i.fa-envelope::before      { content: "\f0e0 " !important; }
+    aside i.fa-calendar::before,      header i.fa-calendar::before      { content: "\f133 " !important; }
+    aside i.fa-spinner::before,       header i.fa-spinner::before       { content: "\f110 " !important; }
+    aside i.fa-circle-check::before,  header i.fa-circle-check::before  { content: "\f058 " !important; }
+    aside i.fa-circle-plus::before,   header i.fa-circle-plus::before   { content: "\f055 " !important; }
+    aside i.fa-gear::before,          header i.fa-gear::before          { content: "\f013 " !important; }
+    aside i.fa-circle-question::before, header i.fa-circle-question::before { content: "\f059 " !important; }
+    aside i.fa-house::before,         header i.fa-house::before         { content: "\f015 " !important; }
+    aside i.fa-eye::before,           header i.fa-eye::before           { content: "\f06e " !important; }
+    aside i.fa-newspaper::before,     header i.fa-newspaper::before     { content: "\f1ea " !important; }
+    aside i.fa-arrows-rotate::before, header i.fa-arrows-rotate::before { content: "\f021 " !important; }
+    aside i.fa-wand-magic-sparkles::before, header i.fa-wand-magic-sparkles::before { content: "\e2ca " !important; }
+  </style>
+  <style>
+    /* Insights uses a lightbulb; add its Lucide mask so it renders in the nav + tile.
+       Forced + !important so it beats the leftover Font Awesome `fa-solid::before` rule. */
+    :root { --ic-lightbulb: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5'/><path d='M9 18h6'/><path d='M10 22h4'/></svg>"); }
+    i.fa-lightbulb::before, i.fa-solid.fa-lightbulb::before {
+      content:"" !important; display:inline-block !important;
+      width:1em !important; height:1em !important;
+      background-color: currentColor !important;
+      font-family: inherit !important;
+      -webkit-mask: var(--ic-lightbulb) center / contain no-repeat !important;
+      mask: var(--ic-lightbulb) center / contain no-repeat !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" src="ui_kits/shadcn/faCls.jsx"></script>
+  <script type="text/babel" src="ui_kits/shadcn/Button.jsx"></script>
+  <script type="text/babel" src="ui_kits/shadcn/Form.jsx"></script>
+  <script type="text/babel" src="ui_kits/shadcn/Card.jsx"></script>
+  <script type="text/babel" src="ui_kits/shadcn/Chart.jsx"></script>
+  <script type="text/babel" src="ui_kits/shadcn/HC.jsx"></script>
+  <script type="text/babel" src="ui_kits/shadcn/Sidebar.jsx"></script>
+  <script type="text/babel" src="ui_kits/shadcn/Topbar.jsx"></script>
+  <script type="text/babel" src="advisor/AdvisorTiles.jsx"></script>
+  <script src="advisor/image-slot.js"></script>
+  <script type="text/babel" src="advisor/HaloTiles.jsx"></script>
+  <script type="text/babel" src="advisor/ClientList.jsx"></script>
+  <script type="text/babel" src="advisor/ClientFilterDrawer.jsx"></script>
+  <script type="text/babel" src="advisor/ClientDetail.jsx"></script>
+  <script type="text/babel" src="advisor/ClientReports.jsx"></script>
+  <script type="text/babel" src="advisor/NotificationsPage.jsx"></script>
+  <script type="text/babel" src="advisor/MyPracticeCashFlow.jsx"></script>
+  <script type="text/babel" src="advisor/MyPracticeAssets.jsx"></script>
+  <script type="text/babel" src="advisor/MyPractice.jsx"></script>
+  <script type="text/babel" src="advisor/RebalanceFlow.jsx"></script>
+  <script type="text/babel" src="advisor/InsightsPage.jsx"></script>
+  <script type="text/babel" src="advisor/InsightProposalFlow.jsx"></script>
+  <script type="text/babel" src="advisor/HaloGuidedFlow.jsx"></script>
+  <script type="text/babel" src="advisor/ios-frame.jsx"></script>
+  <script type="text/babel" src="advisor/ShareWithClient.jsx"></script>
+  <script type="text/babel" src="advisor/AddTileCommand.jsx"></script>
+  <script type="text/babel" src="advisor/FormulaEditor.jsx"></script>
+  <script type="text/babel" src="advisor/TileBuilder.jsx"></script>
+  <script type="text/babel" src="advisor/CalendarView.jsx"></script>
+  <script type="text/babel" src="advisor/TileDetail.jsx"></script>
+  <script type="text/babel" src="advisor/ConnectionsPanel.jsx"></script>
+  <script type="text/babel" src="advisor/AIAssistantPanel.jsx"></script>
+  <script type="text/babel" src="advisor/AdvisorAIFeed.jsx"></script>
+  <script type="text/babel" src="advisor/AdvisorAIPage.jsx"></script>
+  <script type="text/babel">
+    function App() {
+      const nav = [
+        { id:'assistant',     label:'Home',           icon:'house' },
+        { id:'dashboard',     label:'Dashboard',     icon:'table-columns' },
+        { id:'clients',       label:'Clients',       icon:'users' },
+        { id:'notifications', label:'Notifications', icon:'bell',          badge:1 },
+        { id:'insights',      label:'Insights',      icon:'lightbulb' },
+        { id:'practice',      label:'My Practice',   icon:'briefcase', children: [
+          { id:'practice.clients',  label:'Client Analysis' },
+          { id:'practice.cashflow', label:'Cash Flow' },
+          { id:'practice.assets',   label:'Assets' },
+        ] },
+      ];
+      const NAV_FOOTER = [
+        { id:'settings', label:'Settings',       icon:'gear' },
+        { id:'help',     label:'Help & support', icon:'circle-question' },
+      ];
+      const [active, setActive] = React.useState('assistant');
+      const [selectedClient, setSelectedClient] = React.useState(null);
+      const [highlightOpp, setHighlightOpp] = React.useState(null);
+      const [sbWidth, setSbWidth] = React.useState(56);
+      // Highcharts only reflows on window resize — nudge it when the sidebar width settles.
+      React.useEffect(() => { const t = setTimeout(() => window.dispatchEvent(new Event('resize')), 280); return () => clearTimeout(t); }, [sbWidth]);
+      const [connectionsOpen, setConnectionsOpen] = React.useState(false);
+      const [toast, setToast] = React.useState(null);
+      const [feedKey, setFeedKey] = React.useState(0);
+      /* Hitting Home resets the demo: manager-shared ideas and the allocation
+         notice both clear, so the next run starts from zero. */
+      const resetDemoState = () => {
+        try {
+          localStorage.setItem('halo.shared', '[]');
+          localStorage.setItem('halo.adoptions', '[]');
+          localStorage.setItem('halo.adoptions.dismissed', '[]');
+          localStorage.setItem('halo.adoptions.read', '0');
+        } catch (e) {}
+      };
+      const [connTick, setConnTick] = React.useState(0);
+      const connections = React.useMemo(() => {
+        try { return JSON.parse(localStorage.getItem('field.connections') || '{}'); } catch (e) { return {}; }
+      }, [connectionsOpen, connTick]);
+      const connectedCount = Object.values(connections).filter(c => c && c.status === 'connected').length;
+      const totalIntegrations = 6;
+      const [tcOpen, setTcOpen] = React.useState(false);
+      const [tbOpen, setTbOpen] = React.useState(false);
+      const [editTile, setEditTile] = React.useState(null);
+      const [aiOpen, setAiOpen] = React.useState(false);
+      const [aiTiles, setAiTiles] = React.useState([]);
+      // Edit-mode state for dashboard tiles
+      const [editingDash, setEditingDash] = React.useState(false);
+      // Dashboard period filter (Year to date, Today, This week, …). Lifted to
+      // App so tiles can read it via PeriodContext.
+      const [period, setPeriod] = React.useState('Year to date');
+      // Insights page filters (provider / type) — lifted so they can live in the topbar.
+      const [insightProv, setInsightProv] = React.useState(null);
+      const [insightType, setInsightType] = React.useState(null);
+      // Client-detail (e.g. David Young profile) period + active sub-tab —
+      // lifted so the period filter can live in the top header.
+      const [clientPeriod, setClientPeriod] = React.useState('Year to date');
+      const [clientTab, setClientTab] = React.useState('Profile');
+      // Clients-table filters (slide-out drawer) + active-selections bar
+      const [filterOpen, setFilterOpen] = React.useState(false);
+      const [clientFilters, setClientFilters] = React.useState({});
+      const CF_ICONS = { segment:'layer-group', aum:'building-columns', risk:'shield-halved', status:'circle-check' };
+      const activeFilterChips = Object.entries(clientFilters).flatMap(([key, vals]) =>
+        (vals || []).map(v => ({ key, value:v, label:v, icon: CF_ICONS[key] }))
+      );
+      const removeFilterChip = (key, value) => setClientFilters(prev => {
+        const next = (prev[key] || []).filter(x => x !== value);
+        const out = { ...prev }; if (next.length) out[key] = next; else delete out[key];
+        return out;
+      });
+      const DEFAULT_TILE_ORDER = ['meetings','notifs','insights_tile','lifecycle','journal','watchtile','topclients','aum_alloc','billing','aum','holdings','cashflow','fees'];
+      const [tileOrder, setTileOrder] = React.useState(() => {
+        let arr = null;
+        try { const s = JSON.parse(localStorage.getItem('adv.tile.order.v2')||'null'); if (Array.isArray(s) && s.length) arr = s; } catch(e) {}
+        if (!arr) return DEFAULT_TILE_ORDER;
+        // Migrate: insert any newly-added default tiles missing from a saved order.
+        const out = [...arr];
+        DEFAULT_TILE_ORDER.forEach((id, idx) => { if (!out.includes(id)) out.splice(Math.min(idx, out.length), 0, id); });
+        return out;
+      });
+      const [hiddenTiles, setHiddenTiles] = React.useState(() => {
+        try { const s = JSON.parse(localStorage.getItem('adv.tile.hidden')||'[]'); const set = new Set(s); set.delete('insights_tile'); return set; } catch(e) { return new Set(); }
+      });
+      // Per-tile display variant (e.g. aum_alloc: 'donut' | 'bar'). Driven by the
+      // AI-edit drawer prompt — typing "bar chart" swaps the donut for bars.
+      const [tileVariants, setTileVariants] = React.useState(() => {
+        try { return JSON.parse(localStorage.getItem('adv.tile.variants')||'{}') || {}; } catch(e) { return {}; }
+      });
+      React.useEffect(() => { localStorage.setItem('adv.tile.variants', JSON.stringify(tileVariants)); }, [tileVariants]);
+      const handleTileAiSubmit = React.useCallback(({ id, prompt }) => {
+        const p = (prompt||'').toLowerCase();
+        if (id === 'aum_alloc') {
+          if (/\bbar\b/.test(p))                              setTileVariants(v => ({ ...v, aum_alloc: 'bar' }));
+          else if (/\bdonut\b|\bpie\b|\bring\b/.test(p))      setTileVariants(v => ({ ...v, aum_alloc: 'donut' }));
+        }
+      }, []);
+      React.useEffect(() => { localStorage.setItem('adv.tile.order.v2', JSON.stringify(tileOrder)); }, [tileOrder]);
+      React.useEffect(() => { localStorage.setItem('adv.tile.hidden', JSON.stringify([...hiddenTiles])); }, [hiddenTiles]);
+      // 'calendar' or one of the TileDetail kinds: aum_alloc, billing, aum, holdings, cashflow, fees
+      const [detailRoute, setDetailRoute] = React.useState(null);
+      // Halo Journal article route (opened from the Journal tile)
+      const [journalArticle, setJournalArticle] = React.useState(null);
+      const [notePost, setNotePost] = React.useState(null);
+      React.useEffect(() => {
+        const onJournal = (e) => { const { id } = e.detail || {}; if (id) { setNotePost(null); setJournalArticle(id); setActive(a => a === 'assistant' ? 'journals' : a); } };
+        const onNote = (e) => { const { id } = e.detail || {}; if (id) { setJournalArticle(null); setNotePost(id); setActive(a => a === 'assistant' ? 'watchlist' : a); } };
+        window.addEventListener('journal:open', onJournal);
+        window.addEventListener('note:open', onNote);
+        return () => { window.removeEventListener('journal:open', onJournal); window.removeEventListener('note:open', onNote); };
+      }, []);
+      // Client-profile tile detail (cd_networth, cd_allocation, cd_investment, cd_performance, cd_unrealized, cd_tax)
+      const [clientDetailRoute, setClientDetailRoute] = React.useState(null);
+      const [shareOpen, setShareOpen] = React.useState(false);
+      const [dashboards, setDashboards] = React.useState([
+        { id:'main',     name:'Main Dashboard',    active:true },
+        { id:'clients',  name:'Client Performance' },
+      ]);
+      const [activeDash, setActiveDash] = React.useState('main');
+      const [dashMenuOpen, setDashMenuOpen] = React.useState(false);
+      const [creatingDash, setCreatingDash] = React.useState(false);
+      const handleCreateDashboard = (name) => {
+        const id = 'dash-' + Date.now();
+        setDashboards(prev => [...prev, { id, name }]);
+        setActiveDash(id);
+        setCreatingDash(false);
+      };
+      // Cmd+K / Ctrl+K and 'tilebuilder:open' event open the AI tile builder
+      React.useEffect(() => {
+        const onKey = (e) => {
+          if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+            e.preventDefault();
+            setTcOpen(true);
+          }
+        };
+        const onOpen = () => setTbOpen(true);
+        window.addEventListener('keydown', onKey);
+        window.addEventListener('tilebuilder:open', onOpen);
+        return () => {
+          window.removeEventListener('keydown', onKey);
+          window.removeEventListener('tilebuilder:open', onOpen);
+        };
+      }, []);
+      // Listen for client-tile detail open events from CDTile
+      React.useEffect(() => {
+        const onOpenClientTile = (e) => {
+          const { kind } = e.detail || {};
+          if (kind) setClientDetailRoute(kind);
+        };
+        window.addEventListener('clienttile:open', onOpenClientTile);
+        return () => window.removeEventListener('clienttile:open', onOpenClientTile);
+      }, []);
+      // External "open this client + highlight an opportunity" trigger
+      React.useEffect(() => {
+        const onOpenClient = (e) => {
+          const { client, highlight } = e.detail || {};
+          setActive('clients');
+          setSelectedClient(client || 'David Young');
+          if (highlight) {
+            setHighlightOpp(highlight);
+            // auto-clear the highlight after 6s so it doesn't persist forever
+            setTimeout(() => setHighlightOpp(null), 6000);
+          }
+        };
+        window.addEventListener('client:open', onOpenClient);
+        const onNavSet = (e) => {
+          const { screen } = e.detail || {};
+          if (!screen) return;
+          if (screen === 'assistant') { resetDemoState(); setFeedKey(k => k + 1); }
+          setActive(screen); setSelectedClient(null); setHighlightOpp(null); setDetailRoute(null); setClientDetailRoute(null); setJournalArticle(null); setNotePost(null);
+        };
+        window.addEventListener('nav:set', onNavSet);
+        const onHaloScan = () => { setActive('insights'); setSelectedClient(null); setHighlightOpp(null); setDetailRoute(null); setClientDetailRoute(null); };
+        const onConnOpen = () => setConnectionsOpen(true);
+        window.addEventListener('insights:scan', onHaloScan);
+        window.addEventListener('connections:open', onConnOpen);
+        /* An approved proposal (structured note or rebalance) lands back on the
+           home feed: close the flow, return home, confirm, and let the feed
+           clear the card it came from. */
+        const onApproved = (e) => {
+          const id = (e.detail && e.detail.id) || '';
+          window.dispatchEvent(new CustomEvent('rebalance:close'));
+          window.dispatchEvent(new CustomEvent('insight:closeflow'));
+          setActive('assistant'); setSelectedClient(null); setHighlightOpp(null);
+          setDetailRoute(null); setClientDetailRoute(null); setJournalArticle(null); setNotePost(null);
+          setToast('Approved \u2014 sent to execution');
+          /* Tell the asset-manager portal a firm just put their product to work. */
+          try {
+            const log = JSON.parse(localStorage.getItem('halo.adoptions') || '[]');
+            log.unshift({
+              id: 'adopt-' + Date.now(),
+              practiceId: 'alpine-partners',
+              firm: 'Alpine Partners',
+              city: 'Denver, CO',
+              territory: 'West',
+              product: 'BlackRock Target Allocation',
+              manager: 'BlackRock',
+              sleeve: 'Domestic equity \u00b7 iShares ITOT',
+              amount: '$168K',
+              accounts: 3,
+              at: Date.now(),
+            });
+            localStorage.setItem('halo.adoptions', JSON.stringify(log.slice(0, 20)));
+          } catch (err) {}
+          setTimeout(() => window.dispatchEvent(new CustomEvent('opportunity:done', { detail:{ id } })), 340);
+          setTimeout(() => setToast(null), 4200);
+        };
+        const onDeckMessage = (e) => {
+          const d = e.data;
+          if (d && d.type === 'opportunity:done') onApproved({ detail:{ id:d.id } });
+        };
+        window.addEventListener('proposal:approved', onApproved);
+        window.addEventListener('message', onDeckMessage);
+        return () => {
+          window.removeEventListener('client:open', onOpenClient);
+          window.removeEventListener('nav:set', onNavSet);
+          window.removeEventListener('insights:scan', onHaloScan);
+          window.removeEventListener('connections:open', onConnOpen);
+          window.removeEventListener('proposal:approved', onApproved);
+          window.removeEventListener('message', onDeckMessage);
+        };
+      }, []);
+      const go = (id) => {
+        if (id === 'assistant') resetDemoState();
+        setActive(id); setSelectedClient(null); setHighlightOpp(null); setDetailRoute(null); setClientDetailRoute(null); setJournalArticle(null); setNotePost(null);
+        if (id === 'assistant') setFeedKey(k => k + 1);
+      };
+      // onMore handler factory for tiles
+      const handleMore = (kind) => () => {
+        if (kind === 'topclients') { setActive('clients'); setDetailRoute(null); return; }
+        if (kind === 'notifications') { setActive('notifications'); setDetailRoute(null); return; }
+        if (kind === 'watchlist') { setActive('watchlist'); setDetailRoute(null); return; }
+        if (kind === 'journals') { setActive('journals'); setDetailRoute(null); return; }
+        if (kind === 'lifecycle') { setActive('lifecycle'); setDetailRoute(null); return; }
+        setDetailRoute(kind);
+      };
+      const SIGN_OUT_HREF = "asset-manager/Asset Manager Portal.html?view=home";
+      return (
+        <div style={{ display:'flex', minHeight:'100vh', background:'transparent' }}>
+          <Sidebar
+            items={nav}
+            footerItems={NAV_FOOTER}
+            user={{ name:'Avery Chen', role:'Senior Advisor' }}
+            active={active}
+            onSelect={(id) => {
+              if (id === 'connections') { setConnectionsOpen(true); return; }
+              go(id);
+            }}
+            brand="HALO +"
+            defaultExpanded={true}
+            signOutHref={SIGN_OUT_HREF}
+            signOutLabel="Asset Manager Portal demo"
+            persistKey="adv.sb.expanded.v2"
+            persistAccordionKey="adv.sb.accordion"
+            onWidthChange={setSbWidth}
+          />
+          <div style={{ flex:1, minWidth:0, marginLeft: sbWidth + (sbWidth > 100 ? 24 : 0), display:'flex', flexDirection:'column', transition:'margin-left 220ms cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
+            <AdvisorTopbar
+              active={active}
+              selectedClient={selectedClient}
+              clientDetailTitle={selectedClient && clientDetailRoute ? (TILE_DETAIL_CONFIG[clientDetailRoute]?.title || null) : null}
+              onBack={selectedClient && clientDetailRoute
+                ? (()=>setClientDetailRoute(null))
+                : (()=>setSelectedClient(null))}
+              dashboards={dashboards}
+              activeDash={activeDash}
+              setActiveDash={(id)=>{ setActiveDash(id); setCreatingDash(false); setDetailRoute(null); }}
+              dashMenuOpen={dashMenuOpen}
+              setDashMenuOpen={setDashMenuOpen}
+              onCreateDashboardPage={()=>{ setCreatingDash(true); setDetailRoute(null); }}
+              creatingDash={creatingDash}
+              period={period}
+              setPeriod={setPeriod}
+              clientPeriod={clientPeriod}
+              setClientPeriod={setClientPeriod}
+              clientTab={clientTab}
+              onOpenFilter={()=>setFilterOpen(true)}
+              activeFilterChips={activeFilterChips}
+              onRemoveFilterChip={removeFilterChip}
+              onClearFilters={()=>setClientFilters({})}
+              insightProv={insightProv}
+              setInsightProv={setInsightProv}
+              insightType={insightType}
+              setInsightType={setInsightType}
+            />
+            {active === 'assistant' ? (
+              <AdvisorAIPage
+                key={feedKey}
+                onOpenClient={(name)=>window.dispatchEvent(new CustomEvent('client:open', { detail:{ client:name, highlight: name === 'David Young' ? 'rebalance' : null } }))}
+                onOpenDeck={()=>window.open('advisor/Rebalance Deck - David Young.html', '_blank')}
+                onNav={go}
+              />
+            ) : selectedClient && clientDetailRoute ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <TileDetail kind={clientDetailRoute} onBack={()=>setClientDetailRoute(null)} hideBack={true} />
+              </main>
+            ) : selectedClient ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <ClientDetail clientName={selectedClient} onBack={()=>{setSelectedClient(null); setHighlightOpp(null); setClientDetailRoute(null);}} highlightOpp={highlightOpp} tab={clientTab} onTabChange={setClientTab} period={clientPeriod} setPeriod={setClientPeriod} />
+              </main>
+            ) : notePost ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <NotePostPage noteId={notePost} onBack={()=>{ setNotePost(null); setActive('watchlist'); }} />
+              </main>
+            ) : journalArticle ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <JournalArticlePage articleId={journalArticle} onBack={()=>{ setJournalArticle(null); setActive('journals'); }} />
+              </main>
+            ) : active === 'watchlist' ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <WatchlistPage />
+              </main>
+            ) : active === 'lifecycle' ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <LifecyclePage />
+              </main>
+            ) : active === 'journals' ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <JournalsPage />
+              </main>
+            ) : active === 'clients' ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <ClientList onOpenClient={(name)=>setSelectedClient(name)} filters={clientFilters} />
+              </main>
+            ) : active === 'notifications' ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <NotificationsPage />
+              </main>
+            ) : active === 'insights' ? (
+              <InsightsPage provFilter={insightProv} typeFilter={insightType} onBuildProposal={(r)=>window.dispatchEvent(new CustomEvent('insight:open', { detail:{ id:r.id } }))} />
+            ) : active.startsWith('practice') ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <MyPractice initialTab={
+                  active === 'practice.cashflow' ? 'cashflow' :
+                  active === 'practice.assets'   ? 'assets'   :
+                  'clients'
+                } onTabChange={(tabId)=>setActive('practice.'+tabId)} />
+              </main>
+            ) : (active === 'settings' || active === 'help') ? (
+              <main style={{ flex:1, background:'transparent', padding:'48px 56px', color:'rgb(163,163,163)', fontFamily:'Inter' }}>
+                <h2 style={{ fontFamily:'Inter', color:'rgb(249,250,251)', fontSize:22, fontWeight:600, margin:'0 0 8px' }}>
+                  {active === 'settings' ? 'Settings' : 'Help & support'}
+                </h2>
+                <p style={{ fontSize:13, maxWidth:560, lineHeight:1.55 }}>
+                  Placeholder route for the new <code>More</code> section in the sidebar. The dual-state component now
+                  supports section grouping; the contents of these pages aren't part of this design pass.
+                </p>
+              </main>
+            ) : creatingDash ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <NewDashboardPage
+                  onCancel={()=>setCreatingDash(false)}
+                  onCreate={handleCreateDashboard}
+                />
+              </main>
+            ) : detailRoute === 'calendar' ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <CalendarView onBack={()=>setDetailRoute(null)} />
+              </main>
+            ) : detailRoute ? (
+              <main style={{ flex:1, background:'transparent' }}>
+                <TileDetail kind={detailRoute} onBack={()=>setDetailRoute(null)} />
+              </main>
+            ) : (
+            <main style={{ flex:1, padding:'24px', background:'transparent' }}>
+              <DashboardSecondaryMenu
+                editing={editingDash}
+                setEditing={setEditingDash}
+                tileCount={tileOrder.filter(id=>!hiddenTiles.has(id)).length + aiTiles.length}
+                onResetLayout={() => { setTileOrder(DEFAULT_TILE_ORDER); setHiddenTiles(new Set()); setTileVariants({}); }}
+                onShare={() => setShareOpen(true)}
+                onAddTile={() => { setEditTile(null); setTbOpen(true); }}
+                period={period}
+                setPeriod={setPeriod}
+              />
+              <PeriodContext.Provider value={period}>
+              {(() => {
+                const TILE_DEFS = {
+                  meetings:   { cls:'col-3', el: <UpcomingMeetings onMore={handleMore('calendar')} />,      title:'Upcoming Meetings' },
+                  notifs:     { cls:'col-3', el: <Notifications onMore={handleMore('notifications')} />,    title:'Notifications' },
+                  lifecycle:  { cls:'col-6', el: <PortfolioLifecycle onMore={handleMore('lifecycle')} />, title:'Portfolio Lifecycle' },
+                  journal:    { cls:'col-6', el: <JournalTile onMore={handleMore('journals')} />, title:'Journal' },
+                  watchtile:  { cls:'col-6', el: <WatchlistTile onMore={handleMore('watchlist')} />, title:'Watchlist' },
+                  insights_tile: { cls:'col-6', el: <InsightsTile onMore={()=>window.dispatchEvent(new CustomEvent('insights:scan'))} />, title:'Insights' },
+                  topclients: { cls:'col-6', el: <TopClients onMore={handleMore('topclients')} />,          title:'Top Clients' },
+                  aum_alloc:  { cls:'col-6', el: <AumAllocation onMore={handleMore('aum_alloc')} variant={tileVariants.aum_alloc || 'donut'} />,        title:'AUM Allocation' },
+                  billing:    { cls:'col-6', el: <BillingSummary onMore={handleMore('billing')} />,         title:'Billing Summary' },
+                  aum:        { cls:'col-6', el: <AumBars onMore={handleMore('aum')} />,                    title:'Assets Under Management' },
+                  holdings:   { cls:'col-6', el: <Holdings onMore={handleMore('holdings')} />,              title:'Holdings' },
+                  cashflow:   { cls:'col-6', el: <CashFlow onMore={handleMore('cashflow')} />,              title:'Cash Flow' },
+                  fees:       { cls:'col-6', el: <ProjectedFees onMore={handleMore('fees')} />,             title:'Projected Fees' },
+                };
+                const visible = tileOrder.filter(id => !hiddenTiles.has(id) && TILE_DEFS[id]);
+                return (
+                  <div className="adv-grid">
+                    {visible.map(id => (
+                      <EditTile
+                        key={id}
+                        id={id}
+                        title={TILE_DEFS[id].title}
+                        cls={TILE_DEFS[id].cls}
+                        editing={editingDash}
+                        onMove={(from,to) => setTileOrder(prev => reorderArr(prev, from, to))}
+                        order={tileOrder}
+                        onRemove={() => setHiddenTiles(prev => new Set([...prev, id]))}
+                        onAiSubmit={handleTileAiSubmit}
+                        onEditTile={() => { setEditTile({ id, canonical:true, _state: window.canonicalTileState(id, TILE_DEFS[id].title) }); setTbOpen(true); }}
+                      >
+                        {TILE_DEFS[id].el}
+                      </EditTile>
+                    ))}
+                    {aiTiles.map((t, i) => (
+                      <div key={t.id} className={`${t.size || 'col-4'} row-${5 + Math.floor(i/3)}`}>
+                        <AddedTile tile={t} onRemove={() => setAiTiles(prev => prev.filter(x => x.id !== t.id))} onEdit={(tile) => { setEditTile(tile); setTbOpen(true); }} />
+                      </div>
+                    ))}
+                  </div>
+                );
+              })()}
+              </PeriodContext.Provider>
+              {shareOpen && <ShareDashboardDialog onClose={()=>setShareOpen(false)} dashboardName={dashboards.find(d=>d.id===activeDash)?.name || 'Dashboard'} />}
+            </main>
+            )}
+            <AIFab onClick={() => setAiOpen(true)} hidden={aiOpen || active === 'assistant'} />
+            <AddTileCommand
+              open={tcOpen}
+              onClose={() => setTcOpen(false)}
+              onAdd={(tile) => setAiTiles(prev => [...prev, tile])}
+            />
+            <TileBuilder
+              open={tbOpen}
+              editTile={editTile}
+              onClose={() => { setTbOpen(false); setEditTile(null); }}
+              onAdd={(tile) => setAiTiles(prev => [...prev, tile])}
+              onUpdate={(tile) => {
+                if (editTile && editTile.canonical) {
+                  setHiddenTiles(prev => new Set([...prev, editTile.id]));
+                  setAiTiles(prev => [...prev, tile]);
+                } else {
+                  setAiTiles(prev => prev.map(x => x.id === tile.id ? tile : x));
+                }
+              }}
+            />
+          </div>
+          <RebalanceFlow />
+          {toast && (
+            <div style={{
+              position:'fixed', left:'50%', bottom:28, transform:'translateX(-50%)', zIndex:400,
+              display:'flex', alignItems:'center', gap:10, padding:'12px 18px', borderRadius:10,
+              background:'rgba(12,20,34,0.96)', border:'1px solid rgba(35,89,255,0.45)',
+              boxShadow:'0 14px 40px -12px rgba(0,0,0,0.7)',
+              fontFamily:'Inter', fontSize:13, color:'rgb(249,250,251)',
+            }}>
+              <i className="fa-solid fa-circle-check" style={{ fontSize:13, color:'rgb(128,152,234)' }} />
+              {toast}
+            </div>
+          )}
+          <InsightProposalFlow />
+          <HaloGuidedFlow />
+          <ShareWithClient />
+          <ConnectionsPanel open={connectionsOpen} onClose={() => { setConnectionsOpen(false); setConnTick(t => t + 1); }} />
+          <AIAssistantPanel open={aiOpen} onClose={() => setAiOpen(false)} />
+          <ClientFilterDrawer open={filterOpen} onClose={()=>setFilterOpen(false)} filters={clientFilters} setFilters={setClientFilters} />
+        </div>
+      );
+    }
+
+    /* -- Legacy local AdvisorSidebar (replaced by canonical <Sidebar>) ------------------------ */
+    function _AdvisorSidebar_unused({ items, active, onSelect, collapsed, onToggle }) {
+      const ref = React.useRef();
+      const W = collapsed ? 48 : 220;
+      return (
+        <aside ref={ref} style={{
+          position:'fixed', top:0, left:0, bottom:0,
+          width:W, background:'rgb(31,41,55)',
+          borderRight:'1px solid rgb(75,85,99)',
+          display:'flex', flexDirection:'column', alignItems: collapsed ? 'center' : 'stretch',
+          padding: collapsed ? '14px 6px' : '14px 10px', gap:4, zIndex:40,
+          transition:'width 220ms ease', overflow:'visible',
+        }}>
+          <div style={{ display:'flex', alignItems:'center', gap:10, padding:'4px 6px 14px', borderBottom:'1px solid rgba(75,85,99,0.5)', marginBottom:8, justifyContent: collapsed ? 'center' : 'space-between' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:10, minWidth:0 }}>
+              {!collapsed && <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:14, color:'rgb(249,250,251)', whiteSpace:'nowrap' }}>Halo +</div>}
+            </div>
+            {!collapsed && (
+              <button onClick={onToggle} title="Collapse sidebar" style={{
+                width:24, height:24, borderRadius:6, border:'none', background:'transparent',
+                color:'rgb(163,163,163)', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center',
+              }}>
+                <i className="fa-solid fa-angles-left sb-nav-icon" style={{ fontSize:12 }} />
+              </button>
+            )}
+          </div>
+          {collapsed && (
+            <button onClick={onToggle} title="Expand sidebar" style={{
+              width:'100%', height:32, borderRadius:8, border:'none', background:'transparent',
+              color:'rgb(163,163,163)', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', marginBottom:4,
+            }}>
+              <i className="fa-solid fa-angles-right sb-nav-icon" style={{ fontSize:12 }} />
+            </button>
+          )}
+          {items.map(it => {
+            const on = it.id === active;
+            return (
+              <button key={it.id} onClick={()=>onSelect(it.id)} className="sb-item" data-tip={collapsed ? it.label : undefined} style={{
+                position:'relative',
+                display:'flex', alignItems:'center', gap:10,
+                width: collapsed ? 32 : '100%',
+                height: collapsed ? 32 : 36, padding: collapsed ? 0 : '0 10px',
+                borderRadius: 8, border:'none',
+                justifyContent: collapsed ? 'center' : 'flex-start',
+                alignSelf: collapsed ? 'center' : 'stretch',
+                background: on ? 'rgba(35,89,255,0.22)' : 'transparent',
+                color: on ? 'rgb(249,250,251)' : 'rgb(209,213,219)',
+                fontFamily:'Inter', fontWeight: on ? 600 : 500, fontSize:13,
+                cursor:'pointer', textAlign:'left', overflow:'visible',
+              }}>
+                <i className={faCls(it.icon) + ' sb-nav-icon'} style={{ width:16, height:16, fontSize:14, color: on?'rgb(35,89,255)':'rgb(163,163,163)', flexShrink:0 }} />
+                {!collapsed && <span style={{ flex:1, whiteSpace:'nowrap' }}>{it.label}</span>}
+                {it.badge && (collapsed ? (
+                  <span style={{
+                    position:'absolute', top:-2, right:-2, minWidth:14, height:14, padding:'0 3px', borderRadius:9999,
+                    background:'rgb(220,38,38)', color:'#fff', fontSize:9, fontWeight:700,
+                    display:'flex', alignItems:'center', justifyContent:'center',
+                  }}>{it.badge}</span>
+                ) : (
+                  <span style={{
+                    minWidth:18, height:18, padding:'0 5px', borderRadius:9999,
+                    background:'rgb(220,38,38)', color:'#fff', fontSize:10, fontWeight:700,
+                    display:'flex', alignItems:'center', justifyContent:'center',
+                  }}>{it.badge}</span>
+                ))}
+              </button>
+            );
+          })}
+          <a
+            href={SIGN_OUT_HREF}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = SIGN_OUT_HREF;
+            }}
+            title="Asset Manager Portal demo"
+            style={{
+              marginTop:'auto', display:'flex', alignItems:'center', gap:10,
+              padding: collapsed ? '10px 0' : '10px 8px',
+              borderTop:'1px solid rgba(75,85,99,0.5)',
+              justifyContent: collapsed ? 'center' : 'flex-start',
+              textDecoration:'none', color:'inherit', cursor:'pointer',
+            }}>
+            <div style={{
+              width:32, height:32, borderRadius:9999,
+              background:'rgba(255,255,255,0.04)',
+              border:'1px solid rgb(75,85,99)',
+              flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center',
+              color:'rgb(209,213,219)',
+            }}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" width="14" height="14" fill="currentColor"><path d="M86.6 297.4L64 320L86.6 342.6L214.6 470.6L237.2 493.2L282.5 447.9C275.9 441.3 243.9 409.3 186.5 351.9L416 351.9L416 287.9L186.5 287.9C243.9 230.5 275.9 198.5 282.5 191.9L237.2 146.6L214.6 169.2L86.6 297.2zM416 480L384 480L384 544L576 544L576 96L384 96L384 160L512 160L512 480L416 480z"/></svg>
+            </div>
+            {!collapsed && <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ fontFamily:'Inter', fontSize:12.5, fontWeight:600, color:'rgb(249,250,251)' }}>Sign out</div>
+              <div style={{ fontFamily:'Inter', fontSize:10.5, color:'rgb(163,163,163)' }}>Return to home</div>
+            </div>}
+          </a>
+        </aside>
+      );
+    }
+
+    /* -- Edit-mode tile wrapper + helpers ---------------------------- */
+    function reorderArr(arr, from, to) {
+      if (from === to) return arr;
+      const next = arr.slice();
+      const [m] = next.splice(from, 1);
+      next.splice(to, 0, m);
+      return next;
+    }
+    function EditTile({ id, title, cls, editing, order, onMove, onRemove, children, onAiSubmit, onEditTile }) {
+      const [over, setOver] = React.useState(false);
+      const [menuOpen, setMenuOpen] = React.useState(false);
+      const [aiOpen, setAiOpen] = React.useState(false);
+      const [aiPrompt, setAiPrompt] = React.useState('');
+      const [aiBusy, setAiBusy] = React.useState(false);
+      const [aiDone, setAiDone] = React.useState(false);
+      const ref = React.useRef();
+      const menuRef = React.useRef();
+      React.useEffect(() => {
+        setMenuOpen(false);
+        if (!editing) { setAiOpen(false); setAiDone(false); }
+      }, [editing]);
+      React.useEffect(() => {
+        if (!menuOpen) return;
+        const onDoc = (e) => { if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false); };
+        document.addEventListener('mousedown', onDoc);
+        return () => document.removeEventListener('mousedown', onDoc);
+      }, [menuOpen]);
+      React.useEffect(() => {
+        if (!aiOpen) return;
+        const onKey = (e) => { if (e.key === 'Escape') setAiOpen(false); };
+        document.addEventListener('keydown', onKey);
+        return () => document.removeEventListener('keydown', onKey);
+      }, [aiOpen]);
+      const onDragStart = (e) => {
+        if (!editing) return;
+        e.dataTransfer.setData('text/plain', id);
+        e.dataTransfer.effectAllowed = 'move';
+      };
+      const onDragOver = (e) => {
+        if (!editing) return;
+        e.preventDefault(); e.dataTransfer.dropEffect = 'move'; setOver(true);
+      };
+      const onDragLeave = () => setOver(false);
+      const onDrop = (e) => {
+        e.preventDefault(); setOver(false);
+        const src = e.dataTransfer.getData('text/plain');
+        if (!src || src === id) return;
+        const from = order.indexOf(src);
+        const to = order.indexOf(id);
+        if (from < 0 || to < 0) return;
+        onMove(from, to);
+      };
+      const submitAi = async () => {
+        if (!aiPrompt.trim()) return;
+        setAiBusy(true);
+        try {
+          await new Promise(r => setTimeout(r, 900));
+          if (window.claude && window.claude.complete) {
+            await window.claude.complete(`Acknowledge tile edit request for "${title}": ${aiPrompt}. Respond with one short sentence.`).catch(()=>null);
+          }
+        } catch (e) {}
+        setAiBusy(false); setAiDone(true);
+        if (typeof onAiSubmit === 'function') {
+          try { onAiSubmit({ id, title, prompt: aiPrompt }); } catch(e) {}
+        }
+        setTimeout(() => { setAiOpen(false); setAiPrompt(''); setAiDone(false); }, 1400);
+      };
+      return (
+        <div
+          ref={ref}
+          className={`edit-tile ${cls} ${editing ? 'is-editing' : ''} ${over ? 'drop-target' : ''}`}
+          draggable={editing}
+          onDragStart={onDragStart}
+          onDragOver={onDragOver}
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}
+        >
+          {(
+            <div className="edit-menu-wrap" ref={menuRef} onMouseDown={(e)=>e.stopPropagation()}>
+              {editing ? (
+                <>
+                  <button
+                    className="edit-menu-btn ai"
+                    data-tip="Edit"
+                    aria-label="Edit"
+                    onClick={(e)=>{ e.stopPropagation(); onEditTile ? onEditTile() : setAiOpen(true); }}
+                  >
+                    <i className="fa-solid fa-pen-to-square" style={{ fontSize:13 }} />
+                  </button>
+                  <button
+                    className="edit-menu-btn danger"
+                    data-tip="Delete"
+                    aria-label="Delete"
+                    onClick={(e)=>{ e.stopPropagation(); onRemove(); }}
+                  >
+                    <i className="fa-solid fa-trash-can" style={{ fontSize:13 }} />
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    className="edit-menu-btn"
+                    aria-label="More"
+                    aria-haspopup="menu"
+                    aria-expanded={menuOpen}
+                    onClick={(e)=>{ e.stopPropagation(); setMenuOpen(o => !o); }}
+                  >
+                    <i className="fa-solid fa-ellipsis" style={{ fontSize:13 }} />
+                  </button>
+                  {menuOpen && (
+                    <div className="edit-menu" role="menu">
+                      <button
+                        className="edit-menu-item"
+                        role="menuitem"
+                        onClick={(e)=>{ e.stopPropagation(); setMenuOpen(false); onEditTile ? onEditTile() : setAiOpen(true); }}
+                      >
+                        <span className="mi-ic"><i className="fa-solid fa-pen-to-square" style={{ fontSize:12 }} /></span>
+                        Edit
+                      </button>
+                      <button
+                        className="edit-menu-item danger"
+                        role="menuitem"
+                        onClick={(e)=>{ e.stopPropagation(); setMenuOpen(false); onRemove(); }}
+                      >
+                        <span className="mi-ic"><i className="fa-solid fa-trash-can" style={{ fontSize:12 }} /></span>
+                        Delete
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+          {children}
+          {aiOpen && ReactDOM.createPortal((
+            <>
+              <div className={`ai-drawer-backdrop ${aiOpen ? 'open' : ''}`} onClick={()=>setAiOpen(false)} />
+              <div className={`ai-drawer ${aiOpen ? 'open' : ''}`} onMouseDown={(e)=>e.stopPropagation()}>
+                <div className="ai-drawer-head">
+                  <i className="fa-solid fa-wand-magic-sparkles" style={{ fontSize:14, color:'rgb(168,185,241)' }} />
+                  <div style={{ fontFamily:'Inter', fontSize:14, fontWeight:600, color:'rgb(249,250,251)' }}>Edit "{title}"</div>
+                  <div style={{ flex:1 }} />
+                  <button onClick={()=>setAiOpen(false)} style={{ background:'transparent', border:'none', color:'rgb(163,163,163)', cursor:'pointer', width:28, height:28, borderRadius:8, display:'inline-flex', alignItems:'center', justifyContent:'center' }} aria-label="Close">
+                    <i className="fa-solid fa-xmark" style={{ fontSize:13 }} />
+                  </button>
+                </div>
+                <div className="ai-drawer-body">
+                  {aiDone ? (
+                    <div style={{ display:'flex', alignItems:'center', gap:10, padding:'14px 4px', fontFamily:'Inter', fontSize:13, color:'rgb(168,185,241)' }}>
+                      <i className="fa-solid fa-circle-check" style={{ fontSize:14 }} /> Tile updated
+                    </div>
+                  ) : (
+                    <>
+                      <div style={{ fontFamily:'Inter', fontSize:11, fontWeight:600, color:'rgb(163,163,163)', textTransform:'uppercase', letterSpacing:0.4 }}>Describe your change</div>
+                      <textarea
+                        value={aiPrompt}
+                        onChange={e=>setAiPrompt(e.target.value)}
+                        placeholder={`How should "${title}" change?`}
+                        rows={4}
+                        autoFocus
+                        style={{
+                          width:'100%', resize:'vertical', minHeight:96,
+                          background:'rgba(0,0,0,0.25)', border:'1px solid rgba(75,85,99,0.6)', borderRadius:10,
+                          color:'rgb(249,250,251)', fontFamily:'Inter', fontSize:13, padding:'10px 12px', outline:'none', lineHeight:1.5,
+                        }}
+                      />
+                      <div style={{ fontFamily:'Inter', fontSize:11, fontWeight:600, color:'rgb(163,163,163)', textTransform:'uppercase', letterSpacing:0.4, marginTop:4 }}>Try a prompt</div>
+                      <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                        {(id === 'aum_alloc' ? [
+                          'Switch this to a bar chart',
+                          'Switch back to a donut chart',
+                          'Group results by sector',
+                          'Highlight the top 3 movers',
+                          'Make this more compact',
+                        ] : [
+                          'Switch this to a bar chart',
+                          'Show me the last 90 days only',
+                          'Group results by sector',
+                          'Highlight the top 3 movers',
+                          'Make this more compact',
+                        ]).map(s => (
+                          <button key={s} className="ai-prompt-chip" onClick={()=>setAiPrompt(s)}>{s}</button>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+                {!aiDone && (
+                  <div className="ai-drawer-foot">
+                    <div style={{ flex:1 }} />
+                    <button onClick={()=>setAiOpen(false)} style={{ height:32, padding:'0 14px', borderRadius:8, border:'1px solid rgb(75,85,99)', background:'transparent', color:'rgb(209,213,219)', fontFamily:'Inter', fontSize:12.5, fontWeight:500, cursor:'pointer' }}>Cancel</button>
+                    <button onClick={submitAi} disabled={!aiPrompt.trim() || aiBusy} style={{
+                      height:32, padding:'0 14px', borderRadius:8, border:'none',
+                      background: aiPrompt.trim() && !aiBusy ? 'rgb(35,89,255)' : 'rgba(35,89,255,0.4)',
+                      color:'#fff', fontFamily:'Inter', fontSize:12.5, fontWeight:600,
+                      cursor: aiPrompt.trim() && !aiBusy ? 'pointer' : 'not-allowed',
+                      display:'inline-flex', alignItems:'center', gap:6,
+                    }}>
+                      {aiBusy ? <><i className="fa-solid fa-spinner fa-spin" style={{ fontSize:12 }} /> Updating…</> : <><i className="fa-solid fa-wand-magic-sparkles" style={{ fontSize:12 }} /> Apply</>}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </>
+          ), document.body)}
+        </div>
+      );
+    }
+
+    /* -- Dashboard Secondary Menu (above the tile grid) ----------------- */
+    function DashboardSecondaryMenu({ onShare, onAddTile, editing, setEditing, tileCount, onResetLayout, period, setPeriod }) {
+      const [periodOpen, setPeriodOpen] = React.useState(false);
+      const ref = React.useRef();
+      React.useEffect(() => {
+        const onDoc = (e) => { if (ref.current && !ref.current.contains(e.target)) setPeriodOpen(false); };
+        document.addEventListener('mousedown', onDoc);
+        return () => document.removeEventListener('mousedown', onDoc);
+      }, []);
+      const PILL = (active) => ({
+        height:30, padding:'0 12px', borderRadius:8,
+        border:'1px solid ' + (active?'rgb(35,89,255)':'rgb(75,85,99)'),
+        background: active?'rgba(35,89,255,0.22)':'rgba(255,255,255,0.03)',
+        color:'rgb(249,250,251)',
+        fontFamily:'Inter', fontSize:12, fontWeight:500, cursor:'pointer',
+        display:'inline-flex', alignItems:'center', gap:6,
+      });
+      const periods = ['Today','This week','This month','This quarter','Year to date','Last 12 months','All time'];
+      return (
+        <div style={{
+          display:'flex', alignItems:'center', gap:10, marginBottom:16,
+          paddingBottom:12, borderBottom:'1px solid rgba(75,85,99,0.5)',
+        }}>
+          <button onClick={onAddTile} style={PILL(false)}>
+            <i className="fa-solid fa-wand-magic-sparkles" style={{ fontSize:11, color:'rgb(168,185,241)' }} /> Add a tile
+          </button>
+
+          <button onClick={()=>setEditing(e=>!e)} style={PILL(editing)}>
+            <i className="fa-solid fa-table-columns" style={{ fontSize:11 }} /> {editing ? 'Done editing' : 'Edit Dashboard'}
+          </button>
+
+          {editing && (
+            <button onClick={onResetLayout} style={{
+              height:30, padding:'0 12px', borderRadius:8,
+              border:'1px solid rgba(75,85,99,0.7)', background:'transparent',
+              color:'rgb(209,213,219)', fontFamily:'Inter', fontSize:12, fontWeight:500, cursor:'pointer',
+              display:'inline-flex', alignItems:'center', gap:6,
+            }}>
+              <i className="fa-solid fa-rotate-left" style={{ fontSize:11 }} /> Reset layout
+            </button>
+          )}
+
+          <div style={{ flex:1 }} />
+
+          <span style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)', marginRight:4 }}>{tileCount != null ? tileCount : 9} tiles · last edited 2 days ago</span>
+
+          <button onClick={onShare} style={PILL(false)}>
+            <i className="fa-solid fa-share-from-square" style={{ fontSize:11 }} /> Share
+          </button>
+        </div>
+      );
+    }
+
+    /* -- Dashboard switcher dropdown for the topbar title slot ---------- */
+    function DashSwitcher({ dashboards, activeDash, setActiveDash, menuOpen, setMenuOpen, onCreate }) {
+      const ref = React.useRef();
+      const current = dashboards.find(d => d.id === activeDash) || dashboards[0];
+      React.useEffect(() => {
+        const onDoc = (e) => { if (ref.current && !ref.current.contains(e.target)) setMenuOpen(false); };
+        document.addEventListener('mousedown', onDoc);
+        return () => document.removeEventListener('mousedown', onDoc);
+      }, [setMenuOpen]);
+      return (
+        <div ref={ref} style={{ position:'relative' }}>
+          <button onClick={()=>setMenuOpen(o=>!o)} style={{
+            display:'inline-flex', alignItems:'center', gap:8, height:32, padding:'0 10px',
+            borderRadius:8, border:'1px solid rgba(75,85,99,0.5)',
+            background: menuOpen?'rgba(255,255,255,0.05)':'transparent',
+            color:'rgb(249,250,251)', cursor:'pointer',
+            fontFamily:'Inter', fontWeight:600, fontSize:15,
+          }}>
+            {current?.name || 'Dashboard'}
+            <i className="fa-solid fa-chevron-down" style={{ width:10, height:10, opacity:0.7 }} />
+          </button>
+          {menuOpen && (
+            <div style={{
+              position:'absolute', top:'calc(100% + 6px)', left:0, minWidth:260, zIndex:60,
+              background:'rgb(17,24,39)', border:'1px solid rgb(75,85,99)', borderRadius:10,
+              boxShadow:'0 18px 40px -12px rgba(0,0,0,0.65)', padding:6,
+            }}>
+              <div style={{ fontFamily:'Inter', fontSize:10.5, color:'rgb(163,163,163)', padding:'6px 8px', letterSpacing:'0.06em', textTransform:'uppercase' }}>My dashboards</div>
+              {dashboards.map(d => (
+                <button key={d.id} onClick={()=>{ setActiveDash(d.id); setMenuOpen(false); }} style={{
+                  width:'100%', textAlign:'left', padding:'8px 10px', borderRadius:6, border:'none',
+                  background: d.id===activeDash?'rgba(35,89,255,0.18)':'transparent',
+                  color:'rgb(229,231,235)', fontFamily:'Inter', fontSize:12.5, fontWeight: d.id===activeDash?600:500,
+                  display:'flex', alignItems:'center', gap:8, cursor:'pointer',
+                }}>
+                  <i className="fa-solid fa-table-columns" style={{ width:11, height:11, color: d.id===activeDash?'rgb(35,89,255)':'rgb(163,163,163)' }} />
+                  <span style={{ flex:1 }}>{d.name}</span>
+                  {d.id===activeDash && <i className="fa-solid fa-check" style={{ width:11, height:11, color:'rgb(35,89,255)' }} />}
+                </button>
+              ))}
+              <div style={{ height:1, background:'rgba(75,85,99,0.5)', margin:'6px 4px' }} />
+              <button onClick={()=>{ setMenuOpen(false); onCreate && onCreate(); }} style={{
+                width:'100%', textAlign:'left', padding:'8px 10px', borderRadius:6, border:'none',
+                background:'transparent', color:'rgb(168,185,241)',
+                fontFamily:'Inter', fontSize:12.5, fontWeight:500,
+                display:'flex', alignItems:'center', gap:8, cursor:'pointer',
+              }}>
+                <i className="fa-solid fa-circle-plus" style={{ fontSize:11 }} /> New dashboard
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    /* -- Share Dashboard Dialog ----------------------------------------- */
+    function ShareDashboardDialog({ onClose, dashboardName }) {
+      const [email, setEmail] = React.useState('');
+      const [shared, setShared] = React.useState([
+        { name:'Sarah Berry',    email:'sarah.berry@field.io',    role:'Editor' },
+        { name:'Angel Schleifer',email:'angel.s@field.io',        role:'Viewer' },
+      ]);
+      const [copied, setCopied] = React.useState(false);
+      const handleAdd = (e) => {
+        e.preventDefault();
+        const v = email.trim(); if (!v) return;
+        setShared(prev => [...prev, { name:v.split('@')[0].replace('.',' '), email:v, role:'Viewer' }]);
+        setEmail('');
+      };
+      return (
+        <div onClick={onClose} style={{
+          position:'fixed', inset:0, background:'rgba(0,0,0,0.55)', backdropFilter:'blur(4px)',
+          display:'flex', alignItems:'center', justifyContent:'center', zIndex:80,
+        }}>
+          <div onClick={e=>e.stopPropagation()} style={{
+            width:520, maxWidth:'92vw', background:'rgb(17,24,39)', border:'1px solid rgb(75,85,99)',
+            borderRadius:14, color:'rgb(249,250,251)', overflow:'hidden',
+            boxShadow:'0 30px 60px -20px rgba(0,0,0,0.6)',
+          }}>
+            <div style={{ padding:'16px 18px', borderBottom:'1px solid rgb(75,85,99)', display:'flex', alignItems:'center' }}>
+              <div>
+                <div style={{ fontFamily:'Inter', fontSize:15, fontWeight:600 }}>Share "{dashboardName}"</div>
+                <div style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(163,163,163)', marginTop:2 }}>Invite co-workers to view or edit this dashboard</div>
+              </div>
+              <div style={{ flex:1 }} />
+              <button onClick={onClose} style={{ width:28, height:28, borderRadius:6, border:'none', background:'transparent', color:'rgb(163,163,163)', cursor:'pointer' }}>
+                <i className="fa-solid fa-xmark" style={{ width:13, height:13 }} />
+              </button>
+            </div>
+
+            <div style={{ padding:'16px 18px' }}>
+              <form onSubmit={handleAdd} style={{ display:'flex', gap:8, marginBottom:14 }}>
+                <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Add people by email" style={{
+                  flex:1, height:34, padding:'0 12px', borderRadius:8, border:'1px solid rgb(75,85,99)',
+                  background:'rgba(255,255,255,0.04)', color:'rgb(249,250,251)',
+                  fontFamily:'Inter', fontSize:12.5, outline:'none',
+                }} />
+                <select defaultValue="Viewer" style={{
+                  height:34, padding:'0 10px', borderRadius:8, border:'1px solid rgb(75,85,99)',
+                  background:'rgba(255,255,255,0.04)', color:'rgb(249,250,251)',
+                  fontFamily:'Inter', fontSize:12.5,
+                }}>
+                  <option>Viewer</option><option>Editor</option><option>Admin</option>
+                </select>
+                <button type="submit" style={{
+                  height:34, padding:'0 14px', borderRadius:8, border:'none', background:'rgb(35,89,255)',
+                  color:'#fff', fontFamily:'Inter', fontWeight:600, fontSize:12.5, cursor:'pointer',
+                }}>Invite</button>
+              </form>
+
+              <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)', letterSpacing:'0.06em', textTransform:'uppercase', marginBottom:8 }}>People with access</div>
+              <div style={{ display:'flex', flexDirection:'column', gap:4, maxHeight:220, overflow:'auto' }}>
+                {shared.map((p,i) => (
+                  <div key={i} style={{
+                    display:'flex', alignItems:'center', gap:10, padding:'8px 10px', borderRadius:8,
+                    background:'rgba(255,255,255,0.03)', border:'1px solid rgba(75,85,99,0.5)',
+                  }}>
+                    <div style={{ width:30, height:30, borderRadius:9999, background:'rgba(35,89,255,0.25)', border:'1px solid rgba(35,89,255,0.5)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Inter', fontSize:11.5, fontWeight:600, color:'rgb(168,185,241)' }}>
+                      {p.name.split(' ').map(s=>s[0]).slice(0,2).join('').toUpperCase()}
+                    </div>
+                    <div style={{ flex:1, minWidth:0 }}>
+                      <div style={{ fontFamily:'Inter', fontSize:12.5, fontWeight:500 }}>{p.name}</div>
+                      <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)' }}>{p.email}</div>
+                    </div>
+                    <select defaultValue={p.role} style={{
+                      height:28, padding:'0 8px', borderRadius:6, border:'1px solid rgb(75,85,99)',
+                      background:'rgba(255,255,255,0.04)', color:'rgb(229,231,235)',
+                      fontFamily:'Inter', fontSize:11.5,
+                    }}>
+                      <option>Viewer</option><option>Editor</option><option>Admin</option>
+                    </select>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ padding:'12px 18px 16px', borderTop:'1px solid rgb(75,85,99)', display:'flex', alignItems:'center', gap:10 }}>
+              <button onClick={()=>{ setCopied(true); setTimeout(()=>setCopied(false),1500); }} style={{
+                height:32, padding:'0 12px', borderRadius:8, border:'1px solid rgb(75,85,99)',
+                background:'transparent', color:'rgb(229,231,235)',
+                fontFamily:'Inter', fontSize:12, fontWeight:500, cursor:'pointer',
+                display:'inline-flex', alignItems:'center', gap:6,
+              }}>
+                <i className="fa-solid fa-check" style={{ width:11, height:11 }} />
+                {copied ? 'Link copied' : 'Copy link'}
+              </button>
+              <div style={{ flex:1 }} />
+              <button onClick={onClose} style={{
+                height:32, padding:'0 14px', borderRadius:8, border:'none', background:'rgb(35,89,255)',
+                color:'#fff', fontFamily:'Inter', fontWeight:600, fontSize:12.5, cursor:'pointer',
+              }}>Done</button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* -- New Dashboard creation page (LLM-style) ----------------------- */
+    function NewDashboardPage({ onCancel, onCreate }) {
+      const [prompt, setPrompt] = React.useState('');
+      const [name, setName] = React.useState('');
+      const taRef = React.useRef();
+      React.useEffect(() => { taRef.current && taRef.current.focus(); }, []);
+      const suggestions = [
+        { icon:'chart-line',     title:'Performance overview',  hint:'AUM trend, top movers, benchmarks vs S&P 500' },
+        { icon:'users',          title:'Client engagement',     hint:'Recent meetings, last touch, upcoming reviews' },
+        { icon:'sack-dollar',    title:'Revenue & billing',     hint:'Projected fees, billing summary, AR aging' },
+        { icon:'briefcase',      title:'Pipeline & prospects',  hint:'New opps, conversion stage, stalled deals' },
+        { icon:'shield-halved',  title:'Risk & compliance',     hint:'Drift alerts, concentration, KYC review queue' },
+        { icon:'chart-pie',      title:'Allocation & holdings', hint:'Asset mix, top holdings, sector breakdown' },
+      ];
+      const examples = [
+        'Show me a dashboard for monitoring high-net-worth clients',
+        'Build me a daily morning briefing with meetings, alerts, and market movers',
+        'Create a dashboard focused on Q4 retention and at-risk accounts',
+      ];
+      const submit = () => {
+        const finalName = name.trim() || (prompt.trim().slice(0,40) || 'Untitled dashboard');
+        onCreate(finalName);
+      };
+      const onPromptKey = (e) => {
+        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); submit(); }
+      };
+      return (
+        <div style={{
+          minHeight:'calc(100vh - 56px)', display:'flex', flexDirection:'column', alignItems:'center',
+          padding:'80px 24px 48px', background:'transparent',
+        }}>
+          <div style={{ width:'100%', maxWidth:760 }}>
+            <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:14, marginBottom:36 }}>
+              <div style={{
+                width:54, height:54, borderRadius:14,
+                background:'linear-gradient(135deg, rgba(35,89,255,0.35), rgba(35,89,255,0.1))',
+                border:'1px solid rgba(35,89,255,0.55)',
+                display:'flex', alignItems:'center', justifyContent:'center',
+                boxShadow:'0 12px 32px -10px rgba(35,89,255,0.55)',
+              }}>
+                <i className="fa-solid fa-wand-magic-sparkles" style={{ fontSize:22, color:'rgb(168,185,241)' }} />
+              </div>
+              <h1 style={{
+                margin:0, fontFamily:'Inter', fontWeight:600, fontSize:30, letterSpacing:'-0.01em',
+                color:'rgb(249,250,251)', textAlign:'center',
+              }}>Let's design a new one.</h1>
+              <p style={{
+                margin:0, fontFamily:'Inter', fontSize:14.5, color:'rgb(163,163,163)', textAlign:'center', maxWidth:520,
+              }}>Describe the dashboard you want and we'll assemble the right tiles. You can rearrange and refine after.</p>
+            </div>
+
+            {/* Prompt composer */}
+            <div style={{
+              background:'rgb(17,24,39)', border:'1px solid rgba(75,85,99,0.7)', borderRadius:14,
+              boxShadow:'0 24px 60px -20px rgba(0,0,0,0.6)', padding:'14px 14px 10px',
+            }}>
+              <textarea
+                ref={taRef}
+                value={prompt}
+                onChange={e=>setPrompt(e.target.value)}
+                onKeyDown={onPromptKey}
+                placeholder="Describe your ideal dashboard…"
+                rows={4}
+                style={{
+                  width:'100%', minHeight:96, resize:'vertical',
+                  background:'transparent', border:'none', outline:'none',
+                  color:'rgb(249,250,251)', fontFamily:'Inter', fontSize:14.5, lineHeight:1.55,
+                  padding:'4px 6px',
+                }}
+              />
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginTop:6, paddingTop:10, borderTop:'1px solid rgba(75,85,99,0.4)' }}>
+                <input
+                  value={name}
+                  onChange={e=>setName(e.target.value)}
+                  placeholder="Dashboard name (optional)"
+                  style={{
+                    flex:1, height:32, padding:'0 10px', borderRadius:8,
+                    border:'1px solid rgba(75,85,99,0.5)', background:'rgba(0,0,0,0.25)',
+                    color:'rgb(229,231,235)', fontFamily:'Inter', fontSize:12.5, outline:'none',
+                  }}
+                />
+                <button onClick={onCancel} style={{
+                  height:32, padding:'0 14px', borderRadius:8,
+                  border:'1px solid rgba(75,85,99,0.6)', background:'transparent',
+                  color:'rgb(229,231,235)', fontFamily:'Inter', fontSize:12.5, fontWeight:500, cursor:'pointer',
+                }}>Cancel</button>
+                <button onClick={submit} disabled={!prompt.trim() && !name.trim()} style={{
+                  height:32, padding:'0 16px', borderRadius:8, border:'none',
+                  background: (prompt.trim()||name.trim())?'rgb(35,89,255)':'rgba(35,89,255,0.4)',
+                  color:'white', fontFamily:'Inter', fontSize:12.5, fontWeight:600,
+                  cursor:(prompt.trim()||name.trim())?'pointer':'not-allowed',
+                  display:'inline-flex', alignItems:'center', gap:6,
+                }}>
+                  <i className="fa-solid fa-arrow-up" style={{ fontSize:11 }} /> Generate
+                </button>
+              </div>
+            </div>
+
+            {/* Example prompts */}
+            <div style={{ marginTop:16, display:'flex', flexDirection:'column', gap:6 }}>
+              {examples.map(ex => (
+                <button key={ex} onClick={()=>{ setPrompt(ex); taRef.current && taRef.current.focus(); }} style={{
+                  textAlign:'left', padding:'10px 14px', borderRadius:10,
+                  background:'rgba(255,255,255,0.025)', border:'1px solid rgba(75,85,99,0.4)',
+                  color:'rgb(209,213,219)', fontFamily:'Inter', fontSize:13, cursor:'pointer',
+                  display:'flex', alignItems:'center', gap:10,
+                }}>
+                  <i className="fa-regular fa-message" style={{ fontSize:11, color:'rgb(163,163,163)' }} />
+                  <span style={{ flex:1 }}>{ex}</span>
+                  <i className="fa-solid fa-arrow-up-right-from-square" style={{ fontSize:10, color:'rgb(163,163,163)' }} />
+                </button>
+              ))}
+            </div>
+
+            {/* Templates */}
+            <div style={{ marginTop:32 }}>
+              <div style={{
+                fontFamily:'Inter', fontSize:11, fontWeight:600, letterSpacing:'0.08em',
+                textTransform:'uppercase', color:'rgb(163,163,163)', marginBottom:12, paddingLeft:2,
+              }}>Or start from a template</div>
+              <div style={{ display:'grid', gridTemplateColumns:'repeat(3, minmax(0,1fr))', gap:10 }}>
+                {suggestions.map(s => (
+                  <button key={s.title} onClick={()=>{ setPrompt(s.hint); setName(s.title); }} style={{
+                    textAlign:'left', padding:14, borderRadius:12,
+                    background:'rgba(255,255,255,0.025)', border:'1px solid rgba(75,85,99,0.45)',
+                    cursor:'pointer', display:'flex', flexDirection:'column', gap:6,
+                  }}>
+                    <div style={{
+                      width:30, height:30, borderRadius:8,
+                      background:'rgba(35,89,255,0.18)', border:'1px solid rgba(35,89,255,0.4)',
+                      display:'flex', alignItems:'center', justifyContent:'center', marginBottom:4,
+                    }}>
+                      <i className={`fa-solid fa-${s.icon}`} style={{ fontSize:13, color:'rgb(168,185,241)' }} />
+                    </div>
+                    <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:13, color:'rgb(249,250,251)' }}>{s.title}</div>
+                    <div style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(163,163,163)', lineHeight:1.45 }}>{s.hint}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div style={{
+              marginTop:32, display:'flex', alignItems:'center', justifyContent:'center', gap:6,
+              fontFamily:'Inter', fontSize:11, color:'rgb(115,115,115)',
+            }}>
+              <kbd style={{
+                fontFamily:'Inter', fontSize:10.5, padding:'2px 6px', borderRadius:4,
+                background:'rgba(255,255,255,0.05)', border:'1px solid rgba(75,85,99,0.5)', color:'rgb(163,163,163)',
+              }}>⌘</kbd>
+              <kbd style={{
+                fontFamily:'Inter', fontSize:10.5, padding:'2px 6px', borderRadius:4,
+                background:'rgba(255,255,255,0.05)', border:'1px solid rgba(75,85,99,0.5)', color:'rgb(163,163,163)',
+              }}>Enter</kbd>
+              <span>to generate</span>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* -- Period / date-range dropdown for the topbar -------------------- */
+    function TopbarPeriod({ value, onChange }) {
+      const [open, setOpen] = React.useState(false);
+      const [internal, setInternal] = React.useState('Year to date');
+      const period = value != null ? value : internal;
+      const setPeriod = (p) => { if (onChange) onChange(p); else setInternal(p); };
+      const ref = React.useRef();
+      React.useEffect(() => {
+        const onDoc = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+        document.addEventListener('mousedown', onDoc);
+        return () => document.removeEventListener('mousedown', onDoc);
+      }, []);
+      const periods = ['Today','This week','This month','This quarter','Year to date','Last 12 months','All time'];
+      return (
+        <div style={{ position:'relative' }} ref={ref}>
+          <TopbarButton variant="outline" onClick={()=>setOpen(o=>!o)}>
+            <i className="fa-solid fa-calendar" style={{ width:12, height:12 }} />
+            {period}
+            <i className="fa-solid fa-chevron-down" style={{ fontSize:10, opacity:0.7, marginLeft:2 }} />
+          </TopbarButton>
+          {open && (
+            <div style={{
+              position:'absolute', top:'calc(100% + 6px)', right:0, minWidth:200, zIndex:50,
+              background:'rgb(17,24,39)', border:'1px solid rgb(75,85,99)', borderRadius:10,
+              boxShadow:'0 18px 40px -12px rgba(0,0,0,0.65)', padding:6,
+            }}>
+              {periods.map(p => (
+                <button key={p} onClick={()=>{ setPeriod(p); setOpen(false); }} style={{
+                  width:'100%', textAlign:'left', padding:'8px 10px', borderRadius:6, border:'none',
+                  background: p===period?'rgba(35,89,255,0.18)':'transparent',
+                  color:'rgb(229,231,235)', fontFamily:'Inter', fontSize:12.5, fontWeight: p===period?600:500,
+                  cursor:'pointer', display:'flex', alignItems:'center', gap:8,
+                }}>
+                  <span style={{ flex:1 }}>{p}</span>
+                  {p===period && <i className="fa-solid fa-check" style={{ width:11, height:11, color:'rgb(35,89,255)' }} />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    /* -- Insights topbar filters (provider / type dropdowns) -------------- */
+    function InsightFilterMenu({ label, value, options, onChange }) {
+      const [open, setOpen] = React.useState(false);
+      const ref = React.useRef();
+      React.useEffect(() => {
+        const f = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+        document.addEventListener('mousedown', f); return () => document.removeEventListener('mousedown', f);
+      }, []);
+      const cur = options.find(o => o.value === value);
+      const active = value != null;
+      return (
+        <div ref={ref} style={{ position:'relative' }}>
+          <button onClick={()=>setOpen(o=>!o)} style={{ height:32, padding:'0 12px', borderRadius:8, cursor:'pointer',
+            border:`1px solid ${active?'rgb(35,89,255)':'rgb(75,85,99)'}`, background: active?'rgba(35,89,255,0.15)':'rgba(0,0,0,0.25)',
+            color: active?'rgb(128,152,234)':'rgb(229,231,235)', fontFamily:'Inter', fontSize:12.5, fontWeight:500,
+            display:'inline-flex', alignItems:'center', gap:8, whiteSpace:'nowrap' }}>
+            {cur && cur.color && <span style={{ width:7, height:7, borderRadius:9999, background:cur.color }} />}
+            {label}: {cur ? cur.label : 'All'}
+            <i className="fa-solid fa-chevron-down" style={{ fontSize:9 }} />
+          </button>
+          {open && (
+            <div style={{ position:'absolute', top:'calc(100% + 6px)', right:0, zIndex:60, minWidth:210, maxHeight:340, overflowY:'auto', padding:6, borderRadius:10,
+              background:'rgb(17,24,39)', border:'1px solid rgb(75,85,99)', boxShadow:'0 18px 40px -12px rgba(0,0,0,0.7)' }}>
+              {[{ value:null, label:'All' }].concat(options).map(o => (
+                <button key={String(o.value)} onClick={()=>{ onChange(o.value); setOpen(false); }} style={{ display:'flex', alignItems:'center', gap:9, width:'100%', padding:'8px 10px', borderRadius:6,
+                  background: o.value===value ? 'rgba(35,89,255,0.16)' : 'transparent', border:'none', color:'rgb(229,231,235)', fontFamily:'Inter', fontSize:12.5, cursor:'pointer', textAlign:'left' }}
+                  onMouseEnter={e=>{ if(o.value!==value) e.currentTarget.style.background='rgba(255,255,255,0.05)'; }}
+                  onMouseLeave={e=>{ if(o.value!==value) e.currentTarget.style.background='transparent'; }}>
+                  {o.color ? <span style={{ width:8, height:8, borderRadius:9999, background:o.color, flexShrink:0 }} /> : <span style={{ width:8 }} />}
+                  <span style={{ flex:1 }}>{o.label}</span>
+                  {o.value===value && <i className="fa-solid fa-check" style={{ fontSize:10, color:'rgb(128,152,234)' }} />}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      );
+    }
+    function InsightTopbarFilters({ prov, setProv, type, setType }) {
+      const PM = window.INSIGHT_PROVIDER_META || {}; const TM = window.INSIGHT_TYPE_META || {};
+      const provOpts = (window.INSIGHT_PROVIDERS || []).map(p => ({ value:p, label:p, color:(PM[p]||{}).fg }));
+      const typeOpts = (window.INSIGHT_TYPES || []).map(t => ({ value:t, label:t, color:(TM[t]||{}).fg }));
+      return (
+        <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+          <InsightFilterMenu label="Provider" value={prov} options={provOpts} onChange={setProv} />
+          <InsightFilterMenu label="Type" value={type} options={typeOpts} onChange={setType} />
+        </div>
+      );
+    }
+
+    function AdvisorTopbar({ active, selectedClient, clientDetailTitle, onBack, dashboards, activeDash, setActiveDash, onNewDashboard, onCreateDashboardPage, dashMenuOpen, setDashMenuOpen, creatingDash, period, setPeriod, clientPeriod, setClientPeriod, clientTab, onOpenFilter, activeFilterChips, onRemoveFilterChip, onClearFilters, insightProv, setInsightProv, insightType, setInsightType }) {
+      const isDashboard = !selectedClient && active === 'dashboard';
+      const currentDash = (dashboards || []).find(d => d.id === activeDash) || (dashboards || [])[0];
+      const titleNode = selectedClient ? (
+          clientDetailTitle ? (
+            <span style={{ display:'inline-flex', alignItems:'baseline', gap:8 }}>
+              <span>{selectedClient}</span>
+              <span style={{ color:'rgb(75,85,99)', fontWeight:400 }}>|</span>
+              <span style={{ color:'rgb(209,213,219)', fontWeight:500 }}>{clientDetailTitle}</span>
+            </span>
+          ) : selectedClient
+        )
+        : active === 'assistant' ? (
+          <span style={{ display:'inline-flex', alignItems:'center', gap:9 }}>
+            <i className="fa-solid fa-house" style={{ fontSize:14, color:'rgb(128,152,234)' }} />
+            <span>Home</span>
+          </span>
+        )
+        : active === 'clients' ? 'Clients'
+        : active === 'notifications' ? 'Notifications'
+        : active === 'watchlist' ? 'Watchlist'
+        : active === 'lifecycle' ? 'Portfolio Lifecycle'
+        : active === 'journals' ? 'Journals'
+        : active === 'insights' ? (
+          <span style={{ display:'inline-flex', alignItems:'center', gap:9 }}>
+            <i className="fa-solid fa-lightbulb" style={{ fontSize:14, color:'rgb(168,185,241)' }} />
+            <span>Insights</span>
+          </span>
+        )
+        : active.startsWith('practice') ? (() => {
+          const sub = { 'practice.clients':'Client Analysis', 'practice.cashflow':'Cash Flow', 'practice.assets':'Assets' }[active];
+          return sub ? (
+            <span style={{ display:'inline-flex', alignItems:'center', gap:10 }}>
+              <span>My Practice</span>
+              <span style={{ color:'rgb(75,85,99)', fontWeight:400 }}>|</span>
+              <span style={{ color:'rgb(209,213,219)', fontWeight:500 }}>{sub}</span>
+            </span>
+          ) : 'My Practice';
+        })()
+        : active === 'settings' ? 'Settings'
+        : active === 'help' ? 'Help & support'
+        : creatingDash ? 'New dashboard'
+        : isDashboard && currentDash ? (
+          <DashSwitcher
+            dashboards={dashboards}
+            activeDash={activeDash}
+            setActiveDash={setActiveDash}
+            menuOpen={dashMenuOpen}
+            setMenuOpen={setDashMenuOpen}
+            onCreate={onCreateDashboardPage}
+          />
+        ) : 'Dashboard';
+      const actions = selectedClient ? (clientDetailTitle ? (
+        <>
+          <TopbarButton variant="outline"><i className="fa-solid fa-download" style={{ width:13, height:13 }} /> Export</TopbarButton>
+        </>
+      ) : (clientTab === 'Profile' ? (
+        <TopbarPeriod value={clientPeriod} onChange={setClientPeriod} />
+      ) : null)) : active === 'notifications' ? null : active === 'clients' ? (
+        <>
+          <TopbarButton variant="outline" active={(activeFilterChips||[]).length>0} onClick={onOpenFilter}><i className="fa-solid fa-filter" style={{ width:12, height:12 }} /> Filter{(activeFilterChips||[]).length>0 ? ` · ${activeFilterChips.length}` : ''}</TopbarButton>
+          <TopbarButton variant="outline"><i className="fa-solid fa-table-columns" style={{ width:12, height:12 }} /> Columns</TopbarButton>
+        </>
+      ) : creatingDash ? null : active === 'insights' ? (
+        <InsightTopbarFilters prov={insightProv} setProv={setInsightProv} type={insightType} setType={setInsightType} />
+      ) : active.startsWith('practice') ? (
+        <TopbarPeriod />
+      ) : isDashboard ? (
+        <>
+          <TopbarPeriod value={period} onChange={setPeriod} />
+          <TopbarButton variant="outline" onClick={onCreateDashboardPage}><i className="fa-solid fa-circle-plus" style={{ fontSize:12 }} /> New dashboard</TopbarButton>
+        </>
+      ) : null;
+      const dateStr = (() => {
+        const d = new Date();
+        const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const n = d.getDate();
+        const suf = (n%10===1&&n!==11)?'st':(n%10===2&&n!==12)?'nd':(n%10===3&&n!==13)?'rd':'th';
+        return `${days[d.getDay()]} ${months[d.getMonth()]} ${n}${suf} ${d.getFullYear()}`;
+      })();
+      const hideDate = (active === 'clients' && !selectedClient) || active === 'assistant';
+      const actionsWithDate = (
+        <>
+          {!hideDate && <span style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(163,163,163)', marginRight:4, whiteSpace:'nowrap' }}>{dateStr}</span>}
+          {actions}
+        </>
+      );
+      const isClients = active === 'clients' && !selectedClient;
+      const showSelections = isClients && (activeFilterChips || []).length > 0;
+      return (
+        <Topbar
+          title={titleNode}
+          onBack={selectedClient ? onBack : undefined}
+          actions={actionsWithDate}
+          activeSelections={showSelections
+            ? activeFilterChips.map(c => ({ label:c.label, icon:c.icon, onRemove:()=>onRemoveFilterChip(c.key, c.value) }))
+            : undefined}
+          onClearAll={onClearFilters}
+        />
+      );
+    }
+
+    /* -- FAB ---------------------------------------------------------- */
+    function AIFab({ onClick, hidden }) {
+      const ref = React.useRef();
+      const [hover, setHover] = React.useState(false);
+      if (hidden) return null;
+      return (
+        <button
+          ref={ref}
+          onClick={onClick}
+          onMouseEnter={()=>setHover(true)}
+          onMouseLeave={()=>setHover(false)}
+          title="Ask AI"
+          style={{
+            position:'fixed', right:24, bottom:24, zIndex:80,
+            height:52, padding: hover ? '0 18px 0 14px' : 0, width: hover ? 'auto' : 52, minWidth:52,
+            borderRadius:9999, border:'1px solid rgba(255,255,255,0.10)',
+            background:'linear-gradient(135deg, rgb(35,89,255) 0%, rgb(79,115,233) 100%)',
+            color:'#fff', cursor:'pointer',
+            display:'flex', alignItems:'center', justifyContent:'center', gap:10,
+            boxShadow: hover
+              ? '0 16px 40px -8px rgba(35,89,255,0.55), 0 0 0 6px rgba(35,89,255,0.18)'
+              : '0 10px 25px -5px rgba(0,0,0,0.45), 0 0 0 4px rgba(35,89,255,0.22)',
+            transition:'box-shadow 200ms ease, padding 200ms ease, width 200ms ease, transform 200ms ease',
+            transform: hover ? 'translateY(-1px)' : 'translateY(0)',
+            overflow:'hidden', whiteSpace:'nowrap',
+          }}>
+          <i className="fa-solid fa-wand-magic-sparkles" style={{ fontSize:16, flexShrink:0 }} />
+          {hover && (
+            <span style={{ fontFamily:'Inter', fontSize:13, fontWeight:600 }}>Ask AI</span>
+          )}
+        </button>
+      );
+    }
+
+    function InlineToast() {
+      const [show, setShow] = React.useState(true);
+      const ref = React.useRef();
+      if (!show) return null;
+      return (
+        <div ref={ref} style={{
+          position:'fixed', left:240, bottom:24, width:260,
+          background:'rgba(255,255,255,0.05)', border:'1px solid rgb(75,85,99)', borderRadius:12,
+          backdropFilter:'blur(12px) saturate(140%)', WebkitBackdropFilter:'blur(12px) saturate(140%)',
+          padding:'12px 12px 10px', color:'rgb(249,250,251)',
+          boxShadow:'0 10px 25px -5px rgba(0,0,0,0.4)',
+        }}>
+          <div style={{ display:'flex', alignItems:'flex-start', gap:8 }}>
+            <i className="fa-solid fa-envelope" style={{ width:15, height:15, color:'rgb(35,89,255)', marginTop:2 }} />
+            <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ fontFamily:'Inter', fontSize:12, fontWeight:600 }}>New Email from David Young</div>
+              <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)' }}>Send latest investment selection</div>
+            </div>
+            <button onClick={()=>setShow(false)} style={{ background:'transparent', border:'none', color:'rgb(163,163,163)', cursor:'pointer', padding:2 }}>
+              <i className="fa-solid fa-xmark" style={{ width:12, height:12 }} />
+            </button>
+          </div>
+          <button style={{
+            marginTop:8, width:'100%', height:28, borderRadius:8,
+            background:'rgba(35,89,255,0.2)', border:'1px solid rgba(35,89,255,0.4)', color:'rgb(35,89,255)',
+            fontFamily:'Inter', fontSize:11.5, fontWeight:500, cursor:'pointer',
+          }}>View Notification</button>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+
+</body>
+</html>

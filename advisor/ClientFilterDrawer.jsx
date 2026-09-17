@@ -23,7 +23,7 @@ function ClientFilterDrawer({ open, onClose, filters, setFilters }) {
 
   const C = {
     panel:'rgb(17,24,39)', border:'rgb(75,85,99)', borderSoft:'rgba(75,85,99,0.5)',
-    ink:'rgb(249,250,251)', subtle:'rgb(163,163,163)', green:'rgb(5,122,85)',
+    ink:'rgb(249,250,251)', subtle:'rgb(163,163,163)', green:'rgb(35,89,255)',
   };
 
   return (
@@ -50,8 +50,8 @@ function ClientFilterDrawer({ open, onClose, filters, setFilters }) {
           {count>0 && (
             <span style={{
               height:20, minWidth:20, padding:'0 6px', borderRadius:9999,
-              background:'rgba(5,122,85,0.22)', border:'1px solid rgba(5,122,85,0.55)',
-              color:'rgb(110,231,183)', fontSize:11, fontWeight:600,
+              background:'rgba(35,89,255,0.22)', border:'1px solid rgba(35,89,255,0.55)',
+              color:'rgb(168,185,241)', fontSize:11, fontWeight:600,
               display:'inline-flex', alignItems:'center', justifyContent:'center',
             }}>{count}</span>
           )}
@@ -83,9 +83,9 @@ function ClientFilterDrawer({ open, onClose, filters, setFilters }) {
                         height:32, padding:'0 13px', borderRadius:9999, cursor:'pointer',
                         fontFamily:'Inter', fontSize:12.5, fontWeight:500,
                         display:'inline-flex', alignItems:'center', gap:7,
-                        background: on ? 'rgba(5,122,85,0.22)' : 'rgba(255,255,255,0.03)',
-                        border: `1px solid ${on ? 'rgb(5,122,85)' : C.border}`,
-                        color: on ? 'rgb(110,231,183)' : 'rgb(229,231,235)',
+                        background: on ? 'rgba(35,89,255,0.22)' : 'rgba(255,255,255,0.03)',
+                        border: `1px solid ${on ? 'rgb(35,89,255)' : C.border}`,
+                        color: on ? 'rgb(168,185,241)' : 'rgb(229,231,235)',
                         transition:'background 120ms ease, border-color 120ms ease, color 120ms ease',
                       }}>
                         {on && <i className="fa-solid fa-check" style={{ fontSize:10 }} />}
@@ -108,8 +108,8 @@ function ClientFilterDrawer({ open, onClose, filters, setFilters }) {
             opacity: count===0?0.6:1,
           }}>Clear all</button>
           <button onClick={onClose} data-no-hint style={{
-            flex:1, height:36, borderRadius:8, border:'1px solid rgb(5,122,85)',
-            background:'rgb(5,122,85)', color:'#fff',
+            flex:1, height:36, borderRadius:8, border:'1px solid rgb(35,89,255)',
+            background:'rgb(35,89,255)', color:'#fff',
             fontFamily:'Inter', fontSize:12.5, fontWeight:600, cursor:'pointer',
           }}>{count>0 ? `Show results` : 'Done'}</button>
         </div>

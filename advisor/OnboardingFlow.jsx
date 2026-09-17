@@ -2,8 +2,8 @@
 // Stages: welcome → 5 question steps → tile picker → building → done (handoff)
 // All visuals reuse the dashboard's glass + emerald aesthetic.
 
-const ONB_BRAND_GREEN = 'rgb(5,122,85)';
-const ONB_GREEN_SOFT = 'rgba(5,122,85,0.18)';
+const ONB_BRAND_GREEN = 'rgb(35,89,255)';
+const ONB_GREEN_SOFT = 'rgba(35,89,255,0.18)';
 const ONB_BORDER = 'rgb(75,85,99)';
 const ONB_BORDER_SOFT = 'rgba(75,85,99,0.5)';
 const ONB_GLASS = 'rgba(255,255,255,0.05)';
@@ -78,12 +78,12 @@ function OnbTilePreview({ id }) {
       {children}
     </svg>;
 
-  const ink = 'rgb(229,231,235)',mute = 'rgb(115,115,115)',g = 'rgb(5,122,85)';
+  const ink = 'rgb(229,231,235)',mute = 'rgb(115,115,115)',g = 'rgb(35,89,255)';
   switch (id) {
     case 'meetings':return wrap(<g>
       <text x="14" y="22" fill={ink} fontSize="11" fontWeight="600">Upcoming Meetings</text>
       {[0, 1, 2].map((i) => <g key={i} transform={`translate(14, ${38 + i * 32})`}>
-        <rect width="32" height="24" rx="4" fill="rgba(5,122,85,0.18)" />
+        <rect width="32" height="24" rx="4" fill="rgba(35,89,255,0.18)" />
         <text x="16" y="11" textAnchor="middle" fill={g} fontSize="7" fontWeight="700">FEB</text>
         <text x="16" y="20" textAnchor="middle" fill={ink} fontSize="9" fontWeight="700">{`0${i + 2}`}</text>
         <text x="42" y="11" fill={ink} fontSize="8.5" fontWeight="600">{['Kyung Min', 'David Young', 'Maria W.'][i]}</text>
@@ -104,7 +104,7 @@ function OnbTilePreview({ id }) {
           const x = 14 + i % 4 * 65,y = 38 + Math.floor(i / 4) * 48;
           return <g key={i} transform={`translate(${x}, ${y})`}>
           <rect width="58" height="40" rx="4" fill="rgba(255,255,255,0.04)" stroke="rgba(75,85,99,0.5)" />
-          <circle cx="12" cy="12" r="6" fill="rgba(5,122,85,0.4)" />
+          <circle cx="12" cy="12" r="6" fill="rgba(35,89,255,0.4)" />
           <rect x="22" y="8" width="30" height="3" rx="1" fill={ink} opacity="0.7" />
           <rect x="22" y="15" width="20" height="2.5" rx="1" fill={mute} />
           <text x="6" y="34" fill={i % 3 === 0 ? 'rgb(248,113,113)' : g} fontSize="7" fontWeight="700">{i % 3 === 0 ? '-2.4%' : '+8.1%'}</text>
@@ -114,14 +114,14 @@ function OnbTilePreview({ id }) {
     case 'aumalloc':return wrap(<g>
       <text x="14" y="22" fill={ink} fontSize="11" fontWeight="600">AUM by Allocation</text>
       <g transform="translate(80, 90)">
-        <circle r="36" fill="none" stroke="rgba(94,214,164,0.5)" strokeWidth="14" strokeDasharray="63 226" transform="rotate(-90)" />
+        <circle r="36" fill="none" stroke="rgba(151,171,238,0.5)" strokeWidth="14" strokeDasharray="63 226" transform="rotate(-90)" />
         <circle r="36" fill="none" stroke="rgba(56,189,248,0.5)" strokeWidth="14" strokeDasharray="50 226" strokeDashoffset="-63" transform="rotate(-90)" />
         <circle r="36" fill="none" stroke="rgba(245,158,11,0.5)" strokeWidth="14" strokeDasharray="45 226" strokeDashoffset="-113" transform="rotate(-90)" />
         <circle r="36" fill="none" stroke="rgba(168,85,247,0.5)" strokeWidth="14" strokeDasharray="68 226" strokeDashoffset="-158" transform="rotate(-90)" />
       </g>
       {['Equities', 'Fixed Income', 'Alts', 'Cash'].map((l, i) =>
         <g key={l} transform={`translate(160, ${48 + i * 18})`}>
-          <rect width="8" height="8" rx="2" fill={['rgb(94,214,164)', 'rgb(56,189,248)', 'rgb(245,158,11)', 'rgb(168,85,247)'][i]} />
+          <rect width="8" height="8" rx="2" fill={['rgb(151,171,238)', 'rgb(56,189,248)', 'rgb(245,158,11)', 'rgb(168,85,247)'][i]} />
           <text x="14" y="7" fill={ink} fontSize="8">{l}</text>
           <text x="100" y="7" textAnchor="end" fill={mute} fontSize="8">{['28%', '22%', '20%', '30%'][i]}</text>
         </g>
@@ -136,7 +136,7 @@ function OnbTilePreview({ id }) {
       </g>)}
       <g transform="translate(14, 86)">
         {[0, 1, 2, 3].map((i) =>
-          <rect key={i} x={i * 62} y={20 - i * 4} width="40" height={20 + i * 4} rx="3" fill="rgba(5,122,85,0.5)" />
+          <rect key={i} x={i * 62} y={20 - i * 4} width="40" height={20 + i * 4} rx="3" fill="rgba(35,89,255,0.5)" />
           )}
       </g>
     </g>);
@@ -145,7 +145,7 @@ function OnbTilePreview({ id }) {
       {[780, 420, 310, 560, 490, 820].map((v, i) =>
         <g key={i} transform={`translate(14, ${36 + i * 16})`}>
           <text fill={mute} fontSize="7">{['Qual.Ret.', 'Joint', 'IRA', 'Trust', 'Roth', 'Taxable'][i]}</text>
-          <rect x="60" y="2" width={v / 8} height="8" rx="2" fill="rgba(5,122,85,0.6)" />
+          <rect x="60" y="2" width={v / 8} height="8" rx="2" fill="rgba(35,89,255,0.6)" />
           <text x={70 + v / 8} y="9" fill={ink} fontSize="7" fontWeight="600">${v / 10}M</text>
         </g>
         )}
@@ -153,7 +153,7 @@ function OnbTilePreview({ id }) {
     case 'holdings':return wrap(<g>
       <text x="14" y="22" fill={ink} fontSize="11" fontWeight="600">Top Holdings</text>
       {['All', 'Equity', 'FI', 'Alt'].map((f, i) =>
-        <rect key={f} x={14 + i * 40} y="30" width="36" height="14" rx="7" fill={i === 0 ? 'rgba(5,122,85,0.3)' : 'rgba(255,255,255,0.04)'} stroke="rgba(75,85,99,0.5)" />
+        <rect key={f} x={14 + i * 40} y="30" width="36" height="14" rx="7" fill={i === 0 ? 'rgba(35,89,255,0.3)' : 'rgba(255,255,255,0.04)'} stroke="rgba(75,85,99,0.5)" />
         )}
       {['All', 'Equity', 'FI', 'Alt'].map((f, i) =>
         <text key={f + '_t'} x={32 + i * 40} y="40" textAnchor="middle" fill={i === 0 ? g : mute} fontSize="7" fontWeight="600">{f}</text>
@@ -170,7 +170,7 @@ function OnbTilePreview({ id }) {
           const inH = 30 + Math.sin(i * 0.7) * 10 + i % 3 * 4;
           const outH = 18 + Math.cos(i * 0.8) * 8;
           return <g key={i} transform={`translate(${20 + i * 22}, 130)`}>
-          <rect x="0" y={-inH} width="8" height={inH} fill="rgba(5,122,85,0.7)" />
+          <rect x="0" y={-inH} width="8" height={inH} fill="rgba(35,89,255,0.7)" />
           <rect x="9" y={-outH} width="8" height={outH} fill="rgba(248,113,113,0.6)" />
         </g>;
         })}
@@ -179,13 +179,13 @@ function OnbTilePreview({ id }) {
       <text x="14" y="22" fill={ink} fontSize="11" fontWeight="600">Projected Fees</text>
       <text x="14" y="40" fill={mute} fontSize="8">5Y Projection</text>
       <path d="M 14 120 Q 80 100, 140 70 T 266 30" stroke={g} strokeWidth="2.5" fill="none" />
-      <path d="M 14 120 Q 80 100, 140 70 T 266 30 L 266 140 L 14 140 Z" fill="rgba(5,122,85,0.18)" />
+      <path d="M 14 120 Q 80 100, 140 70 T 266 30 L 266 140 L 14 140 Z" fill="rgba(35,89,255,0.18)" />
       {[0, 1, 2, 3, 4].map((i) => <circle key={i} cx={14 + i * 63} cy={120 - i * 22} r="3" fill={g} />)}
     </g>);
     case 'opportunities':return wrap(<g>
       <text x="14" y="22" fill={ink} fontSize="11" fontWeight="600">Opportunities</text>
       {[0, 1, 2].map((i) => <g key={i} transform={`translate(14, ${36 + i * 32})`}>
-        <rect width="252" height="26" rx="4" fill="rgba(5,122,85,0.1)" stroke="rgba(5,122,85,0.4)" />
+        <rect width="252" height="26" rx="4" fill="rgba(35,89,255,0.1)" stroke="rgba(35,89,255,0.4)" />
         <circle cx="14" cy="13" r="5" fill={g} />
         <text x="26" y="11" fill={ink} fontSize="8" fontWeight="600">{['Rebalance: D. Young', 'Tax Harvest: M. Workman', 'Cash Sweep: K. Min'][i]}</text>
         <text x="26" y="21" fill={mute} fontSize="7">+${[2400, 1800, 950][i]} potential</text>
@@ -195,7 +195,7 @@ function OnbTilePreview({ id }) {
       <text x="14" y="22" fill={ink} fontSize="11" fontWeight="600">Allocation Drift</text>
       <text x="140" y="68" textAnchor="middle" fill={ink} fontSize="32" fontWeight="700">12</text>
       <text x="140" y="82" textAnchor="middle" fill={mute} fontSize="8">clients off-target</text>
-      {[0, 1, 2].map((i) => <rect key={i} x={60 + i * 50} y="100" width="40" height="6" rx="3" fill={['rgb(248,113,113)', 'rgb(245,158,11)', 'rgb(94,214,164)'][i]} />)}
+      {[0, 1, 2].map((i) => <rect key={i} x={60 + i * 50} y="100" width="40" height="6" rx="3" fill={['rgb(248,113,113)', 'rgb(245,158,11)', 'rgb(151,171,238)'][i]} />)}
       {['Sev', 'Mod', 'Min'].map((l, i) => <text key={l} x={80 + i * 50} y="120" textAnchor="middle" fill={mute} fontSize="7">{l}</text>)}
     </g>);
     case 'tasks':return wrap(<g>
@@ -218,7 +218,7 @@ function OnbTilePreview({ id }) {
     case 'inbox':return wrap(<g>
       <text x="14" y="22" fill={ink} fontSize="11" fontWeight="600">Client Inbox</text>
       {[0, 1, 2, 3].map((i) => <g key={i} transform={`translate(14, ${36 + i * 24})`}>
-        <circle cx="8" cy="10" r="5" fill="rgba(5,122,85,0.4)" />
+        <circle cx="8" cy="10" r="5" fill="rgba(35,89,255,0.4)" />
         <text x="20" y="8" fill={ink} fontSize="8" fontWeight="600">{['David Young', 'Maria W.', 'Kyung Min', 'Robert P.'][i]}</text>
         <text x="20" y="17" fill={mute} fontSize="7">{['Re: Rebalance', 'Q4 fees question', 'Cash transfer', 'Annual review'][i]}</text>
       </g>)}
@@ -238,7 +238,7 @@ function OnbTilePreview({ id }) {
         <rect width="58" height="80" rx="4" fill="rgba(255,255,255,0.03)" stroke="rgba(75,85,99,0.4)" />
         <text x="29" y="12" textAnchor="middle" fill={mute} fontSize="7" fontWeight="600">{s}</text>
         {Array.from({ length: [3, 2, 2, 1][i] }).map((_, j) =>
-          <rect key={j} x="4" y={18 + j * 16} width="50" height="12" rx="2" fill="rgba(5,122,85,0.25)" />
+          <rect key={j} x="4" y={18 + j * 16} width="50" height="12" rx="2" fill="rgba(35,89,255,0.25)" />
           )}
       </g>)}
     </g>);
@@ -382,7 +382,7 @@ function OnbPassword({ value, onChange }) {
   const [show, setShow] = React.useState(false);
   const len = value.length;
   const ok = len >= 8;
-  const hasNum = /\\d/.test(value);
+  const hasNum = /\d/.test(value);
   const hasUpper = /[A-Z]/.test(value);
   return (
     <div>
@@ -414,7 +414,7 @@ function OnbPassword({ value, onChange }) {
 }
 function PWHint({ ok, children }) {
   return (
-    <span style={{ display:'inline-flex', alignItems:'center', gap:5, color: ok ? 'rgb(134,239,172)' : ONB_MUTED }}>
+    <span style={{ display:'inline-flex', alignItems:'center', gap:5, color: ok ? 'rgb(182,197,245)' : ONB_MUTED }}>
       <i className={`fa-solid fa-${ok ? 'check' : 'circle'}`} style={{ fontSize: ok ? 9 : 5 }} />
       {children}
     </span>
@@ -473,8 +473,8 @@ function OnbTwoFactor({ value, onChange }) {
           }}>
             <div style={{
               width:36, height:36, borderRadius:9, flexShrink:0,
-              background: on ? 'rgba(5,122,85,0.3)' : 'rgba(255,255,255,0.05)',
-              border: `1px solid ${on ? 'rgba(5,122,85,0.5)' : ONB_BORDER_SOFT}`,
+              background: on ? 'rgba(35,89,255,0.3)' : 'rgba(255,255,255,0.05)',
+              border: `1px solid ${on ? 'rgba(35,89,255,0.5)' : ONB_BORDER_SOFT}`,
               display:'inline-flex', alignItems:'center', justifyContent:'center',
             }}>
               <i className={`fa-solid fa-${o.icon}`} style={{ color: on ? ONB_BRAND_GREEN : ONB_MUTED, fontSize:14 }} />
@@ -544,15 +544,15 @@ function OnbWelcome({ name, onStart }) {
     }}>
       <div style={{
         width: 80, height: 80, borderRadius: 24,
-        background: `linear-gradient(135deg, ${ONB_BRAND_GREEN} 0%, rgb(3,84,63) 100%)`,
+        background: `linear-gradient(135deg, ${ONB_BRAND_GREEN} 0%, rgb(10,65,246) 100%)`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: `0 0 0 8px rgba(5,122,85,0.12), 0 20px 40px -10px rgba(5,122,85,0.4)`
+        boxShadow: `0 0 0 8px rgba(35,89,255,0.12), 0 20px 40px -10px rgba(35,89,255,0.4)`
       }}>
         <i className="fa-solid fa-wand-sparkles" style={{ fontSize: 36, color: '#fff' }} />
       </div>
       <div>
         <div style={{ fontFamily: 'Inter', fontSize: 13, fontWeight: 600, letterSpacing: '0.18em', color: ONB_BRAND_GREEN, textTransform: 'uppercase', marginBottom: 12 }}>
-          Welcome to Field
+          Welcome to Halo +
         </div>
         <h1 style={{
           fontFamily: 'Inter, sans-serif', fontWeight: 700, fontSize: 44, lineHeight: 1.05,
@@ -563,7 +563,7 @@ function OnbWelcome({ name, onStart }) {
         <p style={{
           fontFamily: 'Inter', fontSize: 16, lineHeight: 1.55, color: ONB_MUTED, margin: '0 auto', maxWidth: 480
         }}>
-          Your operations team has connected your book. Set up your account, pick the tiles you want, and we'll wire up the rest.
+          Your operations team has connected your book. Set up your account, connect your systems, and we'll wire up the rest.
         </p>
       </div>
       <div style={{ display: 'flex', gap: 24, fontFamily: 'Inter', fontSize: 13, color: ONB_MUTED, marginTop: 8 }}>
@@ -571,7 +571,7 @@ function OnbWelcome({ name, onStart }) {
           <i className="fa-solid fa-circle-check" style={{ color: ONB_BRAND_GREEN }} /> ~3 minutes
         </span>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-          <i className="fa-solid fa-circle-check" style={{ color: ONB_BRAND_GREEN }} /> Account → Tiles → Connect
+          <i className="fa-solid fa-circle-check" style={{ color: ONB_BRAND_GREEN }} /> Account → Data → Done
         </span>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
           <i className="fa-solid fa-circle-check" style={{ color: ONB_BRAND_GREEN }} /> Editable later
@@ -582,7 +582,7 @@ function OnbWelcome({ name, onStart }) {
         background: ONB_BRAND_GREEN, color: '#fff', border: 'none',
         fontFamily: 'Inter', fontWeight: 600, fontSize: 15, cursor: 'pointer',
         display: 'inline-flex', alignItems: 'center', gap: 10,
-        boxShadow: '0 8px 24px -8px rgba(5,122,85,0.6)'
+        boxShadow: '0 8px 24px -8px rgba(35,89,255,0.6)'
       }}>
         Get started <i className="fa-solid fa-arrow-right" style={{ width: 14, height: 14 }} />
       </button>
@@ -609,13 +609,13 @@ function OnbStep({ step, index, total, answers, onChange, onNext, onBack }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
           <div style={{
             width: 36, height: 36, borderRadius: 10, background: ONB_GREEN_SOFT,
-            border: `1px solid rgba(5,122,85,0.4)`,
+            border: `1px solid rgba(35,89,255,0.4)`,
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
           }}>
             <i className={`fa-solid fa-${step.icon}`} style={{ color: ONB_BRAND_GREEN, fontSize: 14 }} />
           </div>
           <div style={{ fontFamily: 'Inter', fontSize: 12.5, fontWeight: 500, color: ONB_MUTED, letterSpacing: '0.04em' }}>
-            STEP {index + 1} OF {total}
+            STEP {index + 1} OF 4
           </div>
         </div>
         <h2 style={{
@@ -705,11 +705,11 @@ function OnbStep({ step, index, total, answers, onChange, onNext, onBack }) {
         </button>
         <button onClick={valid ? onNext : undefined} disabled={!valid} style={{
           height: 44, padding: '0 22px', borderRadius: 10, border: 'none',
-          background: valid ? ONB_BRAND_GREEN : 'rgba(5,122,85,0.3)',
+          background: valid ? ONB_BRAND_GREEN : 'rgba(35,89,255,0.3)',
           color: '#fff', fontFamily: 'Inter', fontWeight: 600, fontSize: 14,
           cursor: valid ? 'pointer' : 'not-allowed',
           display: 'inline-flex', alignItems: 'center', gap: 8,
-          boxShadow: valid ? '0 4px 14px -4px rgba(5,122,85,0.6)' : 'none',
+          boxShadow: valid ? '0 4px 14px -4px rgba(35,89,255,0.6)' : 'none',
           opacity: valid ? 1 : 0.6
         }}>
           Continue <i className="fa-solid fa-arrow-right" style={{ width: 13, height: 13 }} />
@@ -747,13 +747,13 @@ function OnbTilePicker({ answers, selected, onToggle, onNext, onBack }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
           <div style={{
             width: 36, height: 36, borderRadius: 10, background: ONB_GREEN_SOFT,
-            border: `1px solid rgba(5,122,85,0.4)`,
+            border: `1px solid rgba(35,89,255,0.4)`,
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
           }}>
             <i className="fa-solid fa-table-columns" style={{ color: ONB_BRAND_GREEN, fontSize: 14 }} />
           </div>
           <div style={{ fontFamily: 'Inter', fontSize: 12.5, fontWeight: 500, color: ONB_MUTED, letterSpacing: '0.04em' }}>
-            STEP 2 OF 2
+            STEP 5 OF 5
           </div>
         </div>
         <h2 style={{
@@ -800,11 +800,11 @@ function OnbTilePicker({ answers, selected, onToggle, onNext, onBack }) {
                   borderRadius: 12,
                   border: soon ? `1px dashed ${ONB_BORDER}` :
                   on ? `1px solid ${ONB_BRAND_GREEN}` :
-                  onDash ? `1px solid rgba(5,122,85,0.45)` :
+                  onDash ? `1px solid rgba(35,89,255,0.45)` :
                   `1px solid ${ONB_BORDER}`,
                   background: soon ? 'rgba(255,255,255,0.02)' :
                   on ? ONB_GREEN_SOFT :
-                  onDash ? 'rgba(5,122,85,0.06)' :
+                  onDash ? 'rgba(35,89,255,0.06)' :
                   ONB_GLASS,
                   opacity: soon ? 0.7 : 1,
                   transition: 'background 150ms ease, border-color 150ms ease'
@@ -823,8 +823,8 @@ function OnbTilePicker({ answers, selected, onToggle, onNext, onBack }) {
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                     <div style={{
                       width: 32, height: 32, borderRadius: 8,
-                      background: on ? 'rgba(5,122,85,0.3)' : 'rgba(255,255,255,0.05)',
-                      border: `1px solid ${on ? 'rgba(5,122,85,0.5)' : ONB_BORDER_SOFT}`,
+                      background: on ? 'rgba(35,89,255,0.3)' : 'rgba(255,255,255,0.05)',
+                      border: `1px solid ${on ? 'rgba(35,89,255,0.5)' : ONB_BORDER_SOFT}`,
                       display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
                     }}>
                       <i className={`fa-solid fa-${t.icon}`} style={{ color: soon ? ONB_DIM : on ? ONB_BRAND_GREEN : ONB_MUTED, fontSize: 13 }} />
@@ -910,13 +910,13 @@ function OnbTilePicker({ answers, selected, onToggle, onNext, onBack }) {
       </div>
 
       <div style={{
-        border: `1px solid rgba(5,122,85,0.4)`, borderRadius: 12, padding: '16px 18px',
-        background: 'rgba(5,122,85,0.06)',
+        border: `1px solid rgba(35,89,255,0.4)`, borderRadius: 12, padding: '16px 18px',
+        background: 'rgba(35,89,255,0.06)',
         display: 'flex', alignItems: 'center', gap: 14
       }}>
         <div style={{
           width: 36, height: 36, borderRadius: 10, background: ONB_GREEN_SOFT,
-          border: `1px solid rgba(5,122,85,0.4)`,
+          border: `1px solid rgba(35,89,255,0.4)`,
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
         }}>
           <i className="fa-solid fa-plus" style={{ color: ONB_BRAND_GREEN, fontSize: 14 }} />
@@ -929,8 +929,8 @@ function OnbTilePicker({ answers, selected, onToggle, onNext, onBack }) {
             Once you're in, click the <span style={{
               display: 'inline-flex', alignItems: 'center', gap: 5,
               padding: '2px 8px', borderRadius: 6, verticalAlign: 'middle',
-              background: 'rgba(5,122,85,0.2)', border: `1px solid rgba(5,122,85,0.4)`,
-              fontFamily: 'Inter', fontSize: 11.5, fontWeight: 600, color: 'rgb(134,239,172)'
+              background: 'rgba(35,89,255,0.2)', border: `1px solid rgba(35,89,255,0.4)`,
+              fontFamily: 'Inter', fontSize: 11.5, fontWeight: 600, color: 'rgb(182,197,245)'
             }}><i className="fa-solid fa-plus" style={{ fontSize: 9 }} /> Add a tile</span> button on your dashboard and describe what you need in plain English.
           </div>
         </div>
@@ -950,7 +950,7 @@ function OnbTilePicker({ answers, selected, onToggle, onNext, onBack }) {
           color: '#fff', fontFamily: 'Inter', fontWeight: 600, fontSize: 14,
           cursor: 'pointer',
           display: 'inline-flex', alignItems: 'center', gap: 8,
-          boxShadow: '0 4px 14px -4px rgba(5,122,85,0.6)'
+          boxShadow: '0 4px 14px -4px rgba(35,89,255,0.6)'
         }}>
           Build my dashboard <i className="fa-solid fa-wand-sparkles" style={{ width: 13, height: 13 }} />
         </button>
@@ -981,7 +981,7 @@ function OnbBuilding({ tileCount, onDone }) {
       <div style={{ position: 'relative', width: 80, height: 80 }}>
         <div style={{
           position: 'absolute', inset: 0, borderRadius: 9999,
-          border: `3px solid rgba(5,122,85,0.2)`
+          border: `3px solid rgba(35,89,255,0.2)`
         }} />
         <div style={{
           position: 'absolute', inset: 0, borderRadius: 9999,
@@ -1012,7 +1012,7 @@ function OnbBuilding({ tileCount, onDone }) {
               display: 'flex', alignItems: 'center', gap: 12,
               padding: '10px 14px', borderRadius: 10,
               background: active ? ONB_GREEN_SOFT : 'transparent',
-              border: active ? `1px solid rgba(5,122,85,0.4)` : '1px solid transparent',
+              border: active ? `1px solid rgba(35,89,255,0.4)` : '1px solid transparent',
               transition: 'background 200ms ease, border-color 200ms ease'
             }}>
               <div style={{
@@ -1041,6 +1041,9 @@ function OnbBuilding({ tileCount, onDone }) {
 /* Connect integrations stage                                              */
 /* ----------------------------------------------------------------------- */
 const ONB_INTEGRATIONS = [
+{ id: 'custodian', name: 'Custodian', provider: 'Schwab · Fidelity · Pershing', desc: 'Stream holdings, balances, and transactions for every account in your book.', icon: 'building-columns', color: 'rgb(35,89,255)', sampleAcct: 'Alpine Advisors · 3 custodians · 1,284 accounts' },
+{ id: 'planning', name: 'Planning', provider: 'eMoney / MoneyGuidePro', desc: 'Sync client plans, goals, and funding status into the planning tiles.', icon: 'compass-drafting', color: 'rgb(94,124,246)', sampleAcct: 'Alpine Advisors · 412 active plans' },
+{ id: 'datawarehouse', name: 'Data warehouse', provider: 'Snowflake / BigQuery', desc: 'Push a nightly copy of your book to the firm warehouse for reporting.', icon: 'database', color: 'rgb(125,150,250)', sampleAcct: 'alpine_prod.analytics · nightly 02:00 ET' },
 { id: 'email', name: 'Email', provider: 'Gmail / Outlook', desc: 'Pull client emails into your inbox tile and surface unanswered threads.', icon: 'envelope', color: 'rgb(220,38,38)', sampleAcct: 'sarah.berry@alpineadvisors.com' },
 { id: 'calendar', name: 'Calendar', provider: 'Google / Microsoft', desc: 'Sync upcoming client meetings and prep windows on your dashboard.', icon: 'calendar', color: 'rgb(56,189,248)', sampleAcct: 'sarah.berry@alpineadvisors.com' },
 { id: 'hubspot', name: 'HubSpot', provider: 'CRM', desc: 'Mirror contacts, deals, and activity logs across your client book.', icon: 'address-book', color: 'rgb(251,146,60)', sampleAcct: 'Alpine Advisors · sarah@alpineadvisors' },
@@ -1050,9 +1053,8 @@ const ONB_INTEGRATIONS = [
 
 function OnbConnect({ selectedTiles, connections, onConnect, onDisconnect, onNext, onBack }) {
   const offered = React.useMemo(() => {
-    const ids = onbIntegrationsFor(selectedTiles ? [...selectedTiles] : []);
-    const list = ONB_INTEGRATIONS.filter(i => ids.has(i.id));
-    return list.length > 0 ? list : ONB_INTEGRATIONS;
+    return ONB_INTEGRATIONS; // demo: show the full stack — custodian, CRM, planning, data
+
   }, [selectedTiles]);
   // For each integration, find which selected tiles need it (so we can show why it's here).
   const tilesNeedingIntegration = React.useMemo(() => {
@@ -1084,13 +1086,13 @@ function OnbConnect({ selectedTiles, connections, onConnect, onDisconnect, onNex
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
           <div style={{
             width: 36, height: 36, borderRadius: 10, background: ONB_GREEN_SOFT,
-            border: `1px solid rgba(5,122,85,0.4)`,
+            border: `1px solid rgba(35,89,255,0.4)`,
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
           }}>
             <i className="fa-solid fa-link" style={{ color: ONB_BRAND_GREEN, fontSize: 14 }} />
           </div>
           <div style={{ fontFamily: 'Inter', fontSize: 12.5, fontWeight: 500, color: ONB_MUTED, letterSpacing: '0.04em' }}>
-            STEP 3 OF 3
+            STEP 2 OF 3
           </div>
         </div>
         <h2 style={{
@@ -1098,29 +1100,29 @@ function OnbConnect({ selectedTiles, connections, onConnect, onDisconnect, onNex
           letterSpacing: '-0.02em', color: ONB_INK, margin: '0 0 8px'
         }}>Plug in the tools you already use</h2>
         <p style={{ fontFamily: 'Inter', fontSize: 15, color: ONB_MUTED, margin: 0, lineHeight: 1.5 }}>
-          Connect any account now or skip and add them later from your sidebar. We'll only pull what you need to power the tiles you picked.
+          Connect your custodian, CRM, planning, and data systems now — or skip any and add them later from your sidebar.
         </p>
       </div>
 
       {/* Custodial-data already-handled banner */}
       <div style={{
-        border: `1px solid rgba(5,122,85,0.35)`, borderRadius: 12, padding: '12px 16px',
-        background: 'rgba(5,122,85,0.08)',
+        border: `1px solid rgba(35,89,255,0.35)`, borderRadius: 12, padding: '12px 16px',
+        background: 'rgba(35,89,255,0.08)',
         display: 'flex', alignItems: 'center', gap: 12
       }}>
         <div style={{
           width: 32, height: 32, borderRadius: 9, flexShrink: 0,
-          background: 'rgba(5,122,85,0.18)', border: `1px solid rgba(5,122,85,0.4)`,
+          background: 'rgba(35,89,255,0.18)', border: `1px solid rgba(35,89,255,0.4)`,
           display: 'inline-flex', alignItems: 'center', justifyContent: 'center'
         }}>
           <i className="fa-solid fa-building-columns" style={{ color: ONB_BRAND_GREEN, fontSize: 13 }} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontFamily: 'Inter', fontSize: 13, fontWeight: 600, color: ONB_INK, marginBottom: 2 }}>
-            Custodial data is already connected
+            Connecting is one click in the demo
           </div>
           <div style={{ fontFamily: 'Inter', fontSize: 12, color: ONB_MUTED, lineHeight: 1.45 }}>
-            Your firm's admin has linked Schwab, Fidelity, and Pershing for the whole book — holdings, balances, and transactions are flowing in.
+            Each system authorizes with your firm credentials. Halo + never stores them — we hold a revocable token only.
           </div>
         </div>
       </div>
@@ -1133,9 +1135,9 @@ function OnbConnect({ selectedTiles, connections, onConnect, onDisconnect, onNex
           const reasons = tilesNeedingIntegration[intg.id] || [];
           return (
             <div key={intg.id} style={{
-              border: isConnected ? `1px solid rgba(5,122,85,0.5)` : `1px solid ${ONB_BORDER}`,
+              border: isConnected ? `1px solid rgba(35,89,255,0.5)` : `1px solid ${ONB_BORDER}`,
               borderRadius: 12, padding: '14px 16px',
-              background: isConnected ? 'rgba(5,122,85,0.06)' : ONB_GLASS,
+              background: isConnected ? 'rgba(35,89,255,0.06)' : ONB_GLASS,
               display: 'flex', alignItems: 'flex-start', gap: 14, transition: 'all 150ms ease'
             }}>
               <div style={{
@@ -1163,8 +1165,8 @@ function OnbConnect({ selectedTiles, connections, onConnect, onDisconnect, onNex
                         fontFamily: 'Inter', fontSize: 11, fontWeight: 500,
                         color: ONB_BRAND_GREEN,
                         padding: '3px 8px', borderRadius: 9999,
-                        background: 'rgba(5,122,85,0.10)',
-                        border: `1px solid rgba(5,122,85,0.25)`,
+                        background: 'rgba(35,89,255,0.10)',
+                        border: `1px solid rgba(35,89,255,0.25)`,
                       }}>{name}</span>
                     ))}
                   </div>
@@ -1173,9 +1175,9 @@ function OnbConnect({ selectedTiles, connections, onConnect, onDisconnect, onNex
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                     <span style={{
                     display: 'inline-flex', alignItems: 'center', gap: 6,
-                    fontFamily: 'Inter', fontSize: 11.5, fontWeight: 600, color: 'rgb(134,239,172)'
+                    fontFamily: 'Inter', fontSize: 11.5, fontWeight: 600, color: 'rgb(182,197,245)'
                   }}>
-                      <span style={{ width: 7, height: 7, borderRadius: 9999, background: 'rgb(134,239,172)' }} />
+                      <span style={{ width: 7, height: 7, borderRadius: 9999, background: 'rgb(182,197,245)' }} />
                       Connected · {conn.account}
                     </span>
                     <button onClick={() => onDisconnect(intg.id)} style={{
@@ -1212,13 +1214,13 @@ function OnbConnect({ selectedTiles, connections, onConnect, onDisconnect, onNex
       </div>
 
       <div style={{
-        border: `1px solid rgba(5,122,85,0.4)`, borderRadius: 12, padding: '14px 18px',
-        background: 'rgba(5,122,85,0.06)',
+        border: `1px solid rgba(35,89,255,0.4)`, borderRadius: 12, padding: '14px 18px',
+        background: 'rgba(35,89,255,0.06)',
         display: 'flex', alignItems: 'center', gap: 14
       }}>
         <i className="fa-solid fa-shield-halved" style={{ color: ONB_BRAND_GREEN, fontSize: 18 }} />
         <div style={{ flex: 1, fontFamily: 'Inter', fontSize: 12.5, color: ONB_MUTED, lineHeight: 1.4 }}>
-          We use read-only OAuth scopes by default. Field never stores your credentials and you can revoke access at any time from your sidebar.
+          We use read-only OAuth scopes by default. Halo + never stores your credentials and you can revoke access at any time from your sidebar.
         </div>
       </div>
 
@@ -1247,9 +1249,9 @@ function OnbConnect({ selectedTiles, connections, onConnect, onDisconnect, onNex
             background: ONB_BRAND_GREEN, color: '#fff',
             fontFamily: 'Inter', fontWeight: 600, fontSize: 14,
             cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
-            boxShadow: '0 4px 14px -4px rgba(5,122,85,0.6)'
+            boxShadow: '0 4px 14px -4px rgba(35,89,255,0.6)'
           }}>
-            Build my dashboard <i className="fa-solid fa-wand-sparkles" style={{ width: 13, height: 13 }} />
+            Continue <i className="fa-solid fa-arrow-right" style={{ width: 13, height: 13 }} />
           </button>
         </div>
       </div>
@@ -1264,9 +1266,23 @@ function OnboardingFlow({ advisorName = 'Sarah', onComplete }) {
   // stages: 'welcome' | step index | 'connect' | 'tiles' | 'building'
   const [stage, setStage] = React.useState('welcome');
   const [answers, setAnswers] = React.useState({
+    /* Demo: the account step arrives prefilled so nobody has to type it live. */
+    password: 'HaloDemo2026!',
+    crd: '4521987',
+    twofactor: 'authenticator',
     sliders: { meetings: 60, rebalance: 55, reporting: 40, planning: 50, prospecting: 30, ops: 25 }
   });
   const [selected, setSelected] = React.useState(new Set());
+  /* Firm-level data stages. Custodians are firm agreements and already flow
+     when the advisor arrives; Orion, Redtail and eMoney are left to connect
+     live so there is something to click in the demo. */
+  const [sources, setSources] = React.useState({ schwab: 'connected', fidelity: 'connected', pershing: 'connected' });
+  const [resolved, setResolved] = React.useState({});
+  const [heldAway, setHeldAway] = React.useState(false);
+  const connectSource = (id) => {
+    setSources((m) => ({ ...m, [id]: 'connecting' }));
+    setTimeout(() => setSources((m) => ({ ...m, [id]: 'connected' })), 900);
+  };
   // Onboarding always starts with all tools disconnected — fresh setup state.
   const [connections, setConnections] = React.useState({});
   React.useEffect(() => {
@@ -1285,17 +1301,23 @@ function OnboardingFlow({ advisorName = 'Sarah', onComplete }) {
   const goNextFrom = (s) => {
     if (s === 'welcome') return 0;
     if (typeof s === 'number') {
-      if (s + 1 >= ONB_STEPS.length) return 'tiles';
+      if (s + 1 >= ONB_STEPS.length) return 'sources';
       return s + 1;
     }
+    if (s === 'sources') return 'resolve';
+    if (s === 'resolve') return 'heldaway';
+    if (s === 'heldaway') return 'building';
     if (s === 'tiles') return 'building';
-    if (s === 'connect') return 'building';
+    if (s === 'connect') return 'tiles';
     return s;
   };
   const goBackFrom = (s) => {
     if (typeof s === 'number') return s === 0 ? 'welcome' : s - 1;
-    if (s === 'tiles') return ONB_STEPS.length - 1;
-    if (s === 'connect') return 'tiles';
+    if (s === 'sources') return ONB_STEPS.length - 1;
+    if (s === 'resolve') return 'sources';
+    if (s === 'heldaway') return 'resolve';
+    if (s === 'tiles') return 'heldaway';
+    if (s === 'connect') return 'heldaway';
     return s;
   };
 
@@ -1327,9 +1349,9 @@ function OnboardingFlow({ advisorName = 'Sarah', onComplete }) {
             width: 28, height: 28, borderRadius: 7, background: ONB_BRAND_GREEN,
             display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
             fontFamily: 'Inter', fontWeight: 700, fontSize: 13, color: '#fff'
-          }}>F</div>
+          }}>H</div>
           <div style={{ fontFamily: 'Inter', fontWeight: 600, fontSize: 14, color: ONB_INK, letterSpacing: '0.02em' }}>
-            FIELD
+            HALO +
           </div>
         </div>
         {typeof stage === 'number' &&
@@ -1339,10 +1361,11 @@ function OnboardingFlow({ advisorName = 'Sarah', onComplete }) {
         }
         <div style={{ fontFamily: 'Inter', fontSize: 12.5, color: ONB_MUTED }}>
           {stage === 'welcome' ? "Setup" :
-          stage === 'tiles' ? `Step 2 of 2` :
-          stage === 'connect' ? `Step 2 of 2` :
+          stage === 'sources' ? `Step 2 of 4` :
+          stage === 'resolve' ? `Step 3 of 4` :
+          stage === 'heldaway' ? `Step 4 of 4` :
           stage === 'building' ? "Almost there" :
-          `Step 1 of 2`}
+          `Step 1 of 4`}
         </div>
       </header>
 
@@ -1373,6 +1396,27 @@ function OnboardingFlow({ advisorName = 'Sarah', onComplete }) {
           onNext={() => setStage(goNextFrom('tiles'))}
           onBack={() => setStage(goBackFrom('tiles'))} />
 
+        }
+        {stage === 'sources' && window.OnbSources &&
+        <OnbSources
+          connections={sources}
+          onConnect={connectSource}
+          onNext={() => setStage(goNextFrom('sources'))}
+          onBack={() => setStage(goBackFrom('sources'))} />
+        }
+        {stage === 'resolve' && window.OnbResolve &&
+        <OnbResolve
+          resolved={resolved}
+          onResolve={(id, how) => setResolved((m) => ({ ...m, [id]: how }))}
+          onNext={() => setStage(goNextFrom('resolve'))}
+          onBack={() => setStage(goBackFrom('resolve'))} />
+        }
+        {stage === 'heldaway' && window.OnbHeldAway &&
+        <OnbHeldAway
+          uploaded={heldAway}
+          onUpload={() => setHeldAway(true)}
+          onNext={() => setStage(goNextFrom('heldaway'))}
+          onBack={() => setStage(goBackFrom('heldaway'))} />
         }
         {stage === 'connect' &&
         <OnbConnect

@@ -15,16 +15,16 @@ const IP_MUTED = 'rgb(163,163,163)';
 const IP_DIM   = 'rgb(107,114,128)';
 const IP_BORDER= 'rgb(75,85,99)';
 const IP_SOFT  = 'rgba(75,85,99,0.5)';
-const IP_GREEN = 'rgb(5,122,85)';
-const IP_GREEN_BR = 'rgb(52,211,153)';
+const IP_GREEN = 'rgb(35,89,255)';
+const IP_GREEN_BR = 'rgb(128,152,234)';
 
 /* Providers that surface insights. Halo = protective/structured specialist. */
 const PROVIDER_META = {
   'Halo':       { abbr:'HALO', brand:'rgb(124,58,237)', fg:'rgb(192,132,252)', specialty:'Protective & Structured' },
-  'BlackRock':  { abbr:'BLK',  brand:'rgb(17,24,32)',   fg:'rgb(110,231,183)', specialty:'Models & ETFs' },
+  'BlackRock':  { abbr:'BLK',  brand:'rgb(17,24,32)',   fg:'rgb(168,185,241)', specialty:'Models & ETFs' },
   'PIMCO':      { abbr:'PIM',  brand:'rgb(0,46,110)',   fg:'rgb(120,160,230)', specialty:'Fixed Income' },
   'Blackstone': { abbr:'BX',   brand:'rgb(38,38,38)',   fg:'rgb(245,200,90)',  specialty:'Private Markets' },
-  'Nuveen':     { abbr:'NUV',  brand:'rgb(13,123,138)', fg:'rgb(244,164,200)', specialty:'Income & Munis' },
+  'Nuveen':     { abbr:'NUV',  brand:'rgb(58,100,236)', fg:'rgb(244,164,200)', specialty:'Income & Munis' },
 };
 const PROVIDER_ORDER = ['Halo', 'BlackRock', 'PIMCO', 'Blackstone', 'Nuveen'];
 
@@ -32,7 +32,7 @@ const TYPE_META = {
   'Downside Protection':            { fg:'rgb(196,181,253)', bg:'rgba(139,92,246,0.16)', bd:'rgba(196,181,253,0.45)' },
   'Structured Income':              { fg:'rgb(125,211,252)', bg:'rgba(56,189,248,0.14)', bd:'rgba(125,211,252,0.45)' },
   'Cash Deployment':                { fg:'rgb(248,113,113)', bg:'rgba(220,38,38,0.16)',  bd:'rgba(248,113,113,0.50)' },
-  'Income Generation':              { fg:'rgb(110,231,183)', bg:'rgba(16,185,129,0.16)', bd:'rgba(110,231,183,0.45)' },
+  'Income Generation':              { fg:'rgb(168,185,241)', bg:'rgba(84,121,240,0.16)', bd:'rgba(168,185,241,0.45)' },
   'Rebalancing / Drift':            { fg:'rgb(248,180,150)', bg:'rgba(251,146,60,0.16)', bd:'rgba(248,180,150,0.45)' },
   'Diversification':                { fg:'rgb(120,160,230)', bg:'rgba(96,165,250,0.16)', bd:'rgba(120,160,230,0.45)' },
   'Private Markets / Alternatives': { fg:'rgb(245,200,90)',  bg:'rgba(234,179,8,0.16)',  bd:'rgba(245,200,90,0.45)'  },
@@ -175,7 +175,7 @@ function PriorityChip({ p }) {
       fontFamily:'Inter', fontSize:10.5, fontWeight:700, letterSpacing:'0.06em', lineHeight:1, whiteSpace:'nowrap' }}>{p}</span>
   );
 }
-function FitBar({ value, color='rgb(110,231,183)' }) {
+function FitBar({ value, color='rgb(168,185,241)' }) {
   return (
     <span style={{ display:'inline-flex', alignItems:'center', gap:8 }}>
       <span style={{ width:48, height:5, borderRadius:9999, background:'rgba(255,255,255,0.12)', overflow:'hidden', display:'inline-block' }}>
@@ -190,8 +190,8 @@ function FilterChip({ active, onClick, label, dot }) {
     <button onClick={onClick} style={{
       display:'inline-flex', alignItems:'center', gap:7, height:32, padding:'0 13px', borderRadius:9999, cursor:'pointer',
       border:`1px solid ${active ? IP_GREEN : 'rgba(75,85,99,0.8)'}`,
-      background: active ? 'rgba(5,122,85,0.16)' : 'transparent',
-      color: active ? 'rgb(110,231,183)' : 'rgb(229,231,235)',
+      background: active ? 'rgba(35,89,255,0.16)' : 'transparent',
+      color: active ? 'rgb(168,185,241)' : 'rgb(229,231,235)',
       fontFamily:'Inter', fontSize:12.5, fontWeight:500, whiteSpace:'nowrap', transition:'background 150ms ease, border-color 150ms ease' }}>
       {dot && <span style={{ width:7, height:7, borderRadius:9999, background:dot, flexShrink:0 }} />}
       {label}
@@ -212,11 +212,11 @@ function InsightCard({ r, expanded, onToggle, onBuild }) {
   const pm = PROVIDER_META[r.provider] || PROVIDER_META['Halo'];
   const isHalo = r.provider === 'Halo';
   const accent = isHalo ? 'rgb(168,85,247)' : IP_GREEN;
-  const accentSoft = isHalo ? 'rgba(168,85,247,0.16)' : 'rgba(5,122,85,0.16)';
-  const accentBr = isHalo ? 'rgb(192,132,252)' : 'rgb(110,231,183)';
+  const accentSoft = isHalo ? 'rgba(168,85,247,0.16)' : 'rgba(35,89,255,0.16)';
+  const accentBr = isHalo ? 'rgb(192,132,252)' : 'rgb(168,185,241)';
   return (
     <div style={{
-      border:`1px solid ${expanded ? (isHalo ? 'rgba(168,85,247,0.4)' : 'rgba(5,122,85,0.4)') : IP_SOFT}`,
+      border:`1px solid ${expanded ? (isHalo ? 'rgba(168,85,247,0.4)' : 'rgba(35,89,255,0.4)') : IP_SOFT}`,
       borderRadius:14, background: expanded ? accentSoft.replace('0.16','0.05') : 'rgba(255,255,255,0.02)',
       transition:'border-color 160ms ease, background 160ms ease', overflow:'hidden' }}>
       <div onClick={onToggle} style={{

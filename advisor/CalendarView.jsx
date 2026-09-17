@@ -20,7 +20,7 @@ function CalendarView({ onBack }) {
   ];
 
   const TONE = {
-    green: { bg:'rgba(5,122,85,0.22)',  bd:'rgb(5,122,85)',   fg:'rgb(110,231,183)' },
+    green: { bg:'rgba(35,89,255,0.22)',  bd:'rgb(35,89,255)',   fg:'rgb(168,185,241)' },
     blue:  { bg:'rgba(59,130,246,0.18)',bd:'rgb(59,130,246)', fg:'rgb(147,197,253)' },
     amber: { bg:'rgba(234,179,8,0.18)', bd:'rgb(234,179,8)',  fg:'rgb(253,224,71)' },
     red:   { bg:'rgba(220,38,38,0.18)', bd:'rgb(220,38,38)',  fg:'rgb(248,113,113)' },
@@ -44,7 +44,7 @@ function CalendarView({ onBack }) {
         </button>
         <button style={{
           height:30, padding:'0 14px', borderRadius:8, border:'none',
-          background:'rgb(5,122,85)', color:'#fff',
+          background:'rgb(35,89,255)', color:'#fff',
           fontFamily:'Inter', fontSize:12, fontWeight:600, cursor:'pointer',
           display:'inline-flex', alignItems:'center', gap:6, marginLeft:6,
         }}>
@@ -64,7 +64,7 @@ function CalendarView({ onBack }) {
           {['Day','Week','Month'].map(v => (
             <button key={v} onClick={()=>setView(v)} style={{
               height:30, padding:'0 14px', border:'none',
-              background: v===view ? 'rgba(5,122,85,0.25)' : 'transparent',
+              background: v===view ? 'rgba(35,89,255,0.25)' : 'transparent',
               color: v===view ? 'rgb(249,250,251)' : 'rgb(163,163,163)',
               fontFamily:'Inter', fontSize:12, fontWeight:500, cursor:'pointer',
               borderRight: v!=='Month' ? '1px solid rgb(75,85,99)' : 'none',
@@ -86,9 +86,9 @@ function CalendarView({ onBack }) {
             return (
               <div key={i} style={{
                 padding:'12px 14px', fontFamily:'Inter', fontSize:12, fontWeight:600,
-                color: isToday ? 'rgb(5,122,85)' : 'rgb(229,231,235)',
+                color: isToday ? 'rgb(35,89,255)' : 'rgb(229,231,235)',
                 borderLeft:'1px solid rgba(75,85,99,0.6)',
-                background: isToday ? 'rgba(5,122,85,0.10)' : 'transparent',
+                background: isToday ? 'rgba(35,89,255,0.10)' : 'transparent',
               }}>
                 {d}
               </div>

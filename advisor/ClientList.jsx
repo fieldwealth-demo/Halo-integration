@@ -5,7 +5,7 @@ const CL_SEGMENTS = {
   Platinum: { fg:'rgb(199,210,254)', bg:'rgba(129,140,248,0.16)', bd:'rgba(129,140,248,0.4)' },
   Gold:     { fg:'rgb(252,211,77)',  bg:'rgba(245,158,11,0.16)',  bd:'rgba(245,158,11,0.4)'  },
   Silver:   { fg:'rgb(203,213,225)', bg:'rgba(148,163,184,0.16)', bd:'rgba(148,163,184,0.4)' },
-  Emerging: { fg:'rgb(110,231,183)', bg:'rgba(5,122,85,0.18)',    bd:'rgba(5,122,85,0.45)'   },
+  Emerging: { fg:'rgb(168,185,241)', bg:'rgba(35,89,255,0.18)',    bd:'rgba(35,89,255,0.45)'   },
 };
 
 function clAumTier(aum) {
@@ -76,9 +76,9 @@ function ClientList({ onOpenClient, view = 'households', filters }) {
     ink:    'rgb(249,250,251)',
     surface:'rgb(17,24,39)',
     hover:  'rgba(255,255,255,0.03)',
-    green:  'rgb(5,122,85)',
-    greenSoft:'rgba(5,122,85,0.16)',
-    pos:    'rgb(52,211,153)',
+    green:  'rgb(35,89,255)',
+    greenSoft:'rgba(35,89,255,0.16)',
+    pos:    'rgb(128,152,234)',
     neg:    'rgb(248,113,113)',
   };
 
@@ -229,9 +229,9 @@ function smBtn() {
 function viewBtn(active) {
   return {
     width:30, height:30, borderRadius:8,
-    background: active ? 'rgba(5,122,85,0.22)' : 'rgba(255,255,255,0.04)',
+    background: active ? 'rgba(35,89,255,0.22)' : 'rgba(255,255,255,0.04)',
     border:'1px solid rgb(75,85,99)',
-    color: active ? 'rgb(5,122,85)' : 'rgb(163,163,163)',
+    color: active ? 'rgb(35,89,255)' : 'rgb(163,163,163)',
     cursor:'pointer', display:'inline-flex', alignItems:'center', justifyContent:'center',
   };
 }
@@ -240,7 +240,7 @@ function viewBtn(active) {
 function Avatar({ name, id }) {
   const palette = [
     ['#f0abfc','#c084fc'], ['#fca5a5','#f87171'], ['#fdba74','#fb923c'],
-    ['#fcd34d','#f59e0b'], ['#86efac','#34d399'], ['#67e8f9','#22d3ee'],
+    ['#fcd34d','#f59e0b'], ['#B6C5F5','#8098EA'], ['#A4B8FB','#7A97F5'],
     ['#93c5fd','#60a5fa'], ['#c4b5fd','#a78bfa'], ['#f9a8d4','#ec4899'],
   ];
   const [a,b] = palette[id % palette.length];

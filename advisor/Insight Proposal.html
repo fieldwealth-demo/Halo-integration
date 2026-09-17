@@ -34,7 +34,7 @@
     .tt th { text-align:left; font-size:15px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:rgb(163,163,163); padding:14px 20px; border-bottom:1px solid rgba(75,85,99,0.5); }
     .tt td { font-size:22px; color:rgb(229,231,235); padding:16px 20px; border-bottom:1px solid rgba(75,85,99,0.35); }
     .tt td.num { text-align:right; font-variant-numeric:tabular-nums; }
-    .pos { color: rgb(110,231,183); font-weight:600; }
+    .pos { color: rgb(168,185,241); font-weight:600; }
     .neg { color: rgb(248,113,113); }
     .legend-dot { width:14px; height:4px; border-radius:2px; display:inline-block; margin-right:8px; vertical-align:middle; }
     .footnote { font-size: 14px; color: rgb(107,114,128); line-height: 1.5; }
@@ -55,10 +55,10 @@
   /* ====== Provider theming ====== */
   const PROVIDERS = {
     'Halo':       { abbr:'HALO', brand:'rgb(124,58,237)', accent:'rgb(168,85,247)', br:'rgb(192,132,252)', slideBg:'rgb(18,14,30)' },
-    'BlackRock':  { abbr:'BLK',  brand:'rgb(17,24,32)',   accent:'rgb(5,122,85)',   br:'rgb(110,231,183)', slideBg:'rgb(13,20,18)' },
+    'BlackRock':  { abbr:'BLK',  brand:'rgb(17,24,32)',   accent:'rgb(35,89,255)',   br:'rgb(168,185,241)', slideBg:'rgb(31,69,192)' },
     'PIMCO':      { abbr:'PIM',  brand:'rgb(0,46,110)',   accent:'rgb(37,99,235)',  br:'rgb(147,178,240)', slideBg:'rgb(12,16,28)' },
     'Blackstone': { abbr:'BX',   brand:'rgb(38,38,38)',   accent:'rgb(202,138,4)',  br:'rgb(245,200,90)',  slideBg:'rgb(22,19,12)' },
-    'Nuveen':     { abbr:'NUV',  brand:'rgb(13,123,138)', accent:'rgb(190,24,93)',  br:'rgb(244,164,200)', slideBg:'rgb(24,14,20)' },
+    'Nuveen':     { abbr:'NUV',  brand:'rgb(58,100,236)', accent:'rgb(190,24,93)',  br:'rgb(244,164,200)', slideBg:'rgb(24,14,20)' },
   };
 
   /* ====== Per-insight proposal data ====== */
@@ -98,44 +98,44 @@
     davenport: { name:'Davenport', who:'Robert Davenport', provider:'BlackRock', product:'BLK Target Allocation', cat:'ETF Model Portfolio', kind:'alloc',
       signal:'Allocation drift', signalBody:'The equity sleeve has drifted 8% above target after the rally. Rebalancing to the BLK Target Allocation model brings the portfolio back to policy with minimal turnover.',
       scope:'$2.9M', term:'0.12% ER',
-      before:[['US Equity',58,'rgb(110,231,183)'],['Intl Equity',10,'rgb(120,160,230)'],['Fixed Income',26,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
-      after:[['US Equity',50,'rgb(110,231,183)'],['Intl Equity',14,'rgb(120,160,230)'],['Fixed Income',30,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
+      before:[['US Equity',58,'rgb(168,185,241)'],['Intl Equity',10,'rgb(120,160,230)'],['Fixed Income',26,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
+      after:[['US Equity',50,'rgb(168,185,241)'],['Intl Equity',14,'rgb(120,160,230)'],['Fixed Income',30,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
       proj:{ now:2.90, after:3.04, label:'Projected account value · 12 months' }, sleevePct:30, sleeveLabel:'rebalanced back to model targets' },
     collins: { name:'Collins', who:'James Collins', provider:'BlackRock', product:'BLK Target Allocation', cat:'Model Update · EM to 8%', kind:'alloc',
       signal:'IPS diversification gap', signalBody:'A model update increases emerging-market exposure to 8% via the BLK Target Allocation, closing an IPS diversification gap while staying inside the existing low-cost model.',
       scope:'$2.3M', term:'EM to 8%',
-      before:[['US Equity',64,'rgb(110,231,183)'],['Intl Dev',24,'rgb(120,160,230)'],['EM',2,'rgb(245,200,90)'],['Fixed Income',10,'rgb(163,163,163)']],
-      after:[['US Equity',60,'rgb(110,231,183)'],['Intl Dev',22,'rgb(120,160,230)'],['EM',8,'rgb(245,200,90)'],['Fixed Income',10,'rgb(163,163,163)']],
+      before:[['US Equity',64,'rgb(168,185,241)'],['Intl Dev',24,'rgb(120,160,230)'],['EM',2,'rgb(245,200,90)'],['Fixed Income',10,'rgb(163,163,163)']],
+      after:[['US Equity',60,'rgb(168,185,241)'],['Intl Dev',22,'rgb(120,160,230)'],['EM',8,'rgb(245,200,90)'],['Fixed Income',10,'rgb(163,163,163)']],
       proj:{ now:2.30, after:2.40, label:'Projected account value · 12 months' }, sleevePct:8, sleeveLabel:'added in emerging-market exposure' },
     workman: { name:'Workman', who:'Maria Workman', provider:'PIMCO', product:'PIMCO Total Return (PTTRX)', cat:'Active Fund · 0.46% ER', kind:'alloc',
       signal:'Idle cash + duration gap', signalBody:'Idle cash plus an AGG drag — repositioning $1.16M into PIMCO Total Return closes the duration gap and deploys the full idle balance with no tax impact.',
       scope:'$1.16M', term:'0.46% ER',
-      before:[['Equity',55,'rgb(110,231,183)'],['Core Bond (AGG)',22,'rgb(120,160,230)'],['Cash',23,'rgb(163,163,163)']],
-      after:[['Equity',55,'rgb(110,231,183)'],['PIMCO Total Return',38,'rgb(120,160,230)'],['Cash',7,'rgb(163,163,163)']],
+      before:[['Equity',55,'rgb(168,185,241)'],['Core Bond (AGG)',22,'rgb(120,160,230)'],['Cash',23,'rgb(163,163,163)']],
+      after:[['Equity',55,'rgb(168,185,241)'],['PIMCO Total Return',38,'rgb(120,160,230)'],['Cash',7,'rgb(163,163,163)']],
       proj:{ now:5.10, after:5.32, label:'Projected account value · 12 months' }, sleevePct:23, sleeveLabel:'of idle cash repositioned into core fixed income' },
     chen: { name:'Chen', who:'Robert Chen', provider:'PIMCO', product:'PIMCO Income (PIMIX)', cat:'Active Fund · 5.6% yield', kind:'alloc',
       signal:'Income shortfall', signalBody:'Light income duration in the fixed-income sleeve — adding PIMCO Income lifts portfolio yield to roughly 5.6% without materially extending credit risk.',
       scope:'$3.4M', term:'5.6% yield',
-      before:[['Equity',60,'rgb(110,231,183)'],['Core Bond',30,'rgb(120,160,230)'],['Cash',10,'rgb(163,163,163)']],
-      after:[['Equity',58,'rgb(110,231,183)'],['PIMCO Income',28,'rgb(120,160,230)'],['Core Bond',10,'rgb(245,200,90)'],['Cash',4,'rgb(163,163,163)']],
+      before:[['Equity',60,'rgb(168,185,241)'],['Core Bond',30,'rgb(120,160,230)'],['Cash',10,'rgb(163,163,163)']],
+      after:[['Equity',58,'rgb(168,185,241)'],['PIMCO Income',28,'rgb(120,160,230)'],['Core Bond',10,'rgb(245,200,90)'],['Cash',4,'rgb(163,163,163)']],
       proj:{ now:3.40, after:3.55, label:'Projected account value · 12 months' }, sleevePct:28, sleeveLabel:'allocated to a higher-yield income sleeve' },
     sinclair: { name:'Sinclair Foundation', who:'The Sinclair Foundation', provider:'Blackstone', product:'Blackstone BREIT', cat:'Private REIT', kind:'alloc',
       signal:'Private-markets underweight', signalBody:'A qualified purchaser with 0% private real estate. A BREIT allocation fits the IPS target and diversifies an equity-heavy book with income-producing private real estate.',
       scope:'$6.4M', term:'IPS target',
-      before:[['Public Equity',64,'rgb(110,231,183)'],['Fixed Income',30,'rgb(120,160,230)'],['Private RE',0,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
-      after:[['Public Equity',56,'rgb(110,231,183)'],['Fixed Income',28,'rgb(120,160,230)'],['Private RE',12,'rgb(245,200,90)'],['Cash',4,'rgb(163,163,163)']],
+      before:[['Public Equity',64,'rgb(168,185,241)'],['Fixed Income',30,'rgb(120,160,230)'],['Private RE',0,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
+      after:[['Public Equity',56,'rgb(168,185,241)'],['Fixed Income',28,'rgb(120,160,230)'],['Private RE',12,'rgb(245,200,90)'],['Cash',4,'rgb(163,163,163)']],
       proj:{ now:6.40, after:6.70, label:'Projected portfolio value · 12 months' }, sleevePct:12, sleeveLabel:'added in private real estate' },
     delgado: { name:'Delgado', who:'The Delgado Family', provider:'Blackstone', product:'Blackstone BCRED', cat:'Private Credit · ~9% yield', kind:'alloc',
       signal:'Alternatives gap', signalBody:'Underexposed to private credit. A BCRED direct-lending sleeve targets roughly 9% yield and diversifies income sources away from the public-bond sleeve.',
       scope:'$4.8M', term:'~9% target yield',
-      before:[['Equity',62,'rgb(110,231,183)'],['Public Bonds',32,'rgb(120,160,230)'],['Private Credit',0,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
-      after:[['Equity',58,'rgb(110,231,183)'],['Public Bonds',24,'rgb(120,160,230)'],['Private Credit',14,'rgb(245,200,90)'],['Cash',4,'rgb(163,163,163)']],
+      before:[['Equity',62,'rgb(168,185,241)'],['Public Bonds',32,'rgb(120,160,230)'],['Private Credit',0,'rgb(245,200,90)'],['Cash',6,'rgb(163,163,163)']],
+      after:[['Equity',58,'rgb(168,185,241)'],['Public Bonds',24,'rgb(120,160,230)'],['Private Credit',14,'rgb(245,200,90)'],['Cash',4,'rgb(163,163,163)']],
       proj:{ now:4.80, after:5.05, label:'Projected portfolio value · 12 months' }, sleevePct:14, sleeveLabel:'added in private credit' },
     okafor: { name:'Okafor Trust', who:'The Okafor Trust', provider:'Nuveen', product:'Nuveen AMT-Free Muni', cat:'Municipal SMA', kind:'alloc',
       signal:'Tax drag', signalBody:'A 37%-bracket trust holding a taxable bond sleeve. Swapping to a Nuveen AMT-free municipal SMA improves after-tax yield by moving to tax-exempt income.',
       scope:'$2.3M', term:'Municipal SMA',
-      before:[['Equity',50,'rgb(110,231,183)'],['Taxable Bonds',42,'rgb(120,160,230)'],['Cash',8,'rgb(163,163,163)']],
-      after:[['Equity',50,'rgb(110,231,183)'],['AMT-Free Munis',42,'rgb(245,200,90)'],['Cash',8,'rgb(163,163,163)']],
+      before:[['Equity',50,'rgb(168,185,241)'],['Taxable Bonds',42,'rgb(120,160,230)'],['Cash',8,'rgb(163,163,163)']],
+      after:[['Equity',50,'rgb(168,185,241)'],['AMT-Free Munis',42,'rgb(245,200,90)'],['Cash',8,'rgb(163,163,163)']],
       proj:{ now:2.30, after:2.39, label:'Projected after-tax value · 12 months' }, sleevePct:42, sleeveLabel:'moved to tax-exempt municipals' },
   };
 
@@ -159,7 +159,7 @@
   const d = DATA[id] || DATA.watson;
   const Praw = PROVIDERS[d.provider] || PROVIDERS.Halo;
   // Field house theming for ALL proposals & CTAs (green / slate); providers differ only by their badge monogram.
-  const P = { abbr:Praw.abbr, brand:Praw.brand, accent:'rgb(5,122,85)', br:'rgb(52,211,153)', slideBg:'rgb(13,22,38)' };
+  const P = { abbr:Praw.abbr, brand:Praw.brand, accent:'rgb(35,89,255)', br:'rgb(128,152,234)', slideBg:'rgb(13,22,38)' };
   const isPayoff = d.kind === 'payoff';
   document.title = `${d.product} Proposal · ${d.name}`;
 
@@ -189,7 +189,7 @@
 
   const coverHeader = d.provider === 'Halo'
     ? `<div class="ring"></div><div><div style="font-weight:700; font-size:24px; color:rgb(249,250,251); letter-spacing:0.04em;">HALO</div><div style="font-size:14px; color:rgb(163,163,163); letter-spacing:0.06em;">PROTECTIVE INVESTMENTS</div></div>`
-    : `<div class="pbadge" style="background:${P.brand};">${P.abbr}</div><div><div style="font-weight:700; font-size:24px; color:rgb(249,250,251); letter-spacing:0.02em;">${esc(d.provider)}</div><div style="font-size:14px; color:rgb(163,163,163); letter-spacing:0.06em;">VIA FIELD</div></div>`;
+    : `<div class="pbadge" style="background:${P.brand};">${P.abbr}</div><div><div style="font-weight:700; font-size:24px; color:rgb(249,250,251); letter-spacing:0.02em;">${esc(d.provider)}</div><div style="font-size:14px; color:rgb(163,163,163); letter-spacing:0.06em;">VIA HALO +</div></div>`;
 
   /* ====== Slides ====== */
   const cover = `
@@ -369,7 +369,7 @@
         <h2 style="font-weight:700; font-size:54px; letter-spacing:-0.02em; margin:0 0 24px; color:rgb(249,250,251);">${isPayoff ? 'A defined floor under what matters most.' : 'A clear, documented move — ready when you are.'}</h2>
         <div style="font-size:24px; color:rgb(209,213,219); line-height:1.6; margin-bottom:40px;">With your approval, we\u2019ll confirm terms with ${esc(d.provider)} and fund the ${esc(d.scope)} sleeve. Your signature is all we need to begin — it settles alongside your existing accounts and is monitored continuously.</div>
         <div style="display:flex; gap:16px;">
-          <div style="padding:18px 32px; border-radius:12px; background:${P.accent}; color:#fff; font-weight:600; font-size:20px;">Approve &amp; proceed</div>
+          <button data-approve="1" style="padding:18px 32px; border-radius:12px; border:none; background:${P.accent}; color:#fff; font-weight:600; font-size:20px; font-family:inherit; cursor:pointer;">Approve &amp; proceed</button>
           <div style="padding:18px 32px; border-radius:12px; border:1px solid rgba(75,85,99,0.7); color:rgb(229,231,235); font-weight:500; font-size:20px;">Discuss further</div>
         </div>
       </div>
@@ -378,7 +378,7 @@
 
   /* "Lower volatility" wave illustration: defined-outcome smooths the ride. */
   function volatilitySVG(){
-    const X0=78, X1=1268, MID=232, AMPc=158, AMPd=94, CYC=3, N=200, A='rgb(110,231,183)';
+    const X0=78, X1=1268, MID=232, AMPc=158, AMPd=94, CYC=3, N=200, A='rgb(168,185,241)';
     const sine=(amp)=>{ let s=''; for(let i=0;i<=N;i++){ const x=X0+(X1-X0)*i/N; const y=MID-amp*Math.sin(i/N*CYC*2*Math.PI); s+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)+' '; } return s; };
     const dArrow=(x,yo,yi)=>{ const top=Math.min(yo,yi), bot=Math.max(yo,yi); return `<line x1="${x}" y1="${top+2}" x2="${x}" y2="${bot-2}" stroke="${A}" stroke-width="3"/>`
       +`<path d="M${x-7} ${top+11} L${x} ${top+1} L${x+7} ${top+11}" fill="none" stroke="${A}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`
@@ -390,10 +390,10 @@
       +`<circle cx="36" cy="${MID-AMPd}" r="16" fill="none" stroke="rgb(115,122,135)" stroke-width="2"/><text x="36" y="${MID-AMPd+8}" text-anchor="middle" fill="rgb(163,163,163)" font-size="26">+</text>`
       +`<circle cx="36" cy="${MID+AMPd}" r="16" fill="none" stroke="rgb(115,122,135)" stroke-width="2"/><text x="36" y="${MID+AMPd+8}" text-anchor="middle" fill="rgb(163,163,163)" font-size="26">\u2212</text>`
       +`<path d="${sine(AMPc)}" fill="none" stroke="rgb(130,140,155)" stroke-width="6" stroke-linejoin="round"/>`
-      +`<path d="${sine(AMPd)}" fill="none" stroke="rgb(52,211,153)" stroke-width="6" stroke-linejoin="round"/>`
+      +`<path d="${sine(AMPd)}" fill="none" stroke="rgb(128,152,234)" stroke-width="6" stroke-linejoin="round"/>`
       +arrows
-      +`<path d="M${cx+6} ${cy-4} L ${cx+128} ${cy-54}" stroke="rgb(52,211,153)" stroke-width="2" fill="none"/>`
-      +`<text x="${cx+138}" y="${cy-48}" fill="rgb(52,211,153)" font-size="31" font-style="italic">Lower Volatility</text>`
+      +`<path d="M${cx+6} ${cy-4} L ${cx+128} ${cy-54}" stroke="rgb(128,152,234)" stroke-width="2" fill="none"/>`
+      +`<text x="${cx+138}" y="${cy-48}" fill="rgb(128,152,234)" font-size="31" font-style="italic">Lower Volatility</text>`
       +`</svg>`;
   }
   /* Monte Carlo slide — replaces the illustrative volatility page. Same data
@@ -437,7 +437,7 @@
       <div class="footnote" style="margin-top:14px;">Forward-looking simulation using current capital market assumptions and your actual account holdings. For illustrative purposes only — not a guarantee of future results.</div>
     </section>` : '';
 
-  /* Hindsight backtest — Field holds the account's actual history, so we can
+  /* Hindsight backtest — Halo + holds the account's actual history, so we can
      show what the sleeve would have done had the note been in place. */
   const HB_MONTHLY = [1.8,-0.9,2.4,1.1,-1.6,2.9,0.7,-2.2,1.9,2.6,-0.8,1.4, -3.1,-5.8,-7.9,-4.2,1.8,2.1,1.4,-2.6,1.2,0.8,1.7,1.9, 2.1,-1.4,2.8,1.6,-0.6,2.2,3.1,-1.8,1.2,2.4,1.7,2.0];
   function hbSeries(){
@@ -473,7 +473,7 @@
     <section data-screen-label="06 If You Had The Note">
       <div class="eyebrow">Looking back</div>
       <div class="slide-title">If you’d held this note for the last 3 years</div>
-      <div class="slide-sub">Field holds your account’s actual history — this is your real ${esc(d.scope)} sleeve, replayed with the ${esc(d.product)} terms in place through the same markets.</div>
+      <div class="slide-sub">Halo + holds your account’s actual history — this is your real ${esc(d.scope)} sleeve, replayed with the ${esc(d.product)} terms in place through the same markets.</div>
       <div style="display:grid; grid-template-columns:1.7fr 1fr; gap:40px; flex:1; min-height:0;">
         <div class="card" style="padding:20px 26px; display:flex; flex-direction:column;">
           <div style="display:flex; align-items:center; gap:32px; margin-bottom:6px;">
@@ -617,7 +617,7 @@
         series:[
           { name:'Without note', data:MC_X.map((x,i)=>[x, MC_BASE_DIST[i]]), color:'rgb(120,130,140)', dashStyle:'Dash', lineWidth:2.5, fillColor:'rgba(120,130,140,0.14)' },
           { name:'With note', data:MC_X.map((x,i)=>[x, MC_OVER_DIST[i]]), color:P.br, lineWidth:4,
-            fillColor:{ linearGradient:{ x1:0,y1:0,x2:0,y2:1 }, stops:[[0,'rgba(52,211,153,0.32)'],[1,'rgba(52,211,153,0.02)']] } },
+            fillColor:{ linearGradient:{ x1:0,y1:0,x2:0,y2:1 }, stops:[[0,'rgba(128,152,234,0.32)'],[1,'rgba(128,152,234,0.02)']] } },
         ],
       });
       // scenario comparison — CSS diverging bars (captures reliably everywhere)
@@ -655,5 +655,21 @@
   // while their slide was hidden (zero-size) draw at the correct dimensions.
   document.addEventListener('slidechange', () => { setTimeout(boot, 80); });
   </script>
+<script>
+/* Approve & proceed hands back to the app: it returns to the home feed, where
+   the originating card confirms and clears itself. */
+(function(){
+  var id=new URLSearchParams(location.search).get("id")||"";
+  document.addEventListener("click",function(e){
+    var b=e.target.closest("[data-approve]");
+    if(!b)return;
+    b.textContent="Approved";
+    var msg={type:"opportunity:done",id:id};
+    try{ if(window.parent&&window.parent!==window) window.parent.postMessage(msg,"*"); }catch(err){}
+    try{ if(window.opener) window.opener.postMessage(msg,"*"); }catch(err){}
+    window.dispatchEvent(new CustomEvent("opportunity:done",{detail:{id:id}}));
+  });
+})();
+</script>
 </body>
 </html>

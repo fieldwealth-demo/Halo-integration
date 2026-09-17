@@ -1,0 +1,361 @@
+<!doctype html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Asset Manager Portal</title>
+  <link rel="stylesheet" href="colors_and_type.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/a08997c4a1.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/fontawesome.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/solid.min.css" />
+  <link rel="stylesheet" href="fontawesome-pro-local.css" />
+  <script src="https://unpkg.com/highcharts@11.4.8/highcharts.js"></script>
+  <script src="https://unpkg.com/highcharts@11.4.8/highcharts-more.js"></script>
+  <script src="https://unpkg.com/highcharts@11.4.8/modules/map.js"></script>
+  <script src="https://unpkg.com/proj4@2.9.0/dist/proj4.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-array@3/dist/d3-array.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-geo@3/dist/d3-geo.min.js"></script>
+  <style>
+    html, body { margin:0; padding:0; color: rgb(249,250,251); min-height:100vh; font-family: Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+    body {
+      background-color: rgb(11,21,36);
+      background-image:
+        radial-gradient(ellipse 60% 80% at 75% 10%, rgba(39,83,226,0.30) 0%, rgba(32,76,221,0.12) 28%, transparent 55%),
+        radial-gradient(ellipse 60% 80% at 20% 85%, rgba(32,76,221,0.10) 0%, transparent 55%),
+        linear-gradient(135deg, rgb(10, 20, 34) 0%, rgb(11, 22, 36) 50%, rgb(9, 18, 30) 100%);
+      background-attachment: fixed;
+    }
+    * { font-family: Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+    input, textarea, select, button { font-family: inherit; }
+    @keyframes sbTipIn { from { opacity: 0; transform: translateY(-50%) translateX(-4px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
+    @keyframes sbFlyoutIn { from { opacity: 0; transform: translateX(-4px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes obSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .dp-dropzone:hover { border-color: rgb(84,121,240) !important; background: rgba(84,121,240,0.05) !important; }
+    .dp-row:hover { background: rgba(255,255,255,0.03); }
+    @media (max-width: 1240px) { .tb-search { display: none !important; } }
+    @media (max-width: 1000px) { .tb-date { display: none !important; } }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(75,85,99,0.5); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(107,114,128,0.7); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" src="lib/faCls.jsx"></script>
+  <script type="text/babel" src="lib/HC.jsx"></script>
+  <script type="text/babel" src="sidebar.jsx"></script>
+  <script type="text/babel" src="shell.jsx"></script>
+  <script type="text/babel" src="drawers.jsx"></script>
+  <script type="text/babel" src="export-panel.jsx"></script>
+  <script type="text/babel" src="aiflow.jsx"></script>
+  <script type="text/babel" src="ai-assistant-panel.jsx"></script>
+  <script type="text/babel" src="home.jsx"></script>
+  <script type="text/babel" src="dims.jsx"></script>
+  <script type="text/babel" src="management.jsx"></script>
+  <script type="text/babel" src="opportunity.jsx"></script>
+  <script type="text/babel" src="opportunity-extras.jsx"></script>
+  <script type="text/babel" src="clientdetail.jsx"></script>
+  <script type="text/babel" src="client-analytics.jsx"></script>
+  <script type="text/babel" src="advantage.jsx"></script>
+  <script type="text/babel" src="distribution-data.jsx"></script>
+  <script type="text/babel" src="distribution.jsx"></script>
+  <script type="text/babel" src="distribution-share.jsx"></script>
+  <script type="text/babel" src="datapacks-data.jsx"></script>
+  <script type="text/babel" src="datapacks.jsx"></script>
+  <script type="text/babel" src="tilestudio/DataModel.jsx"></script>
+  <script type="text/babel" src="tilestudio/Chart.jsx"></script>
+  <script type="text/babel" src="tilestudio/TileViz.jsx"></script>
+  <script type="text/babel" src="tilestudio/TileAI.jsx"></script>
+  <script type="text/babel" src="tilestudio/TileStudio.jsx"></script>
+  <script type="text/babel" src="tilestudio/TilePreview.jsx"></script>
+  <script type="text/babel" src="custom-reports.jsx"></script>
+  <script type="text/babel">
+    function App() {
+      const [active, setActive] = React.useState(() => {
+        /* Arriving from the advisor app (?view=home) always lands on Ask Halo +,
+           not wherever the last session left off. */
+        try {
+          const q = new URLSearchParams(location.search).get('view');
+          if (q) return q;
+          return localStorage.getItem('amp_active') || 'home';
+        } catch(e) { return 'home'; }
+      });
+      React.useEffect(() => {
+        try { localStorage.setItem('amp_active', active); } catch(e) {}
+      }, [active]);
+
+      const [sbWidth, setSbWidth] = React.useState(56);
+      /* Product adoptions reported by the advisor app (written on approval). */
+      const [adoptions, setAdoptions] = React.useState([]);
+      const [adoptRead, setAdoptRead] = React.useState(() => { try { return +(localStorage.getItem('halo.adoptions.read') || 0); } catch(e) { return 0; } });
+      const readAdoptions = React.useCallback(() => {
+        try {
+          let log = JSON.parse(localStorage.getItem('halo.adoptions') || '[]');
+          if (!log.length) {
+            /* Demo seed so the notice is present even before the advisor run. */
+            log = [{
+              id: 'adopt-seed', practiceId: 'alpine-partners', firm: 'Alpine Partners',
+              city: 'Denver, CO', territory: 'West',
+              product: 'BlackRock Target Allocation', manager: 'BlackRock',
+              sleeve: 'Domestic equity \u00b7 iShares ITOT', amount: '$168K', accounts: 3,
+              at: Date.now(),
+            }];
+            localStorage.setItem('halo.adoptions', JSON.stringify(log));
+          }
+          setAdoptions(log);
+        } catch(e) { setAdoptions([]); }
+      }, []);
+      React.useEffect(() => {
+        readAdoptions();
+        const t = setInterval(readAdoptions, 2000);
+        window.addEventListener('storage', readAdoptions);
+        window.addEventListener('focus', readAdoptions);
+        return () => { clearInterval(t); window.removeEventListener('storage', readAdoptions); window.removeEventListener('focus', readAdoptions); };
+      }, [readAdoptions]);
+      /* Demo: the badge stays up as long as an allocation notice is live —
+         opening the page no longer clears it (dismissing the banner does). */
+      const dismissedIds = (() => { try { return JSON.parse(localStorage.getItem('halo.adoptions.dismissed') || '[]'); } catch(e) { return []; } })();
+      const unreadAdoptions = adoptions.filter(a => dismissedIds.indexOf(a.id) < 0).length;
+      const markAdoptionsRead = () => {
+        const now = Date.now();
+        setAdoptRead(now);
+        try { localStorage.setItem('halo.adoptions.read', String(now)); } catch(e) {}
+      };
+      const NAV = [
+        { id: 'home', label: 'Ask Halo +', icon: 'sparkles' },
+        { id: 'management', label: 'Management', icon: 'chart-column' },
+        { id: 'opportunity', label: 'Opportunity', icon: 'bullseye' },
+        { id: 'advantage', label: 'Competitive Advantage', icon: 'trophy' },
+        { id: 'distribution', label: 'Distribution Intelligence', icon: 'map-location-dot', badge: unreadAdoptions || undefined },
+        { id: 'reports', label: 'Custom Reports', icon: 'table-columns' },
+      ];
+      const NAV_FOOTER = [
+        { id: 'settings', label: 'Settings', icon: 'gear' },
+        { id: 'datapacks', label: 'Data Packs', icon: 'database' },
+        { id: 'help', label: 'Help & support', icon: 'circle-question' },
+      ];
+
+      const [filterOpen, setFilterOpen] = React.useState(false);
+      const [aiOpen, setAiOpen] = React.useState(false);
+      const [filters, setFilters] = React.useState(DEFAULT_FILTERS);
+      const FILTER_ARRAY_KEYS = ['regions','channels','vehicles','advantage','salespeople','categories','focus','firms','offices','teams','advisors'];
+      const filterCount = FILTER_ARRAY_KEYS.reduce((n,k) => n + ((filters[k] || []).length), 0);
+      const filterActive = filterCount > 0 || filters.aumMax < 200;
+      const [exportOpen, setExportOpen] = React.useState(false);
+      const [clientDetail, setClientDetail] = React.useState(null); // CLIENT_ROW or null
+      const [pptOpen, setPptOpen] = React.useState(false);
+      const [periodMgmt, setPeriodMgmt] = React.useState('YTD');
+      const [periodOpp, setPeriodOpp] = React.useState('YTD');
+      const [periodAdv, setPeriodAdv] = React.useState('YTD');
+      const [periodDist, setPeriodDist] = React.useState('YTD');
+      const [oppSelections, setOppSelections] = React.useState([]);
+      const [advSelections, setAdvSelections] = React.useState([]);
+      const [mgmtSelections, setMgmtSelections] = React.useState([]);
+      const clearAdvSelections = React.useCallback(() => {
+        advSelections.forEach(s => s.onRemove && s.onRemove());
+      }, [advSelections]);
+      const [distSelections, setDistSelections] = React.useState([]);
+      const clearMgmtSelections = React.useCallback(() => {
+        mgmtSelections.forEach(s => s.onRemove && s.onRemove());
+      }, [mgmtSelections]);
+      const clearOppSelections = React.useCallback(() => {
+        oppSelections.forEach(s => s.onRemove && s.onRemove());
+      }, [oppSelections]);
+      const clearDistSelections = React.useCallback(() => {
+        distSelections.forEach(s => s.onRemove && s.onRemove());
+      }, [distSelections]);
+
+      // Doe Wealth client row used by AI flow shortcut to client profile
+      const POLK_ROW = { type:'Teams', name:'The Doe Wealth Group', adv:'Strong', advDot:'rgb(128,152,234)', opp:'$142.5M', yours:'$28.4M', share:'19.9%', iOpp:'$18.2M', iYours:'$4.8M', iShare:'26.4%', nOpp:'$8.4M', nYours:'$2.1M', nShare:'25.0%', ca:'$22.4M', perf:'$14.2M', fee:'$8.2M', totInflow:'$3.1M', netFlow:'+$1.4M' };
+
+      // Build a ClientDetailPage-compatible row from an AI list client (TOP_5_CLIENTS shape).
+      // The detail page derives inflow / netflow from these so we synthesize plausible values.
+      const rowFromAIClient = (c) => {
+        if (!c) return POLK_ROW;
+        if (c.name === POLK_ROW.name) return POLK_ROW;
+        // Scale inflow ≈ 13% of opp, netflow ≈ 6% of opp (matching Doe ratios).
+        const parseM = (s) => {
+          const n = parseFloat(String(s||'').replace(/[^0-9.+-]/g,'')) || 0;
+          return /B/i.test(s||'') ? n*1000 : n;
+        };
+        const oppM = parseM(c.opp), yrsM = parseM(c.yours);
+        const fmt = (v) => v >= 100 ? `$${v.toFixed(0)}M` : `$${v.toFixed(1)}M`;
+        return {
+          type: c.type === 'FA' ? 'FA' : c.type === 'BA' ? 'BA' : 'Teams',
+          name: c.name, firm: c.firm,
+          adv: c.advantage, advDot: c.advantageDot,
+          opp: c.opp, yours: c.yours, share: c.share,
+          iOpp: fmt(oppM*0.128), iYours: fmt(yrsM*0.169), iShare:'26.4%',
+          nOpp: '+' + fmt(oppM*0.059), nYours:'+' + fmt(yrsM*0.074), nShare:'25.0%',
+          ca:'$0M', perf:'$0M', fee:'$0M', totInflow:'$0M', netFlow:'+$0M',
+        };
+      };
+
+      const handleAIAction = (action) => {
+        // action may be a string (legacy home-page calls) or an object {id, ...}
+        const id = typeof action === 'string' ? action : action && action.id;
+        if (id === 'viewPolkProfile') {
+          setClientDetail(POLK_ROW);
+        } else if (id === 'openClient') {
+          setClientDetail(rowFromAIClient(action.client));
+        } else if (id === 'createMaterial') {
+          setPptOpen(true);
+        } else if (id === 'openManagement') {
+          setActive('management');
+        } else if (id === 'scheduleMeeting') {
+          // no-op for prototype: could open a calendar drawer
+        }
+      };
+
+      const DATE = (() => {
+        const d = new Date();
+        const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        const n = d.getDate();
+        const suf = (n%10===1&&n!==11)?'st':(n%10===2&&n!==12)?'nd':(n%10===3&&n!==13)?'rd':'th';
+        return `${days[d.getDay()]} ${months[d.getMonth()]} ${n}${suf} ${d.getFullYear()}`;
+      })();
+
+      return (
+        <div style={{ display:'flex', height:'100vh', overflow:'hidden', background:'transparent' }} data-screen-label={
+          active === 'home' ? '01 Home' :
+          active === 'management' ? '02 Management' :
+          active === 'opportunity' ? '03 Opportunity' :
+          active === 'advantage' ? '04 Competitive Advantage' :
+          active === 'distribution' ? '05 Distribution Intelligence' :
+          active === 'reports' ? '06 Custom Reports' :
+          active === 'datapacks' ? '07 Data Packs' : active
+        }>
+          <Sidebar
+            items={NAV}
+            footerItems={NAV_FOOTER}
+            user={{ name: 'Morgan Vance', role: 'Distribution Lead' }}
+            active={active}
+            onSelect={setActive}
+            brand="HALO +"
+            signOutHref="../Advisor Dashboard.html"
+            signOutLabel="Advisor Portal demo"
+            persistKey="amp_sb_expanded"
+            persistAccordionKey="amp_sb_accordion"
+            onWidthChange={setSbWidth}
+          />
+          <div style={{ flex:1, marginLeft: sbWidth + (sbWidth > 100 ? 24 : 0), display:'flex', flexDirection:'column', minWidth:0, transition:'margin-left 220ms cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
+            {active === 'home' && (
+              <>
+                <TopBar title="Ask Halo +" dateStr={DATE} showSearch={false} />
+                <HomePage onNav={setActive} onAIAction={handleAIAction} />
+              </>
+            )}
+            {active === 'management' && (
+              <>
+                <TopBar title="Management Dashboard" dateStr={DATE} activeSelections={mgmtSelections} period={periodMgmt} onPeriod={setPeriodMgmt} showExport showFilter onClearAll={clearMgmtSelections}
+                  onExportClick={() => setExportOpen(true)}
+                  onFilterClick={() => setFilterOpen(true)} filterActive={filterActive} onAiClick={() => setAiOpen(true)} />
+                <main style={{ flex:1, display:'flex', flexDirection:'column', minHeight:0, overflow:'auto' }}><ManagementPage filters={filters} onSelectionsChange={setMgmtSelections} /></main>
+              </>
+            )}
+            {active === 'opportunity' && (
+              <>
+                <TopBar
+                  title={"Opportunity Dashboard"} dateStr={DATE}
+                  activeSelections={oppSelections}
+                  period={periodOpp} onPeriod={setPeriodOpp} showExport showFilter
+                  onClearAll={clearOppSelections}
+                  onExportClick={() => setExportOpen(true)}
+                  onFilterClick={() => setFilterOpen(true)} filterActive={filterActive}
+                  onAiClick={() => setAiOpen(true)}
+                />
+                <main style={{ flex:1, minHeight:0, overflow:'auto' }}>
+                  <OpportunityPage
+                    onViewClient={(row) => setClientDetail(row)}
+                    onSelectionsChange={setOppSelections}
+                    filters={filters}
+                    setFilters={setFilters}
+                  />
+                </main>
+              </>
+            )}
+            {active === 'advantage' && (
+              <>
+                <TopBar
+                  title="Competitive Advantage" dateStr={DATE}
+                  activeSelections={advSelections}
+                  period={periodAdv} onPeriod={setPeriodAdv} showExport showFilter
+                  onClearAll={clearAdvSelections}
+                  onExportClick={() => setExportOpen(true)}
+                  onFilterClick={() => setFilterOpen(true)} filterActive={filterActive}
+                  onAiClick={() => setAiOpen(true)}
+                />
+                <main style={{ flex:1, minHeight:0, overflow:'auto' }}><AdvantagePage onSelectionsChange={setAdvSelections} onViewClient={(row) => setClientDetail(row)} /></main>
+              </>
+            )}
+            {active === 'distribution' && (
+              <>
+                <TopBar
+                  title="Distribution Intelligence" dateStr={DATE}
+                  activeSelections={distSelections}
+                  period={periodDist} onPeriod={setPeriodDist} showExport showFilter
+                  onClearAll={clearDistSelections}
+                  onExportClick={() => setExportOpen(true)}
+                  onFilterClick={() => setFilterOpen(true)} filterActive={filterActive}
+                  onAiClick={() => setAiOpen(true)}
+                />
+                <main style={{ flex:1, minHeight:0, overflow:'auto' }}><DistributionPage adoptions={adoptions} onSelectionsChange={setDistSelections} onViewClient={(row) => setClientDetail(row)} /></main>
+              </>
+            )}
+            {active === 'reports' && (
+              <>
+                <TopBar title="Custom Reports" dateStr={DATE} onAiClick={() => setAiOpen(true)} />
+                <main style={{ flex:1, minHeight:0, overflow:'auto', display:'flex', flexDirection:'column' }}><CustomReportsPage /></main>
+              </>
+            )}
+
+            {active === 'datapacks' && (
+              <>
+                <TopBar title="Data Packs" dateStr={DATE} />
+                <main style={{ flex:1, minHeight:0, overflow:'auto' }}><DataPacksPage /></main>
+              </>
+            )}
+            {!['home','management','opportunity','advantage','distribution','datapacks','reports'].includes(active) && (
+              <>
+                <TopBar title={active.charAt(0).toUpperCase() + active.slice(1)} dateStr={DATE} />
+                <div style={{ padding: 40, color:'rgb(163,163,163)' }}>
+                  <h2 style={{ color:'rgb(249,250,251)' }}>Coming soon</h2>
+                  <p>This screen is not part of the prototype.</p>
+                </div>
+              </>
+            )}
+          </div>
+          <ClientDetailPage clientRow={clientDetail} onBack={() => setClientDetail(null)} />
+          <AIAssistantPanel
+            open={aiOpen}
+            onClose={() => setAiOpen(false)}
+            onAction={handleAIAction}
+          />
+          <PPTPreviewModal open={pptOpen} onClose={() => setPptOpen(false)} />
+          <FilterDrawer
+            open={filterOpen}
+            onClose={() => setFilterOpen(false)}
+            filters={filters}
+            onChange={setFilters}
+            onApply={() => setFilterOpen(false)}
+            onReset={() => setFilters(DEFAULT_FILTERS)}
+          />
+          <ExportPanel
+            open={exportOpen}
+            onClose={() => setExportOpen(false)}
+            view={active}
+            period={active === 'management' ? periodMgmt : active === 'opportunity' ? periodOpp : active === 'advantage' ? periodAdv : periodDist}
+          />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

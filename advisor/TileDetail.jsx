@@ -5,7 +5,7 @@
 // Each entry: short name + dot color used in compact pills.
 const SOURCE_META = {
   schwab:    { name:'Schwab',     short:'SCHW', dot:'rgb(0,164,228)'  },
-  fidelity:  { name:'Fidelity',   short:'FID',  dot:'rgb(80,175,90)'  },
+  fidelity:  { name:'Fidelity',   short:'FID',  dot:'rgb(123,149,234)'  },
   pershing:  { name:'Pershing',   short:'PSHG', dot:'rgb(245,158,11)' },
   ibkr:      { name:'IBKR',       short:'IBKR', dot:'rgb(220,38,38)'  },
   altruist:  { name:'Altruist',   short:'ALT',  dot:'rgb(168,85,247)' },
@@ -14,10 +14,10 @@ const SOURCE_META = {
   raymond:   { name:'Raymond James', short:'RJF', dot:'rgb(245,200,90)' },
   goldman:   { name:'Goldman',    short:'GS',   dot:'rgb(110,170,235)'},
   bny:       { name:'BNY Mellon', short:'BNY',  dot:'rgb(56,189,248)' },
-  apex:      { name:'Apex',       short:'APX',  dot:'rgb(110,231,183)'},
+  apex:      { name:'Apex',       short:'APX',  dot:'rgb(168,185,241)'},
   blackrock: { name:'BlackRock',  short:'BLK',  dot:'rgb(40,40,40)'   },
-  betterment:{ name:'Betterment', short:'BTM',  dot:'rgb(0,180,140)'  },
-  internal:  { name:'FieldWealth',short:'FW',   dot:'rgb(5,122,85)'   },
+  betterment:{ name:'Betterment', short:'BTM',  dot:'rgb(57,103,255)'  },
+  internal:  { name:'Halo +',short:'H+',   dot:'rgb(35,89,255)'   },
 };
 
 function SourceDot({ id, size=8 }) {
@@ -45,7 +45,7 @@ function SourcePill({ id }) {
 
 // Ownership badge — who holds the account (David / Emily / Joint).
 const OWNER_META = {
-  David: { label:'David', color:'rgb( 94,214,164)', bg:'rgba(5,122,85,0.16)',   bd:'rgba(16,185,129,0.45)' },
+  David: { label:'David', color:'rgb(151,171,238)', bg:'rgba(35,89,255,0.16)',   bd:'rgba(84,121,240,0.45)' },
   Emily: { label:'Emily', color:'rgb(196,166,250)', bg:'rgba(168,85,247,0.16)', bd:'rgba(168,85,247,0.45)' },
   Joint: { label:'Joint', color:'rgb(120,160,230)', bg:'rgba(59,130,246,0.16)', bd:'rgba(96,165,250,0.45)' },
 };
@@ -78,7 +78,7 @@ function SourcesStrip({ sources, syncedAt }) {
         fontFamily:'Inter', fontSize:10.5, fontWeight:600,
         color:'rgb(163,163,163)', letterSpacing:'0.08em', textTransform:'uppercase',
       }}>
-        <i className="fa-solid fa-link" style={{ marginRight:6, fontSize:9, color:'rgb(110,231,183)' }} />
+        <i className="fa-solid fa-link" style={{ marginRight:6, fontSize:9, color:'rgb(168,185,241)' }} />
         Data sources
       </div>
       <div style={{ width:1, height:14, background:'rgba(75,85,99,0.7)' }} />
@@ -89,7 +89,7 @@ function SourcesStrip({ sources, syncedAt }) {
         <>
           <div style={{ width:1, height:14, background:'rgba(75,85,99,0.7)' }} />
           <div style={{ display:'inline-flex', alignItems:'center', gap:6, fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)' }}>
-            <span style={{ width:7, height:7, borderRadius:7, background:'rgb(110,231,183)', boxShadow:'0 0 0 3px rgba(110,231,183,0.15)' }} />
+            <span style={{ width:7, height:7, borderRadius:7, background:'rgb(168,185,241)', boxShadow:'0 0 0 3px rgba(168,185,241,0.15)' }} />
             Synced {syncedAt}
           </div>
         </>
@@ -143,7 +143,7 @@ function TileDetail({ kind, onBack, backLabel='Back to Dashboard', hideBack=fals
             }}>
               <div style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(163,163,163)' }}>{k.label}</div>
               <div style={{ fontFamily:'Inter', fontSize:22, fontWeight:600, fontVariantNumeric:'tabular-nums', marginTop:4 }}>{k.value}</div>
-              {k.delta && <div style={{ fontFamily:'Inter', fontSize:11.5, color:k.tone==='down'?'rgb(248,113,113)':'rgb(110,231,183)', marginTop:4, display:'inline-flex', alignItems:'center', gap:5 }}>
+              {k.delta && <div style={{ fontFamily:'Inter', fontSize:11.5, color:k.tone==='down'?'rgb(248,113,113)':'rgb(168,185,241)', marginTop:4, display:'inline-flex', alignItems:'center', gap:5 }}>
                 <i className={`fa-solid fa-arrow-${k.tone==='down'?'down':'up'}`} style={{ width:9, height:9 }} /> {k.delta}
               </div>}
             </div>
@@ -163,8 +163,8 @@ function TileDetail({ kind, onBack, backLabel='Back to Dashboard', hideBack=fals
             {['1M','3M','YTD','1Y','5Y','All'].map((r,i) => (
               <button key={r} data-no-hint style={{
                 height:24, padding:'0 10px', borderRadius:6,
-                border:'1px solid ' + (i===2?'rgb(5,122,85)':'rgb(75,85,99)'),
-                background: i===2?'rgba(5,122,85,0.22)':'transparent',
+                border:'1px solid ' + (i===2?'rgb(35,89,255)':'rgb(75,85,99)'),
+                background: i===2?'rgba(35,89,255,0.22)':'transparent',
                 color:'rgb(249,250,251)', fontFamily:'Inter', fontSize:11, cursor:'pointer',
               }}>{r}</button>
             ))}
@@ -208,13 +208,13 @@ function TileDetail({ kind, onBack, backLabel='Back to Dashboard', hideBack=fals
                     <td colSpan={cfg.cols.length} style={{
                       padding:'12px 16px 9px', fontFamily:'Inter', fontSize:10.5, fontWeight:700,
                       letterSpacing:'0.08em', textTransform:'uppercase',
-                      color: r.tone==='neg' ? 'rgb(248,113,113)' : 'rgb(110,231,183)',
+                      color: r.tone==='neg' ? 'rgb(248,113,113)' : 'rgb(168,185,241)',
                       background:'rgba(255,255,255,0.025)',
                       borderTop: i===0 ? 'none' : '1px solid rgb(75,85,99)',
                       borderBottom:'1px solid rgba(75,85,99,0.6)',
                     }}>
                       <span style={{ display:'inline-flex', alignItems:'center', gap:7 }}>
-                        <span style={{ width:7, height:7, borderRadius:9999, background: r.tone==='neg' ? 'rgb(248,113,113)' : 'rgb(110,231,183)' }} />
+                        <span style={{ width:7, height:7, borderRadius:9999, background: r.tone==='neg' ? 'rgb(248,113,113)' : 'rgb(168,185,241)' }} />
                         {r.section}
                       </span>
                     </td>
@@ -224,7 +224,7 @@ function TileDetail({ kind, onBack, backLabel='Back to Dashboard', hideBack=fals
               // Subtotal / total row
               if (r.total) {
                 return (
-                  <tr key={i} style={{ borderBottom:'1px solid rgb(75,85,99)', background: r.accent ? 'rgba(5,122,85,0.10)' : 'rgba(255,255,255,0.035)' }}>
+                  <tr key={i} style={{ borderBottom:'1px solid rgb(75,85,99)', background: r.accent ? 'rgba(35,89,255,0.10)' : 'rgba(255,255,255,0.035)' }}>
                     {cfg.cols.map((c,j) => {
                       const tv = j===0 ? r.label : r[c.key];
                       return (
@@ -273,8 +273,8 @@ function TileDetail({ kind, onBack, backLabel='Back to Dashboard', hideBack=fals
   );
 }
 
-const _GREEN = 'rgb(5,122,85)';
-const _GREENS = ['rgb(5,122,85)','rgb(16,185,129)','rgb(110,231,183)','rgb(167,243,208)'];
+const _GREEN = 'rgb(35,89,255)';
+const _GREENS = ['rgb(35,89,255)','rgb(84,121,240)','rgb(168,185,241)','rgb(202,213,248)'];
 
 const TILE_DETAIL_CONFIG = {
   aum_alloc: {
@@ -298,12 +298,12 @@ const TILE_DETAIL_CONFIG = {
       plotOptions:{ area:{ stacking:'percent', lineWidth:1, marker:{enabled:false}, fillOpacity:0.55 } },
       legend:{ enabled:true, itemStyle:{ color:'rgb(229,231,235)' } },
       series:[
-        { name:'Equities',     color:'rgb( 94,214,164)', data:[26,27,27,28,28,28,28,29,28,28,28,28] },
+        { name:'Equities',     color:'rgb(151,171,238)', data:[26,27,27,28,28,28,28,29,28,28,28,28] },
         { name:'Fixed Income', color:'rgb(120,160,230)', data:[20,19,19,19,18,18,18,18,18,18,18,18] },
         { name:'Alternatives', color:'rgb(180,150,235)', data:[12,13,13,13,14,14,14,14,14,14,14,14] },
         { name:'Private',      color:'rgb(245,200, 90)', data:[11,11,11,12,12,12,12,12,12,12,12,12] },
         { name:'Real Estate',  color:'rgb(240,140,120)', data:[10,10,10,10,10,10,10,10,10,10,10,10] },
-        { name:'Cash',         color:'rgb(120,200,210)', data:[ 9, 8, 8, 8, 8, 8, 8, 7, 8, 8, 8, 8] },
+        { name:'Cash',         color:'rgb(162,180,240)', data:[ 9, 8, 8, 8, 8, 8, 8, 7, 8, 8, 8, 8] },
         { name:'Hedge',        color:'rgb(200,170,130)', data:[ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6] },
         { name:'Other',        color:'rgb(160,170,185)', data:[ 6, 6, 6, 4, 4, 4, 4, 4, 4, 4, 4, 4] },
       ],
@@ -347,7 +347,7 @@ const TILE_DETAIL_CONFIG = {
       yAxis:{ title:{text:null}, labels:{ formatter: function(){ return '$'+this.value+'K'; } } },
       legend:{ enabled:false },
       tooltip:{ valuePrefix:'$', valueSuffix:'K' },
-      series:[{ name:'Fees', color:'rgba(5,122,85,0.45)', borderColor:_GREEN, borderWidth:1.5, data:[36,38,40,41,42,42.5,43.5,44] }],
+      series:[{ name:'Fees', color:'rgba(35,89,255,0.45)', borderColor:_GREEN, borderWidth:1.5, data:[36,38,40,41,42,42.5,43.5,44] }],
     },
     cols:[
       { key:'invoice', label:'Invoice' },
@@ -389,9 +389,9 @@ const TILE_DETAIL_CONFIG = {
       legend:{ enabled:true, itemStyle:{ color:'rgb(229,231,235)' } },
       tooltip:{ shared:true, valuePrefix:'$', valueSuffix:'M' },
       series:[
-        { type:'area', name:'AUM',       color:'rgb(5,122,85)',
-          fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(5,122,85,0.35)'],[1,'rgba(5,122,85,0)']] },
-          lineWidth:2, marker:{ enabled:true, radius:3.5, fillColor:'rgb(10,10,10)', lineColor:'rgb(5,122,85)', lineWidth:2, symbol:'circle' },
+        { type:'area', name:'AUM',       color:'rgb(35,89,255)',
+          fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(35,89,255,0.35)'],[1,'rgba(35,89,255,0)']] },
+          lineWidth:2, marker:{ enabled:true, radius:3.5, fillColor:'rgb(10,10,10)', lineColor:'rgb(35,89,255)', lineWidth:2, symbol:'circle' },
           data:[2300,2320,2350,2380,2400,2420,2440,2460,2470,2480,2490,2500] },
         { type:'line', name:'Held Away', color:'rgb(120,160,230)',
           lineWidth:2, marker:{ enabled:true, radius:3.5, fillColor:'rgb(10,10,10)', lineColor:'rgb(120,160,230)', lineWidth:2, symbol:'circle' },
@@ -434,7 +434,7 @@ const TILE_DETAIL_CONFIG = {
       yAxis:{ title:{text:null}, labels:{ formatter: function(){ return '$'+this.value+'M'; } } },
       legend:{ enabled:false },
       tooltip:{ valuePrefix:'$', valueSuffix:'M' },
-      series:[{ name:'AUM', color:'rgba(5,122,85,0.45)', borderColor:_GREEN, borderWidth:1.5, data:[185,142,128,98,82,71,62,54,46,38] }],
+      series:[{ name:'AUM', color:'rgba(35,89,255,0.45)', borderColor:_GREEN, borderWidth:1.5, data:[185,142,128,98,82,71,62,54,46,38] }],
     },
     cols:[
       { key:'ticker', label:'Ticker', bold:true },
@@ -479,7 +479,7 @@ const TILE_DETAIL_CONFIG = {
       legend:{ enabled:true, itemStyle:{ color:'rgb(229,231,235)' } },
       tooltip:{ shared:true, valuePrefix:'$', valueSuffix:'M' },
       series:[
-        { name:'Inflow',  color:'rgba(5,122,85,0.45)',  borderColor:'rgb(5,122,85)',  borderWidth:1.5, data:[20,28,32,18,25,30,15,22,28,20,32,25] },
+        { name:'Inflow',  color:'rgba(35,89,255,0.45)',  borderColor:'rgb(35,89,255)',  borderWidth:1.5, data:[20,28,32,18,25,30,15,22,28,20,32,25] },
         { name:'Outflow', color:'rgba(220,38,38,0.45)', borderColor:'rgb(220,38,38)', borderWidth:1.5, data:[-8,-10,-9,-12,-7,-8,-11,-9,-10,-8,-9,-7] },
       ],
     },
@@ -522,9 +522,9 @@ const TILE_DETAIL_CONFIG = {
       legend:{ enabled:false },
       tooltip:{ shared:true, valuePrefix:'$', valueSuffix:'K' },
       series:[
-        { type:'area', name:'Projected Fees', color:'rgb(5,122,85)',
-          fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(5,122,85,0.35)'],[1,'rgba(5,122,85,0)']] },
-          lineWidth:2, marker:{ enabled:true, radius:3.5, fillColor:'rgb(10,10,10)', lineColor:'rgb(5,122,85)', lineWidth:2, symbol:'circle' },
+        { type:'area', name:'Projected Fees', color:'rgb(35,89,255)',
+          fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(35,89,255,0.35)'],[1,'rgba(35,89,255,0)']] },
+          lineWidth:2, marker:{ enabled:true, radius:3.5, fillColor:'rgb(10,10,10)', lineColor:'rgb(35,89,255)', lineWidth:2, symbol:'circle' },
           data:[150,185,235,285,340,400] },
       ],
     },
@@ -571,14 +571,14 @@ TILE_DETAIL_CONFIG.cd_networth = {
     legend:{ enabled:false },
     tooltip:{ formatter: function(){ return '<b>'+this.x+'</b><br/>$'+(this.y/1000).toFixed(2)+'M'; } },
     series:[{ type:'area', name:'Net Worth', color:_GREEN,
-      fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(5,122,85,0.35)'],[1,'rgba(5,122,85,0)']] },
+      fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(35,89,255,0.35)'],[1,'rgba(35,89,255,0)']] },
       lineWidth:2, marker:{ enabled:true, radius:3.5, fillColor:'rgb(10,10,10)', lineColor:_GREEN, lineWidth:2, symbol:'circle' },
       data:[5620,5680,5740,5810,5760,5830,5880,5920,5975,6020,6080,6124] }],
   },
   cols:[
     { key:'item',  label:'Account / Holding' },
     { key:'type',  label:'Type', muted:true },
-    { key:'david', label:'David', align:'right', num:true, ownerCol:true, headColor:'rgb( 94,214,164)' },
+    { key:'david', label:'David', align:'right', num:true, ownerCol:true, headColor:'rgb(151,171,238)' },
     { key:'emily', label:'Emily', align:'right', num:true, ownerCol:true, headColor:'rgb(196,166,250)' },
     { key:'joint', label:'Joint', align:'right', num:true, ownerCol:true, headColor:'rgb(120,160,230)' },
     { key:'value', label:'Total', align:'right', num:true, bold:true },
@@ -624,12 +624,12 @@ TILE_DETAIL_CONFIG.cd_allocation = {
     plotOptions:{ area:{ stacking:'percent', lineWidth:1, marker:{enabled:false}, fillOpacity:0.55 } },
     legend:{ enabled:true, itemStyle:{ color:'rgb(229,231,235)' } },
     series:[
-      { name:'Domestic Stock',  color:'rgb( 94,214,164)', data:[33,33,34,34,35,35,35,35,35,35,35,35] },
+      { name:'Domestic Stock',  color:'rgb(151,171,238)', data:[33,33,34,34,35,35,35,35,35,35,35,35] },
       { name:'Bond Funds',      color:'rgb(120,160,230)', data:[29,28,28,27,27,26,26,25,25,25,25,25] },
       { name:'International',   color:'rgb(180,150,235)', data:[18,18,18,18,18,18,18,18,18,18,18,18] },
       { name:'Alternatives',    color:'rgb(245,200, 90)', data:[ 9, 9, 9, 9, 9,10,10,10,10,10,10,10] },
       { name:'Real Estate',     color:'rgb(240,140,120)', data:[ 6, 7, 6, 7, 6, 6, 6, 7, 7, 7, 7, 7] },
-      { name:'Cash',            color:'rgb(120,200,210)', data:[ 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5] },
+      { name:'Cash',            color:'rgb(162,180,240)', data:[ 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5] },
     ],
   },
   cols:[
@@ -670,7 +670,7 @@ TILE_DETAIL_CONFIG.cd_investment = {
     legend:{ enabled:false },
     tooltip:{ valuePrefix:'$', valueSuffix:'M' },
     series:[{ type:'area', name:'Account Value', color:_GREEN,
-      fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(5,122,85,0.35)'],[1,'rgba(5,122,85,0)']] },
+      fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(35,89,255,0.35)'],[1,'rgba(35,89,255,0)']] },
       lineWidth:2, marker:{ enabled:true, radius:3.5, fillColor:'rgb(10,10,10)', lineColor:_GREEN, lineWidth:2, symbol:'circle' },
       data:[2.6, 3.1, 2.9, 3.6, 4.1, 4.54] }],
   },
@@ -711,7 +711,7 @@ TILE_DETAIL_CONFIG.cd_performance = {
     legend:{ enabled:true, itemStyle:{ color:'rgb(229,231,235)' } },
     tooltip:{ shared:true, valueSuffix:'%' },
     series:[
-      { name:'TWRR',  color:'rgba(94,214,164,0.55)',  borderColor:'rgb(94,214,164)',  borderWidth:1.5, data:[13.19, 12.69, 14.20, 9.85, 8.42, 7.69] },
+      { name:'TWRR',  color:'rgba(151,171,238,0.55)',  borderColor:'rgb(151,171,238)',  borderWidth:1.5, data:[13.19, 12.69, 14.20, 9.85, 8.42, 7.69] },
       { name:'MMkt',  color:'rgba(120,160,230,0.55)', borderColor:'rgb(120,160,230)', borderWidth:1.5, data:[ 1.20,  4.80,  5.10, 4.20, 3.10, 2.85] },
       { name:'SP500', color:'rgba(245,200,90,0.55)',  borderColor:'rgb(245,200,90)',  borderWidth:1.5, data:[11.80, 12.99, 15.40,10.20, 9.30, 8.05] },
       { name:'Bond',  color:'rgba(180,150,235,0.55)', borderColor:'rgb(180,150,235)', borderWidth:1.5, data:[ 0.80,  3.10,  3.40, 1.20, 1.85, 2.10] },
@@ -755,7 +755,7 @@ TILE_DETAIL_CONFIG.cd_unrealized = {
     legend:{ enabled:true, itemStyle:{ color:'rgb(229,231,235)' } },
     tooltip:{ shared:true, valuePrefix:'$', valueSuffix:'K' },
     series:[
-      { name:'Gains',  color:'rgba(5,122,85,0.45)',  borderColor:'rgb(5,122,85)',  borderWidth:1.5, data:[18, 28, 42, 56, 38, 17] },
+      { name:'Gains',  color:'rgba(35,89,255,0.45)',  borderColor:'rgb(35,89,255)',  borderWidth:1.5, data:[18, 28, 42, 56, 38, 17] },
       { name:'Losses', color:'rgba(220,38,38,0.45)', borderColor:'rgb(220,38,38)', borderWidth:1.5, data:[-5, -2, -0.2, 0, 0, 0] },
     ],
   },
@@ -801,7 +801,7 @@ TILE_DETAIL_CONFIG.cd_tax = {
     series:[
       { name:'Federal',   color:'rgba(220, 38, 38,0.45)', borderColor:'rgb(220, 38, 38)', borderWidth:1.5, data:[ 92, 102, 108, 115, 118, 122] },
       { name:'State',     color:'rgba(245,200, 90,0.55)', borderColor:'rgb(245,200, 90)', borderWidth:1.5, data:[ 14,  16,  17,  18,  18,  19] },
-      { name:'LT Cap Gn', color:'rgba( 94,214,164,0.55)', borderColor:'rgb( 94,214,164)', borderWidth:1.5, data:[ 12,  16,  14,  18,  20,  21] },
+      { name:'LT Cap Gn', color:'rgba(151,171,238,0.55)', borderColor:'rgb(151,171,238)', borderWidth:1.5, data:[ 12,  16,  14,  18,  20,  21] },
       { name:'Other',     color:'rgba(160,170,185,0.55)', borderColor:'rgb(160,170,185)', borderWidth:1.5, data:[  8,  12,  14,  16,  17,  22] },
     ],
   },

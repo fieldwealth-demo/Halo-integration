@@ -18,7 +18,7 @@ const CD_FOOT = {
 };
 const CD_SEE = {
   display:'inline-flex', alignItems:'center', gap:4,
-  color:'rgb(5,122,85)', textDecoration:'none', fontSize:11.5, fontWeight:500, cursor:'pointer',
+  color:'rgb(35,89,255)', textDecoration:'none', fontSize:11.5, fontWeight:500, cursor:'pointer',
 };
 
 /* How-it's-calculated copy + data source per tile, surfaced via the header info icon */
@@ -47,7 +47,7 @@ function InfoPopover({ kind, source }) {
           background:'transparent', border:'none', cursor:'pointer',
           width:24, height:24, borderRadius:6,
           display:'inline-flex', alignItems:'center', justifyContent:'center',
-          color: open ? 'rgb(5,122,85)' : 'rgb(163,163,163)', transition:'color 150ms ease',
+          color: open ? 'rgb(35,89,255)' : 'rgb(163,163,163)', transition:'color 150ms ease',
         }}
       >
         <i className="fa-solid fa-circle-info" style={{ width:14, height:14 }} />
@@ -62,7 +62,7 @@ function InfoPopover({ kind, source }) {
             fontFamily:'Inter', textAlign:'left',
           }}>
             <div style={{ display:'flex', alignItems:'center', gap:6, fontSize:10.5, fontWeight:600, letterSpacing:'0.04em', textTransform:'uppercase', color:'rgb(163,163,163)', marginBottom:7 }}>
-              <i className="fa-solid fa-circle-info" style={{ width:11, height:11, color:'rgb(5,122,85)' }} />
+              <i className="fa-solid fa-circle-info" style={{ width:11, height:11, color:'rgb(35,89,255)' }} />
               How this is calculated
             </div>
             <div style={{ fontSize:11.5, lineHeight:1.5, color:'rgb(209,213,219)' }}>{info.text || 'Calculation details unavailable.'}</div>
@@ -131,7 +131,7 @@ function CDTabs({ active, onChange, period, setPeriod }) {
         <button key={t} onClick={()=>onChange(t)} style={{
           background:'transparent', border:'none', cursor:'pointer',
           padding:'8px 2px 10px',
-          borderBottom: active===t ? '2px solid rgb(5,122,85)' : '2px solid transparent',
+          borderBottom: active===t ? '2px solid rgb(35,89,255)' : '2px solid transparent',
           color: active===t ? 'rgb(249,250,251)' : 'rgb(163,163,163)',
           fontFamily:'Inter', fontSize:12.5, fontWeight: active===t ? 600 : 500,
           marginBottom:-1,
@@ -173,15 +173,15 @@ function NetWorth() {
     },
     plotOptions: {
       area: {
-        fillColor: { linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(5,122,85,0.35)'],[1,'rgba(5,122,85,0)']] },
-        lineWidth:2, color:'rgb(5,122,85)',
-        marker:{ enabled:true, radius:2.5, fillColor:'rgb(10,10,10)', lineColor:'rgb(5,122,85)', lineWidth:1.5, symbol:'circle' },
+        fillColor: { linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(35,89,255,0.35)'],[1,'rgba(35,89,255,0)']] },
+        lineWidth:2, color:'rgb(35,89,255)',
+        marker:{ enabled:true, radius:2.5, fillColor:'rgb(10,10,10)', lineColor:'rgb(35,89,255)', lineWidth:1.5, symbol:'circle' },
       },
     },
     series:[{ name:'Net Worth', data: cfg.data }],
     legend:{ enabled:false }, credits:{ enabled:false },
   }), [period]);
-  const upColor = cfg.dir === 'up' ? 'rgb(5,122,85)' : 'rgb(248,113,113)';
+  const upColor = cfg.dir === 'up' ? 'rgb(35,89,255)' : 'rgb(248,113,113)';
   return (
     <CDTile title="Net Worth" footLink="Facts" source="schwab" kind="cd_networth">
       <div style={{ fontFamily:'Inter', fontWeight:700, fontSize:28, letterSpacing:'-0.02em', padding:'2px 0 8px' }}>$6,124,145</div>
@@ -211,12 +211,12 @@ function NetWorth() {
 /* 2. Asset Allocation — donut + legend */
 function AssetAllocation() {
   const data = [
-    { name:'Domestic Stock', y:35, fill:'rgba( 94,214,164,0.55)', dot:'rgb( 94,214,164)', amt:'35%' },
+    { name:'Domestic Stock', y:35, fill:'rgba(151,171,238,0.55)', dot:'rgb(151,171,238)', amt:'35%' },
     { name:'Bond Funds',     y:25, fill:'rgba(120,160,230,0.55)', dot:'rgb(120,160,230)', amt:'25%' },
     { name:'International',   y:18, fill:'rgba(180,150,235,0.55)', dot:'rgb(180,150,235)', amt:'18%' },
     { name:'Alternatives',   y:10, fill:'rgba(245,200, 90,0.55)', dot:'rgb(245,200, 90)', amt:'10%' },
     { name:'Real Estate',    y:7,  fill:'rgba(240,140,120,0.55)', dot:'rgb(240,140,120)', amt:'7%'  },
-    { name:'Cash',           y:5,  fill:'rgba(120,200,210,0.55)', dot:'rgb(120,200,210)', amt:'5%'  },
+    { name:'Cash',           y:5,  fill:'rgba(162,180,240,0.55)', dot:'rgb(162,180,240)', amt:'5%'  },
   ];
   const opts = React.useMemo(() => ({
     chart:{ type:'pie', height:200, backgroundColor:'transparent', spacing:[4,4,4,4] },
@@ -360,11 +360,11 @@ function ClientSidebar({ onBack, highlightOpp }) {
         </button>
       </div>
       <div style={{ padding:'0 0 16px', display:'flex', flexDirection:'column' }}>
-        <ActivityRow icon="file-invoice-dollar" iconColor="rgb(5,122,85)" title="Billed Q4 Advisory Fee" meta="$2,648 · Nov 18, 2025" />
+        <ActivityRow icon="file-invoice-dollar" iconColor="rgb(35,89,255)" title="Billed Q4 Advisory Fee" meta="$2,648 · Nov 18, 2025" />
         <ActivityRow icon="file-lines" iconColor="rgb(56,189,248)" title="Quarterly Report Created" meta="Q3 Performance · Nov 12, 2025" />
         <ActivityRow icon="envelope" iconColor="rgb(163,163,163)" title="Email Sent" meta="Portfolio Rebalance Review · Nov 5, 2025" />
         <ActivityRow icon="file-lines" iconColor="rgb(56,189,248)" title="Tax Summary Report Created" meta="2025 YTD Estimate · Oct 28, 2025" />
-        <ActivityRow icon="file-invoice-dollar" iconColor="rgb(5,122,85)" title="Billed Q3 Advisory Fee" meta="$2,591 · Aug 22, 2025" last />
+        <ActivityRow icon="file-invoice-dollar" iconColor="rgb(35,89,255)" title="Billed Q3 Advisory Fee" meta="$2,591 · Aug 22, 2025" last />
       </div>
     </div>
   );
@@ -420,18 +420,18 @@ function OppCard({ title, body, highlight }) {
   const isRebalance = title === 'Rebalancing Opportunity';
   return (
     <div style={{
-      border: highlight ? '1px solid rgb(16,185,129)' : '1px solid rgba(75,85,99,0.6)',
+      border: highlight ? '1px solid rgb(84,121,240)' : '1px solid rgba(75,85,99,0.6)',
       borderRadius:10,
-      background: highlight ? 'rgba(5,122,85,0.08)' : 'rgba(255,255,255,0.02)',
+      background: highlight ? 'rgba(35,89,255,0.08)' : 'rgba(255,255,255,0.02)',
       padding:'12px 12px',
-      boxShadow: highlight ? '0 0 0 3px rgba(16,185,129,0.18), 0 8px 24px rgba(5,122,85,0.18)' : 'none',
+      boxShadow: highlight ? '0 0 0 3px rgba(84,121,240,0.18), 0 8px 24px rgba(35,89,255,0.18)' : 'none',
       animation: highlight ? 'opp-glow 2.4s ease-in-out infinite' : 'none',
       transition:'border-color 200ms ease, box-shadow 200ms ease, background 200ms ease',
     }}>
       <style>{`
         @keyframes opp-glow {
-          0%, 100% { box-shadow: 0 0 0 3px rgba(16,185,129,0.18), 0 8px 24px rgba(5,122,85,0.18); }
-          50%      { box-shadow: 0 0 0 6px rgba(16,185,129,0.30), 0 8px 24px rgba(5,122,85,0.32); }
+          0%, 100% { box-shadow: 0 0 0 3px rgba(84,121,240,0.18), 0 8px 24px rgba(35,89,255,0.18); }
+          50%      { box-shadow: 0 0 0 6px rgba(84,121,240,0.30), 0 8px 24px rgba(35,89,255,0.32); }
         }
       `}</style>
       <div style={{ fontFamily:'Inter', fontSize:12.5, fontWeight:600, marginBottom:4 }}>{title}</div>
@@ -442,8 +442,8 @@ function OppCard({ title, body, highlight }) {
           data-no-hint={isRebalance ? undefined : true}
           style={{
             height:26, padding:'0 12px', borderRadius:7,
-            background: highlight ? 'rgb(5,122,85)' : 'rgba(5,122,85,0.2)',
-            border: highlight ? '1px solid rgb(16,185,129)' : '1px solid rgba(5,122,85,0.5)',
+            background: highlight ? 'rgb(35,89,255)' : 'rgba(35,89,255,0.2)',
+            border: highlight ? '1px solid rgb(84,121,240)' : '1px solid rgba(35,89,255,0.5)',
             color:'rgb(249,250,251)', fontFamily:'Inter', fontSize:11, fontWeight:600, cursor:'pointer',
         }}>Execute</button>
       </div>
@@ -476,7 +476,7 @@ function Performance() {
     },
     plotOptions:{ column:{ borderWidth:1.5, pointPadding:0.08, groupPadding:0.12, borderRadius:3 } },
     series:[
-      { name:'TWRR',  data:[ 28, 15, 42 ], color:'rgba( 94,214,164,0.55)', borderColor:'rgb( 94,214,164)' },
+      { name:'TWRR',  data:[ 28, 15, 42 ], color:'rgba(151,171,238,0.55)', borderColor:'rgb(151,171,238)' },
       { name:'MMkt',  data:[ 12,  8, 22 ], color:'rgba(120,160,230,0.55)', borderColor:'rgb(120,160,230)' },
       { name:'SP500', data:[ 22, 10, 38 ], color:'rgba(245,200, 90,0.55)', borderColor:'rgb(245,200, 90)' },
       { name:'Bond',  data:[  6,  4, 10 ], color:'rgba(180,150,235,0.55)', borderColor:'rgb(180,150,235)' },
@@ -491,7 +491,7 @@ function Performance() {
   return (
     <CDTile title="Performance" footLink="Reports" source="pershing" kind="cd_performance">
       <div style={{ display:'flex', gap:12, padding:'2px 0 6px' }}>
-        <Dot c="rgb( 94,214,164)" label="TWRR" />
+        <Dot c="rgb(151,171,238)" label="TWRR" />
         <Dot c="rgb(120,160,230)" label="MMkt" />
         <Dot c="rgb(245,200, 90)" label="SP500" />
         <Dot c="rgb(180,150,235)" label="Bond" />
@@ -502,7 +502,7 @@ function Performance() {
         borderTop:'1px solid rgba(75,85,99,0.5)',
       }}>
         {cfg.metrics.map((m,i)=>{
-          const c = m.dir === 'up' ? 'rgb(5,122,85)' : 'rgb(248,113,113)';
+          const c = m.dir === 'up' ? 'rgb(35,89,255)' : 'rgb(248,113,113)';
           return (
             <div key={i} style={{ textAlign:'center' }}>
               <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)' }}>{m.k}</div>
@@ -525,7 +525,7 @@ function Unrealized() {
       <div style={{ fontFamily:'Inter', fontSize:12, color:'rgb(163,163,163)', marginBottom:6 }}>{label}</div>
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:14 }}>
         <div>
-          <div style={{ display:'flex', alignItems:'center', gap:6, fontFamily:'Inter', fontSize:22, fontWeight:700, color:'rgb(5,122,85)', letterSpacing:'-0.02em' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:6, fontFamily:'Inter', fontSize:22, fontWeight:700, color:'rgb(249,250,251)', letterSpacing:'-0.02em' }}>
             <i className="fa-solid fa-arrow-up" style={{ width:14, height:14 }} />
             {gain}
           </div>
@@ -556,7 +556,7 @@ function TaxSummary() {
     ['Federal (32% bracket)', '$121,840',  'rgb(248,113,113)'],
     ['PA State (3.07%)',      '$18,781',   'rgb(249,250,251)'],
     ['Long-Term Capital Gains','$21,397',  'rgb(249,250,251)'],
-    ['Tax-Loss Harvest Available','-$7,195','rgb(5,122,85)'],
+    ['Tax-Loss Harvest Available','-$7,195','rgb(35,89,255)'],
   ];
   return (
     <CDTile title="Tax Summary" footLink="Reports" source="internal" kind="cd_tax" footLabel="Tax Year 2026 · Est. from 1099 & realized G/L">

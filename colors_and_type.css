@@ -53,11 +53,11 @@
 :root,
 .light {
   /* Brand ------------------------------------------------------------------ */
-  --brand-primary:        oklch(54.5% 0.12 160);   /* rgb(5,122,85)  shadcn/Field green */
+  --brand-primary:        oklch(54.5% 0.12 262);   /* rgb(35,89,255)  shadcn/Field green */
   --brand-primary-ink:    rgb(249, 250, 251);
-  --brand-primary-soft:   rgba(5, 122, 85, 0.10);
-  --brand-primary-ring:   rgba(5, 122, 85, 0.30);
-  --brand-primary-dark:   rgb(3, 84, 63);
+  --brand-primary-soft:   rgba(35,89,255,0.10);
+  --brand-primary-ring:   rgba(35,89,255,0.30);
+  --brand-primary-dark:   rgb(10,65,246);
   --brand-lime:           rgb(173, 250, 29);       /* "Updated: January 2026" pill */
 
   /* Surfaces -------------------------------------------------------------- */
@@ -76,11 +76,11 @@
   /* Borders & separators -------------------------------------------------- */
   --border:            rgb(229, 229, 229);
   --border-strong:     rgb(212, 212, 212);
-  --ring:              rgba(5, 122, 85, 0.30);
+  --ring:              rgba(35,89,255,0.30);
 
   /* Semantic colors (light) ---------------------------------------------- */
-  --success:           rgb(5, 122, 85);
-  --success-soft:      rgb(236, 253, 245);
+  --success:           rgb(35,89,255);
+  --success-soft:      rgb(227,233,252);
   --info:              rgb(0, 144, 255);
   --info-soft:         rgb(239, 246, 255);
   --warning:           rgb(202, 138, 4);
@@ -89,7 +89,7 @@
   --danger-soft:       rgb(254, 226, 226);
 
   /* Chart palette (from figma usage) ------------------------------------- */
-  --chart-1:           rgb(5, 122, 85);
+  --chart-1:           rgb(35,89,255);
   --chart-2:           rgb(0, 144, 255);
   --chart-3:           rgb(94, 177, 239);
   --chart-4:           rgb(124, 58, 237);
@@ -153,10 +153,10 @@
 
   --border:            rgb(75, 85, 99);
   --border-strong:     rgb(107, 114, 128);
-  --ring:              rgba(5, 122, 85, 0.40);
+  --ring:              rgba(35,89,255,0.40);
 
-  --success:           rgb(5, 122, 85);
-  --success-soft:      rgba(22, 101, 52, 0.15);
+  --success:           rgb(35,89,255);
+  --success-soft:      rgba(55,94,222,0.15);
   --info:              rgb(94, 177, 239);
   --info-soft:         rgba(0, 144, 255, 0.15);
   --warning:           rgb(234, 179, 8);
@@ -182,8 +182,8 @@
   --app-bg-base:          rgb(11, 21, 36);
   --app-bg-image:
     /* Soft diagonal emerald bloom — UR to LL, very desaturated */
-    radial-gradient(ellipse 70% 90% at 72% 20%, rgba(12, 90, 82, 0.28) 0%, rgba(10, 70, 70, 0.14) 28%, transparent 55%),
-    radial-gradient(ellipse 65% 85% at 28% 75%, rgba(10, 70, 70, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 90% at 72% 20%, rgba(39,83,226,0.28) 0%, rgba(32,76,221,0.14) 28%, transparent 55%),
+    radial-gradient(ellipse 65% 85% at 28% 75%, rgba(32,76,221,0.12) 0%, transparent 55%),
     linear-gradient(135deg, rgb(10, 20, 34) 0%, rgb(11, 22, 36) 50%, rgb(9, 18, 30) 100%);
 
   --glass-bg:             rgba(255, 255, 255, 0.05);
@@ -203,12 +203,12 @@
      spec (soft, readable over dark glass). Dot tokens (used in legends)
      are 100%-opacity versions of the same hue so legend dots pop against
      the translucent arc/bar they represent. */
-  --alloc-equities:      rgba( 94, 214, 164, 0.5);  /* soft green  */
+  --alloc-equities:      rgba(151,171,238,0.5);  /* soft green  */
   --alloc-fixed-income:  rgba(120, 160, 230, 0.5);  /* soft blue   */
   --alloc-alternatives:  rgba(180, 150, 235, 0.5);  /* soft purple */
   --alloc-private:       rgba(245, 200,  90, 0.5);  /* soft amber  */
   --alloc-real-estate:   rgba(240, 140, 120, 0.5);  /* soft coral  */
-  --alloc-cash:          rgba(120, 200, 210, 0.5);  /* soft teal   */
+  --alloc-cash:          rgba(162,180,240,0.5);  /* soft teal   */
   --alloc-hedge:         rgba(200, 170, 130, 0.5);  /* soft tan    */
   --alloc-other:         rgba(160, 170, 185, 0.5);  /* soft slate  */
 
@@ -242,12 +242,12 @@
      compressed. Set on the Tile root via min-height. */
   --tile-min-height:       440px;
 
-  --alloc-equities-dot:     rgb( 94, 214, 164);
+  --alloc-equities-dot:     rgb(151,171,238);
   --alloc-fixed-income-dot: rgb(120, 160, 230);
   --alloc-alternatives-dot: rgb(180, 150, 235);
   --alloc-private-dot:      rgb(245, 200,  90);
   --alloc-real-estate-dot:  rgb(240, 140, 120);
-  --alloc-cash-dot:         rgb(120, 200, 210);
+  --alloc-cash-dot:         rgb(162,180,240);
   --alloc-hedge-dot:        rgb(200, 170, 130);
   --alloc-other-dot:        rgb(160, 170, 185);
 }

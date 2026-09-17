@@ -35,7 +35,7 @@ function Login({ onLogin }) {
           <Button variant="primary" loading={loading} onClick={() => {
             setLoading(true);
             setTimeout(() => { setLoading(false); onLogin && onLogin(); }, 650);
-          }} style={{ width:'100%', background: email && pw ? 'rgb(249,250,251)' : 'rgb(5,122,85)', color: email && pw ? 'rgb(10,10,10)' : 'rgb(249,250,251)' }}>
+          }} style={{ width:'100%', background: email && pw ? 'rgb(249,250,251)' : 'rgb(35,89,255)', color: email && pw ? 'rgb(10,10,10)' : 'rgb(249,250,251)' }}>
             Login
           </Button>
           <Button variant="outline" icon="chrome" style={{ width:'100%', background:'transparent' }}>

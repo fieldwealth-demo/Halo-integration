@@ -4,9 +4,9 @@
 // AI prompts that describe a metric hand off into the formula editor.
 // Emits a tile via onAdd() compatible with the dashboard's AddedTile renderer.
 
-const TB_BRAND = 'rgb(5,122,85)';
-const TB_BRAND_SOFT = 'rgba(5,122,85,0.18)';
-const TB_BRAND_TXT = 'rgb(110,231,183)';
+const TB_BRAND = 'rgb(35,89,255)';
+const TB_BRAND_SOFT = 'rgba(35,89,255,0.18)';
+const TB_BRAND_TXT = 'rgb(168,185,241)';
 const TB_BORDER = 'rgb(75,85,99)';
 const TB_BORDER_SOFT = 'rgba(75,85,99,0.5)';
 const TB_INK = 'rgb(249,250,251)';
@@ -57,10 +57,10 @@ const TB_LIMITS = ['No Limit', 'Top 5', 'Top 10', 'Top 25'];
 const TB_AI_SUGGESTIONS = [
   { icon:'pie',           tint:'rgb(245,200,90)',  label:'AUM by asset class' },
   { icon:'bar',           tint:'rgb(120,160,230)', label:'Top clients by revenue' },
-  { icon:'line',          tint:'rgb(94,214,164)',  label:'Monthly net flows trend' },
+  { icon:'line',          tint:'rgb(151,171,238)',  label:'Monthly net flows trend' },
   { icon:'bullseye',      tint:'rgb(240,140,120)', label:'Revenue by channel' },
   { icon:'percent',       tint:'rgb(180,150,235)', label:'Effective fee rate', formula:true },
-  { icon:'metric',        tint:'rgb(120,200,210)', label:'AUM per client', formula:true },
+  { icon:'metric',        tint:'rgb(162,180,240)', label:'AUM per client', formula:true },
 ];
 
 /* ---------------------------------------------------------------- helpers */
@@ -101,8 +101,8 @@ function canonicalTileState(id, title) {
   };
   const STATIC = (label, value, fmt) => ({ id:'k'+label.replace(/\W/g,''), label, mode:'static', value, field:'', formula:'', format: fmt || 'currency' });
   const allocSlices = [
-    ['Equities',28,'rgb(94,214,164)'],['Fixed Income',18,'rgb(120,160,230)'],['Alternatives',14,'rgb(180,150,235)'],
-    ['Private',12,'rgb(245,200,90)'],['Real Estate',10,'rgb(240,140,120)'],['Cash',8,'rgb(120,200,210)'],
+    ['Equities',28,'rgb(151,171,238)'],['Fixed Income',18,'rgb(120,160,230)'],['Alternatives',14,'rgb(180,150,235)'],
+    ['Private',12,'rgb(245,200,90)'],['Real Estate',10,'rgb(240,140,120)'],['Cash',8,'rgb(162,180,240)'],
     ['Hedge',6,'rgb(200,170,130)'],['Other',4,'rgb(160,170,185)'],
   ];
 
@@ -255,7 +255,7 @@ function TBPreview({ s, live, menu, footerSlot }) {
       {/* header */}
       <div style={{ display:'flex', alignItems:'center', gap:10, padding:'14px 16px 10px' }}>
         <div style={{
-          width:28, height:28, borderRadius:7, background:TB_BRAND_SOFT, border:'1px solid rgba(5,122,85,0.4)',
+          width:28, height:28, borderRadius:7, background:TB_BRAND_SOFT, border:'1px solid rgba(35,89,255,0.4)',
           display:'inline-flex', alignItems:'center', justifyContent:'center', flexShrink:0,
         }}>
           <TBIcon name={showFormulaMetric ? (isFormula ? 'calc' : 'metric') : s.chartType} size={14} color={TB_BRAND} />
@@ -356,9 +356,9 @@ function TBLineBody({ opts, pd }) {
   return (
     <svg viewBox={`0 0 ${w} ${h}`} style={{ width:'100%', height:150 }} preserveAspectRatio="none">
       {opts.grid && [0.25, 0.5, 0.75].map(g => <line key={g} x1="0" x2={w} y1={h*g} y2={h*g} stroke="rgba(75,85,99,0.4)" strokeWidth="1" vectorEffect="non-scaling-stroke" />)}
-      <defs><linearGradient id="tb-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="rgb(5,122,85)" stopOpacity="0.35" /><stop offset="100%" stopColor="rgb(5,122,85)" stopOpacity="0" /></linearGradient></defs>
+      <defs><linearGradient id="tb-area" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="rgb(35,89,255)" stopOpacity="0.35" /><stop offset="100%" stopColor="rgb(35,89,255)" stopOpacity="0" /></linearGradient></defs>
       <path d={`${path} L${w},${h} L0,${h} Z`} fill="url(#tb-area)" />
-      <path d={path} fill="none" stroke="rgb(94,214,164)" strokeWidth="2.5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
+      <path d={path} fill="none" stroke="rgb(151,171,238)" strokeWidth="2.5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
       {opts.trend && <line x1="0" y1={sy(pts[0])} x2={w} y2={sy(pts[pts.length-1])} stroke="rgba(120,160,230,0.8)" strokeWidth="1.5" strokeDasharray="5 4" vectorEffect="non-scaling-stroke" />}
     </svg>
   );
@@ -374,7 +374,7 @@ function TBBarsBody({ opts, horizontal, pd }) {
         {vals.map((v, i) => (
           <div key={i} style={{ display:'flex', alignItems:'center', gap:8 }}>
             {labels && <span style={{ fontFamily:'Inter', fontSize:11, color:TB_MUTED, width:74, flexShrink:0, whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{labels[i]}</span>}
-            <div style={{ height:16, borderRadius:4, width:`${(v/max)*100}%`, background:`rgba(94,214,164,${0.85 - i*0.12})` }} />
+            <div style={{ height:16, borderRadius:4, width:`${(v/max)*100}%`, background:`rgba(151,171,238,${0.85 - i*0.12})` }} />
             {opts.dataLabels && <span style={{ fontFamily:TB_MONO, fontSize:11, color:TB_MUTED }}>{v}</span>}
           </div>
         ))}
@@ -386,7 +386,7 @@ function TBBarsBody({ opts, horizontal, pd }) {
       {vals.map((v, i) => (
         <div key={i} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:5, height:'100%', justifyContent:'flex-end' }}>
           {opts.dataLabels && <span style={{ fontFamily:TB_MONO, fontSize:10, color:TB_MUTED }}>{v}</span>}
-          <div style={{ width:'100%', borderRadius:'5px 5px 0 0', height:`${(v/max)*100}%`, background:`rgba(94,214,164,${0.85 - i*0.1})` }} />
+          <div style={{ width:'100%', borderRadius:'5px 5px 0 0', height:`${(v/max)*100}%`, background:`rgba(151,171,238,${0.85 - i*0.1})` }} />
           {labels && <span style={{ fontFamily:'Inter', fontSize:9.5, color:TB_MUTED, whiteSpace:'nowrap' }}>{labels[i]}</span>}
         </div>
       ))}
@@ -395,7 +395,7 @@ function TBBarsBody({ opts, horizontal, pd }) {
 }
 
 function TBDonutBody({ donut, legend, pd }) {
-  const segs = (pd && pd.slices && pd.slices.length) ? pd.slices : [['Equities', 42, 'rgb(94,214,164)'], ['Fixed Income', 26, 'rgb(120,160,230)'], ['Alternatives', 18, 'rgb(180,150,235)'], ['Cash', 14, 'rgb(120,200,210)']];
+  const segs = (pd && pd.slices && pd.slices.length) ? pd.slices : [['Equities', 42, 'rgb(151,171,238)'], ['Fixed Income', 26, 'rgb(120,160,230)'], ['Alternatives', 18, 'rgb(180,150,235)'], ['Cash', 14, 'rgb(162,180,240)']];
   let acc = 0;
   const stops = segs.map(([, pct, col]) => { const from = acc; acc += pct; return `${col} ${from}% ${acc}%`; }).join(', ');
   return (
@@ -419,7 +419,7 @@ function TBDonutBody({ donut, legend, pd }) {
 }
 
 function TBTreemapBody({ pd }) {
-  const cells = (pd && pd.slices && pd.slices.length) ? pd.slices.slice(0,4) : [['Equities', 42, 'rgb(94,214,164)'], ['Fixed', 26, 'rgb(120,160,230)'], ['Alts', 18, 'rgb(180,150,235)'], ['Cash', 14, 'rgb(120,200,210)']];
+  const cells = (pd && pd.slices && pd.slices.length) ? pd.slices.slice(0,4) : [['Equities', 42, 'rgb(151,171,238)'], ['Fixed', 26, 'rgb(120,160,230)'], ['Alts', 18, 'rgb(180,150,235)'], ['Cash', 14, 'rgb(162,180,240)']];
   return (
     <div style={{ display:'grid', gridTemplateColumns:'1.6fr 1fr', gridTemplateRows:'1fr 1fr', gap:6, height:150, paddingTop:8 }}>
       {cells.map(([n, pct, col], i) => (
@@ -604,9 +604,9 @@ function TileBuilder({ open, onClose, onAdd, onUpdate, editTile, initialTab }) {
       <div style={{
         display:'flex', alignItems:'center', gap:14, padding:'18px 28px',
         borderBottom:`1px solid ${TB_BORDER}`, flexShrink:0,
-        background:'linear-gradient(90deg, rgba(5,122,85,0.12) 0%, rgba(5,122,85,0.03) 40%, transparent 80%)',
+        background:'linear-gradient(90deg, rgba(35,89,255,0.12) 0%, rgba(35,89,255,0.03) 40%, transparent 80%)',
       }}>
-        <div style={{ width:44, height:44, borderRadius:11, background:TB_BRAND_SOFT, border:'1px solid rgba(5,122,85,0.4)', display:'inline-flex', alignItems:'center', justifyContent:'center' }}>
+        <div style={{ width:44, height:44, borderRadius:11, background:TB_BRAND_SOFT, border:'1px solid rgba(35,89,255,0.4)', display:'inline-flex', alignItems:'center', justifyContent:'center' }}>
           <i className={`fa-solid ${isEditing ? 'fa-pen-to-square' : 'fa-plus'}`} style={{ color:TB_BRAND_TXT, fontSize:18 }} />
         </div>
         <div style={{ flex:1 }}>
@@ -654,7 +654,7 @@ function TileBuilder({ open, onClose, onAdd, onUpdate, editTile, initialTab }) {
       {/* Footer */}
       <div style={{ display:'flex', justifyContent:'flex-end', gap:12, padding:'16px 28px', borderTop:`1px solid ${TB_BORDER}`, flexShrink:0, background:'rgba(10,15,24,0.5)' }}>
         <button onClick={onClose} style={{ height:40, padding:'0 20px', borderRadius:9, border:`1px solid ${TB_BORDER}`, background:'transparent', color:TB_INK, fontFamily:'Inter', fontSize:13.5, fontWeight:500, cursor:'pointer' }}>Cancel</button>
-        <button onClick={apply} style={{ height:40, padding:'0 24px', borderRadius:9, border:'none', background:TB_BRAND, color:'#fff', fontFamily:'Inter', fontSize:13.5, fontWeight:600, cursor:'pointer', display:'inline-flex', alignItems:'center', gap:8, boxShadow:'0 6px 18px -6px rgba(5,122,85,0.6)' }}>
+        <button onClick={apply} style={{ height:40, padding:'0 24px', borderRadius:9, border:'none', background:TB_BRAND, color:'#fff', fontFamily:'Inter', fontSize:13.5, fontWeight:600, cursor:'pointer', display:'inline-flex', alignItems:'center', gap:8, boxShadow:'0 6px 18px -6px rgba(35,89,255,0.6)' }}>
           <i className="fa-solid fa-check" style={{ fontSize:12 }} /> {isEditing ? 'Save changes' : 'Apply'}
         </button>
       </div>
@@ -667,7 +667,7 @@ function TBAiTab({ prompt, setPrompt, aiPhase, runAi, aiBanner, setTab }) {
   return (
     <div style={{ display:'flex', flexDirection:'column', minHeight:'100%' }}>
       <div style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center', padding:'12px 8px 24px' }}>
-        <div style={{ width:64, height:64, borderRadius:16, background:`linear-gradient(135deg, ${TB_BRAND} 0%, rgb(4,90,63) 100%)`, display:'inline-flex', alignItems:'center', justifyContent:'center', marginBottom:20, boxShadow:'0 10px 30px -8px rgba(5,122,85,0.6)' }}>
+        <div style={{ width:64, height:64, borderRadius:16, background:`linear-gradient(135deg, ${TB_BRAND} 0%, rgb(16,69,244) 100%)`, display:'inline-flex', alignItems:'center', justifyContent:'center', marginBottom:20, boxShadow:'0 10px 30px -8px rgba(35,89,255,0.6)' }}>
           <i className="fa-solid fa-wand-magic-sparkles" style={{ color:'#fff', fontSize:26 }} />
         </div>
         <div style={{ fontFamily:'Inter', fontSize:22, fontWeight:700, color:TB_INK, marginBottom:10 }}>What would you like to visualize?</div>
@@ -676,7 +676,7 @@ function TBAiTab({ prompt, setPrompt, aiPhase, runAi, aiBanner, setTab }) {
         </p>
 
         {aiBanner && aiPhase === 'done' && (
-          <div style={{ width:'100%', maxWidth:520, marginBottom:22, padding:'14px 16px', borderRadius:12, background:TB_BRAND_SOFT, border:`1px solid rgba(5,122,85,0.45)`, textAlign:'left', display:'flex', alignItems:'center', gap:12 }}>
+          <div style={{ width:'100%', maxWidth:520, marginBottom:22, padding:'14px 16px', borderRadius:12, background:TB_BRAND_SOFT, border:`1px solid rgba(35,89,255,0.45)`, textAlign:'left', display:'flex', alignItems:'center', gap:12 }}>
             <TBIcon name={aiBanner.kind === 'formula' ? 'calc' : 'line'} size={17} color={TB_BRAND_TXT} />
             <div style={{ flex:1 }}>
               <div style={{ fontFamily:'Inter', fontSize:13.5, fontWeight:600, color:TB_INK }}>
@@ -699,7 +699,7 @@ function TBAiTab({ prompt, setPrompt, aiPhase, runAi, aiBanner, setTab }) {
               display:'flex', alignItems:'center', gap:12, padding:'14px 15px', borderRadius:12,
               background:'rgba(255,255,255,0.04)', border:`1px solid ${TB_BORDER}`, cursor:'pointer', textAlign:'left',
             }}
-              onMouseEnter={(e)=>{ e.currentTarget.style.borderColor='rgba(5,122,85,0.5)'; e.currentTarget.style.background='rgba(255,255,255,0.06)'; }}
+              onMouseEnter={(e)=>{ e.currentTarget.style.borderColor='rgba(35,89,255,0.5)'; e.currentTarget.style.background='rgba(255,255,255,0.06)'; }}
               onMouseLeave={(e)=>{ e.currentTarget.style.borderColor=TB_BORDER; e.currentTarget.style.background='rgba(255,255,255,0.04)'; }}>
               <span style={{ width:32, height:32, borderRadius:8, background:`${s.tint.replace('rgb','rgba').replace(')',',0.16)')}`, display:'inline-flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
                 <TBIcon name={s.icon} size={15} color={s.tint} />
@@ -720,7 +720,7 @@ function TBAiTab({ prompt, setPrompt, aiPhase, runAi, aiBanner, setTab }) {
             style={{ flex:1, minWidth:0, background:'transparent', border:'none', outline:'none', color:TB_INK, fontFamily:'Inter', fontSize:14 }} />
           <button onClick={() => runAi()} disabled={!prompt.trim() || aiPhase === 'thinking'} style={{
             width:40, height:40, borderRadius:9, border:'none', flexShrink:0,
-            background: prompt.trim() && aiPhase !== 'thinking' ? TB_BRAND : 'rgba(5,122,85,0.25)',
+            background: prompt.trim() && aiPhase !== 'thinking' ? TB_BRAND : 'rgba(35,89,255,0.25)',
             color:'#fff', cursor: prompt.trim() && aiPhase !== 'thinking' ? 'pointer' : 'not-allowed',
           }}>
             {aiPhase === 'thinking' ? <i className="fa-solid fa-spinner fa-spin" /> : <i className="fa-solid fa-arrow-up" />}
@@ -740,7 +740,7 @@ function TBCustomTab(p) {
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:30 }}>
       {p.aiBanner && p.aiBanner.kind === 'formula' && (
-        <div style={{ padding:'12px 14px', borderRadius:11, background:TB_BRAND_SOFT, border:`1px solid rgba(5,122,85,0.45)`, display:'flex', alignItems:'center', gap:10 }}>
+        <div style={{ padding:'12px 14px', borderRadius:11, background:TB_BRAND_SOFT, border:`1px solid rgba(35,89,255,0.45)`, display:'flex', alignItems:'center', gap:10 }}>
           <i className="fa-solid fa-wand-magic-sparkles" style={{ color:TB_BRAND_TXT, fontSize:14 }} />
           <span style={{ fontFamily:'Inter', fontSize:12.5, color:TB_INK }}>AI wrote this formula from your prompt — edit it below.</span>
         </div>
@@ -778,7 +778,7 @@ function TBCustomTab(p) {
             return (
               <button key={t.id} onClick={() => p.setChartType(t.id)} style={{
                 display:'flex', flexDirection:'column', alignItems:'center', gap:10, padding:'18px 10px', borderRadius:12,
-                background: on ? 'rgba(5,122,85,0.12)' : 'rgba(255,255,255,0.03)',
+                background: on ? 'rgba(35,89,255,0.12)' : 'rgba(255,255,255,0.03)',
                 border: `1px solid ${on ? TB_BRAND : TB_BORDER_SOFT}`, cursor:'pointer',
               }}>
                 <TBIcon name={t.id} size={22} color={on ? TB_BRAND_TXT : TB_MUTED} />
@@ -832,7 +832,7 @@ function TBCustomTab(p) {
 
         {/* Formula editor */}
         {isFormula && (
-          <div style={{ marginTop:18, padding:16, borderRadius:13, background:'rgba(5,122,85,0.05)', border:`1px solid rgba(5,122,85,0.3)` }}>
+          <div style={{ marginTop:18, padding:16, borderRadius:13, background:'rgba(35,89,255,0.05)', border:`1px solid rgba(35,89,255,0.3)` }}>
             <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
               <i className="fa-solid fa-function" style={{ color:TB_BRAND_TXT, fontSize:13 }} />
               <span style={{ fontFamily:'Inter', fontSize:13, fontWeight:600, color:TB_INK }}>Custom Formula</span>
@@ -883,7 +883,7 @@ function TBCustomTab(p) {
             return (
               <button key={id} onClick={() => p.setSize(id)} style={{
                 display:'flex', flexDirection:'column', alignItems:'center', gap:14, padding:'22px 10px', borderRadius:12,
-                background: on ? 'rgba(5,122,85,0.12)' : 'rgba(255,255,255,0.03)', border:`1px solid ${on ? TB_BRAND : TB_BORDER_SOFT}`, cursor:'pointer',
+                background: on ? 'rgba(35,89,255,0.12)' : 'rgba(255,255,255,0.03)', border:`1px solid ${on ? TB_BRAND : TB_BORDER_SOFT}`, cursor:'pointer',
               }}>
                 <div style={{ display:'flex', gap:3, height:30, alignItems:'center' }}>
                   {id === 'full'
@@ -1008,10 +1008,10 @@ function TBMetricsEditor({ metrics, setMetrics }) {
 /* ------------------------------------------------------------- Chart tab */
 function TBChartTab({ palette, setPalette, stacking, setStacking, numFmt, setNumFmt, chartOpts, setChartOpts }) {
   const PALETTES = {
-    emerald:  ['rgb(94,214,164)', 'rgb(120,200,210)', 'rgb(5,122,85)', 'rgb(173,250,29)'],
-    ocean:    ['rgb(120,160,230)', 'rgb(94,177,239)', 'rgb(0,144,255)', 'rgb(120,200,210)'],
+    emerald:  ['rgb(151,171,238)', 'rgb(162,180,240)', 'rgb(35,89,255)', 'rgb(173,250,29)'],
+    ocean:    ['rgb(120,160,230)', 'rgb(94,177,239)', 'rgb(0,144,255)', 'rgb(162,180,240)'],
     sunset:   ['rgb(245,200,90)', 'rgb(240,140,120)', 'rgb(248,113,113)', 'rgb(200,170,130)'],
-    violet:   ['rgb(180,150,235)', 'rgb(124,58,237)', 'rgb(120,160,230)', 'rgb(94,214,164)'],
+    violet:   ['rgb(180,150,235)', 'rgb(124,58,237)', 'rgb(120,160,230)', 'rgb(151,171,238)'],
   };
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:30 }}>
@@ -1023,7 +1023,7 @@ function TBChartTab({ palette, setPalette, stacking, setStacking, numFmt, setNum
             return (
               <button key={id} onClick={() => setPalette(id)} style={{
                 display:'flex', alignItems:'center', gap:14, padding:'12px 14px', borderRadius:11, cursor:'pointer',
-                background: on ? 'rgba(5,122,85,0.1)' : 'rgba(255,255,255,0.03)', border:`1px solid ${on ? TB_BRAND : TB_BORDER_SOFT}`,
+                background: on ? 'rgba(35,89,255,0.1)' : 'rgba(255,255,255,0.03)', border:`1px solid ${on ? TB_BRAND : TB_BORDER_SOFT}`,
               }}>
                 <div style={{ display:'flex', gap:5 }}>
                   {cols.map((c, i) => <span key={i} style={{ width:22, height:22, borderRadius:6, background:c }} />)}

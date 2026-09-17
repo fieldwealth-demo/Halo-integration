@@ -15,8 +15,8 @@ const CP_BORDER_SOFT = 'rgba(75,85,99,0.5)';
 const CP_INK = 'rgb(249,250,251)';
 const CP_MUTED = 'rgb(163,163,163)';
 const CP_DIM = 'rgb(107,114,128)';
-const CP_GREEN = 'rgb(5,122,85)';
-const CP_GREEN_BRIGHT = 'rgb(52,211,153)';
+const CP_GREEN = 'rgb(35,89,255)';
+const CP_GREEN_BRIGHT = 'rgb(128,152,234)';
 
 function readConnections() {
   try {
@@ -102,7 +102,7 @@ function ConnectionsPanel({ open, onClose }) {
       <style>{`
         @keyframes cpFadeIn { from { opacity:0; } to { opacity:1; } }
         @keyframes cpSlideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-        @keyframes cpPulse { 0%{box-shadow:0 0 0 0 ${CP_GREEN_BRIGHT};} 70%{box-shadow:0 0 0 8px rgba(52,211,153,0);} 100%{box-shadow:0 0 0 0 rgba(52,211,153,0);} }
+        @keyframes cpPulse { 0%{box-shadow:0 0 0 0 ${CP_GREEN_BRIGHT};} 70%{box-shadow:0 0 0 8px rgba(128,152,234,0);} 100%{box-shadow:0 0 0 0 rgba(128,152,234,0);} }
       `}</style>
       <div onClick={onClose} style={{
         position:'fixed', inset:0, background:'rgba(0,0,0,0.5)',
@@ -147,7 +147,7 @@ function ConnectionsPanel({ open, onClose }) {
                 position:'relative',
                 padding:18, marginBottom:12,
                 background:'rgba(0,0,0,0.3)',
-                border: `1px solid ${isOn ? 'rgba(16,185,129,0.35)' : 'rgba(75,85,99,0.4)'}`,
+                border: `1px solid ${isOn ? 'rgba(84,121,240,0.35)' : 'rgba(75,85,99,0.4)'}`,
                 borderRadius:10,
               }}>
                 <div style={{ position:'absolute', top:14, right:14, display:'flex', alignItems:'center', gap:6 }}>
@@ -156,9 +156,9 @@ function ConnectionsPanel({ open, onClose }) {
                     display:'inline-flex', alignItems:'center',
                     height:20, padding:'0 8px', borderRadius:9999,
                     fontFamily:'Inter', fontSize:10.5, fontWeight:600,
-                    background: isOn ? 'rgba(16,185,129,0.18)' : 'rgba(75,85,99,0.3)',
+                    background: isOn ? 'rgba(84,121,240,0.18)' : 'rgba(75,85,99,0.3)',
                     color:    isOn ? CP_GREEN_BRIGHT : 'rgb(209,213,219)',
-                    border: `1px solid ${isOn ? 'rgba(16,185,129,0.35)' : 'rgba(75,85,99,0.5)'}`,
+                    border: `1px solid ${isOn ? 'rgba(84,121,240,0.35)' : 'rgba(75,85,99,0.5)'}`,
                   }}>{isOn ? 'Connected' : 'Disconnected'}</span>
                 </div>
 
@@ -166,7 +166,7 @@ function ConnectionsPanel({ open, onClose }) {
                   width:40, height:40, borderRadius:9, background:intg.color,
                   display:'flex', alignItems:'center', justifyContent:'center',
                   color:'#fff', marginBottom:14,
-                  boxShadow: isOn ? '0 0 0 3px rgba(16,185,129,0.18)' : 'none',
+                  boxShadow: isOn ? '0 0 0 3px rgba(84,121,240,0.18)' : 'none',
                   transition:'box-shadow 240ms',
                 }}>
                   <i className={`fa-solid fa-${intg.icon}`} style={{ fontSize:18 }} />
@@ -180,8 +180,8 @@ function ConnectionsPanel({ open, onClose }) {
                 {isOn ? (
                   <div style={{
                     marginTop:14, padding:'10px 12px',
-                    background:'rgba(16,185,129,0.08)',
-                    border:'1px solid rgba(16,185,129,0.25)',
+                    background:'rgba(84,121,240,0.08)',
+                    border:'1px solid rgba(84,121,240,0.25)',
                     borderRadius:8,
                   }}>
                     <div style={{ display:'flex', justifyContent:'space-between', fontFamily:'Inter', fontSize:11 }}>
@@ -219,11 +219,11 @@ function ConnectionsPanel({ open, onClose }) {
                   ) : (
                     <button onClick={() => !isPending && handleConnect(intg)} disabled={isPending} style={{
                       flex:1, height:34, borderRadius:8, border:'none',
-                      background: isPending ? 'rgba(5,122,85,0.5)' : CP_GREEN,
+                      background: isPending ? 'rgba(35,89,255,0.5)' : CP_GREEN,
                       color:'#fff', fontFamily:'Inter', fontSize:12.5, fontWeight:600,
                       cursor: isPending ? 'wait' : 'pointer',
                       display:'inline-flex', alignItems:'center', justifyContent:'center', gap:8,
-                      boxShadow: isPending ? 'none' : '0 4px 14px -4px rgba(5,122,85,0.6)',
+                      boxShadow: isPending ? 'none' : '0 4px 14px -4px rgba(35,89,255,0.6)',
                     }}>
                       {isPending ? (
                         <React.Fragment>
@@ -248,7 +248,7 @@ function ConnectionsPanel({ open, onClose }) {
           display:'flex', alignItems:'flex-start', gap:10,
         }}>
           <i className="fa-solid fa-shield-halved" style={{ color:CP_GREEN, fontSize:13, marginTop:2 }} />
-          <div>Read-only OAuth scopes by default. Field never stores your credentials and you can revoke access at any time.</div>
+          <div>Read-only OAuth scopes by default. Halo + never stores your credentials and you can revoke access at any time.</div>
         </footer>
       </aside>
     </React.Fragment>

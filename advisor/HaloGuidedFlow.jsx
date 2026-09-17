@@ -10,12 +10,12 @@
 const HGF = {
   ink:'rgb(249,250,251)', muted:'rgb(163,163,163)', dim:'rgb(107,114,128)',
   border:'rgba(75,85,99,0.5)', borderHard:'rgba(75,85,99,0.7)',
-  green:'rgb(5,122,85)', greenBr:'rgb(52,211,153)', greenSoft:'rgba(5,122,85,0.06)',
+  green:'rgb(35,89,255)', greenBr:'rgb(128,152,234)', greenSoft:'rgba(35,89,255,0.06)',
   halo:'rgb(124,58,237)', haloBr:'rgb(192,132,252)',
   card:'rgba(255,255,255,0.03)',
 };
 
-/* Actual client holdings from the Field custodian feed, mapped to asset
+/* Actual client holdings from the Halo + custodian feed, mapped to asset
    classes (Aura lab mode: simulate against real positions, not generic models). */
 const HGF_HOLDINGS = {
   watson: [
@@ -107,7 +107,7 @@ function HgfSeg({ options, value, onChange }) {
         const on = value === o.id;
         return (
           <button key={o.id} onClick={() => onChange(o.id)} style={{ flex:1, display:'flex', alignItems:'center', justifyContent:'center', gap:7, height:36, borderRadius:8, cursor:'pointer', fontFamily:'Inter', fontSize:12.5, fontWeight: on ? 600 : 500,
-            background: on ? 'rgba(5,122,85,0.16)' : HGF.card, border: on ? `1px solid ${HGF.green}` : `1px solid ${HGF.borderHard}`, color: on ? HGF.greenBr : 'rgb(209,213,219)', transition:'all 120ms ease' }}>
+            background: on ? 'rgba(35,89,255,0.16)' : HGF.card, border: on ? `1px solid ${HGF.green}` : `1px solid ${HGF.borderHard}`, color: on ? HGF.greenBr : 'rgb(209,213,219)', transition:'all 120ms ease' }}>
             {o.ic && <i className={`fa-solid ${o.ic}`} style={{ width:12, height:12 }} />}{o.label}
           </button>
         );
@@ -157,7 +157,7 @@ function HaloGuidedFlow() {
   const lines = React.useMemo(() => {
     if (!r) return [];
     return [
-      { type:'thinking', text:`Pulling ${r.client}\u2019s actual holdings from the Field custodian feed…` },
+      { type:'thinking', text:`Pulling ${r.client}\u2019s actual holdings from the Halo + custodian feed…` },
       { type:'thinking', text:'Mapping positions to asset classes for simulation (lab mode — real holdings, not model proxies)…' },
       { type:'thinking', text:`Evaluating "${r.signal}" against the household\u2019s ${r.risk} profile…` },
       { type:'thinking', text:'Bucketing Halo\u2019s shelf (~400 notes, 27-point grid) and loading pre-calculated overlays…' },
@@ -207,7 +207,7 @@ function HaloGuidedFlow() {
     setExplain('busy');
     try {
       const reply = await window.claude.complete({ messages:[{ role:'user', content:
-        `You are Halo Aura's explanation layer inside Field, speaking to a financial advisor (non-advice mode — the advisor decides what to show the client). Client: ${r.client} household, ${r.aum}, ${r.risk} risk. Signal: ${r.signalDetail} A ${overlay}% overlay of "${primary.name}" (${primary.protection}, ${primary.payoff}, ${primary.term}) on the at-risk sleeve moves the Monte Carlo results from expected return ${sim.base.exp.toFixed(1)}%→${sim.over.exp.toFixed(1)}%, std dev ${sim.base.sd.toFixed(1)}%→${sim.over.sd.toFixed(1)}%, Sharpe ${sim.base.sharpe.toFixed(2)}→${sim.over.sharpe.toFixed(2)}, negative-year frequency ${sim.base.neg.toFixed(0)}%→${sim.over.neg.toFixed(0)}%. Explain in plain language (3-4 sentences, no jargon, client-friendly) what changed and why, as text the advisor could read aloud.` }] });
+        `You are Halo Aura's explanation layer inside Halo +, speaking to a financial advisor (non-advice mode — the advisor decides what to show the client). Client: ${r.client} household, ${r.aum}, ${r.risk} risk. Signal: ${r.signalDetail} A ${overlay}% overlay of "${primary.name}" (${primary.protection}, ${primary.payoff}, ${primary.term}) on the at-risk sleeve moves the Monte Carlo results from expected return ${sim.base.exp.toFixed(1)}%→${sim.over.exp.toFixed(1)}%, std dev ${sim.base.sd.toFixed(1)}%→${sim.over.sd.toFixed(1)}%, Sharpe ${sim.base.sharpe.toFixed(2)}→${sim.over.sharpe.toFixed(2)}, negative-year frequency ${sim.base.neg.toFixed(0)}%→${sim.over.neg.toFixed(0)}%. Explain in plain language (3-4 sentences, no jargon, client-friendly) what changed and why, as text the advisor could read aloud.` }] });
       setExplain(reply);
     } catch { setExplain('The overlay trades a slice of the portfolio\u2019s open-ended upside for a defined floor: the buffer absorbs the first leg of any market decline, so bad years get much rarer and shallower, while typical and good years look almost the same. That is why the spread of outcomes narrows and risk-adjusted return improves even though the headline expected return barely moves.'); }
   };
@@ -219,8 +219,8 @@ function HaloGuidedFlow() {
         @keyframes hgf-blink { 0%,49% { opacity:1; } 50%,100% { opacity:0; } }
         @keyframes hgf-rise { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
         @keyframes hgf-pulse { 0%,100% { box-shadow:0 0 0 0 rgba(124,58,237,0.5); } 50% { box-shadow:0 0 0 8px transparent; } }
-        .hgf-range { -webkit-appearance:none; appearance:none; width:100%; height:4px; border-radius:9999px; background:linear-gradient(to right, rgb(5,122,85) 0%, rgb(5,122,85) var(--fill), rgba(75,85,99,0.6) var(--fill), rgba(75,85,99,0.6) 100%); outline:none; }
-        .hgf-range::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; border-radius:9999px; background:rgb(52,211,153); border:2px solid rgb(5,122,85); cursor:grab; }
+        .hgf-range { -webkit-appearance:none; appearance:none; width:100%; height:4px; border-radius:9999px; background:linear-gradient(to right, rgb(35,89,255) 0%, rgb(35,89,255) var(--fill), rgba(75,85,99,0.6) var(--fill), rgba(75,85,99,0.6) 100%); outline:none; }
+        .hgf-range::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; border-radius:9999px; background:rgb(128,152,234); border:2px solid rgb(35,89,255); cursor:grab; }
       `}</style>
 
       <div style={{ display:'flex', alignItems:'center', gap:14, padding:'18px 28px', borderBottom:`1px solid ${HGF.border}` }}>
@@ -239,7 +239,7 @@ function HaloGuidedFlow() {
               <span style={{ fontFamily:'Inter', fontWeight:800, fontSize:11, color:'#fff' }}>HALO</span>
             </div>
             <div style={{ flex:1, minWidth:0 }}>
-              <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:14, color:HGF.ink }}>Field Intelligence · Halo Guided Analysis</div>
+              <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:14, color:HGF.ink }}>Halo + Intelligence · Halo Guided Analysis</div>
               <div style={{ fontFamily:'Inter', fontSize:11.5, color:HGF.muted }}>Simulating on {r.client}’s actual holdings</div>
             </div>
             <div style={{ fontFamily:'Inter', fontSize:11, fontWeight:600, padding:'5px 10px', borderRadius:6, background:'rgba(234,179,8,0.14)', color:'rgb(245,200,90)', border:'1px solid rgba(245,200,90,0.4)', display:'inline-flex', alignItems:'center', gap:7 }}>
@@ -280,7 +280,7 @@ function HaloGuidedFlow() {
 
             {stage >= 1 && (
               <div style={{ marginBottom:28, animation:'hgf-rise 500ms ease-out' }}>
-                <div style={sectionStyle}>Actual holdings · Field custodian feed</div>
+                <div style={sectionStyle}>Actual holdings · Halo + custodian feed</div>
                 <div style={{ border:`1px solid ${HGF.border}`, borderRadius:12, overflow:'hidden' }}>
                   <div style={{ display:'grid', gridTemplateColumns:'0.7fr 1.6fr 1.3fr 0.7fr 0.6fr', background:HGF.card, fontFamily:'Inter', fontSize:11, fontWeight:600, letterSpacing:'0.04em', color:HGF.muted, textTransform:'uppercase' }}>
                     <div style={{ padding:'10px 16px' }}>Ticker</div><div style={{ padding:'10px 12px' }}>Position</div><div style={{ padding:'10px 12px' }}>Mapped asset class</div><div style={{ padding:'10px 12px', textAlign:'right' }}>Value</div><div style={{ padding:'10px 16px', textAlign:'right' }}>Weight</div>
@@ -327,7 +327,7 @@ function HaloGuidedFlow() {
                     const isPrimary = primary.id === n.id && on;
                     return (
                       <div key={n.id} onClick={() => setSelected(s => ({ ...s, [n.id]:!s[n.id] }))} style={{ display:'flex', alignItems:'center', gap:16, padding:'14px 18px', borderRadius:12, cursor:'pointer', transition:'all 140ms ease',
-                        background: on ? 'rgba(5,122,85,0.08)' : HGF.card, border: on ? `1px solid rgba(5,122,85,0.55)` : `1px solid ${HGF.border}` }}>
+                        background: on ? 'rgba(35,89,255,0.08)' : HGF.card, border: on ? `1px solid rgba(35,89,255,0.55)` : `1px solid ${HGF.border}` }}>
                         <div style={{ width:20, height:20, borderRadius:6, flexShrink:0, display:'flex', alignItems:'center', justifyContent:'center', background: on ? HGF.green : 'transparent', border: on ? `1px solid ${HGF.greenBr}` : `1px solid ${HGF.borderHard}` }}>
                           {on && <i className="fa-solid fa-check" style={{ width:11, height:11, color:'#fff' }} />}
                         </div>
@@ -339,7 +339,7 @@ function HaloGuidedFlow() {
                           <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:13.5, color:HGF.ink, display:'flex', alignItems:'center', gap:8 }}>
                             {n.name}
                             {i === 0 && <span style={{ fontFamily:'Inter', fontSize:9.5, fontWeight:700, letterSpacing:'0.06em', padding:'2px 7px', borderRadius:5, background:'rgba(124,58,237,0.22)', color:HGF.haloBr, border:'1px solid rgba(124,58,237,0.45)' }}>TOP MATCH</span>}
-                            {isPrimary && <span style={{ fontFamily:'Inter', fontSize:9.5, fontWeight:700, letterSpacing:'0.06em', padding:'2px 7px', borderRadius:5, background:'rgba(5,122,85,0.2)', color:HGF.greenBr, border:'1px solid rgba(5,122,85,0.5)' }}>SIMULATING</span>}
+                            {isPrimary && <span style={{ fontFamily:'Inter', fontSize:9.5, fontWeight:700, letterSpacing:'0.06em', padding:'2px 7px', borderRadius:5, background:'rgba(35,89,255,0.2)', color:HGF.greenBr, border:'1px solid rgba(35,89,255,0.5)' }}>SIMULATING</span>}
                           </div>
                           <div style={{ fontFamily:'Inter', fontSize:11.5, color:HGF.muted, marginTop:3 }}>{n.und} · {n.protection} · {n.payoff} · {n.issuer}</div>
                         </div>
@@ -391,7 +391,7 @@ function HaloGuidedFlow() {
                     {HGF_BASE_DIST.map((bv, i) => (
                       <div key={i} style={{ flex:1, display:'flex', alignItems:'flex-end', gap:2, height:'100%' }}>
                         <div style={{ flex:1, height:`${bv/maxBar*100}%`, background:'rgba(107,114,128,0.45)', borderRadius:'3px 3px 0 0', transition:'height 300ms ease' }}></div>
-                        <div style={{ flex:1, height:`${overDist[i]/maxBar*100}%`, background: i < 6 ? 'rgba(52,211,153,0.55)' : HGF.greenBr, borderRadius:'3px 3px 0 0', transition:'height 300ms ease' }}></div>
+                        <div style={{ flex:1, height:`${overDist[i]/maxBar*100}%`, background: i < 6 ? 'rgba(128,152,234,0.55)' : HGF.greenBr, borderRadius:'3px 3px 0 0', transition:'height 300ms ease' }}></div>
                       </div>
                     ))}
                   </div>
@@ -409,7 +409,7 @@ function HaloGuidedFlow() {
                     </div>
                   )}
                   {explain && explain !== 'busy' && (
-                    <div style={{ padding:'14px 16px', background:'rgba(5,122,85,0.07)', border:'1px solid rgba(5,122,85,0.35)', borderRadius:10, animation:'hgf-rise 300ms ease-out' }}>
+                    <div style={{ padding:'14px 16px', background:'rgba(35,89,255,0.07)', border:'1px solid rgba(35,89,255,0.35)', borderRadius:10, animation:'hgf-rise 300ms ease-out' }}>
                       <div style={{ fontFamily:'Inter', fontSize:10.5, fontWeight:600, letterSpacing:'0.08em', textTransform:'uppercase', color:HGF.greenBr, marginBottom:8, display:'flex', alignItems:'center', gap:7 }}><i className="fa-solid fa-wand-magic-sparkles" style={{ width:11, height:11 }} /> Plain-language summary — reads aloud to the client</div>
                       <div style={{ fontFamily:'Inter', fontSize:13.5, color:'rgb(229,231,235)', lineHeight:1.65 }}>{explain}</div>
                     </div>
@@ -419,15 +419,15 @@ function HaloGuidedFlow() {
             )}
 
             {stage >= 4 && (
-              <div style={{ padding:'22px 24px', background:'linear-gradient(135deg, rgba(5,122,85,0.14) 0%, rgba(5,122,85,0.04) 100%)', border:'1px solid rgba(5,122,85,0.45)', borderRadius:14, display:'flex', alignItems:'center', gap:18, animation:'hgf-rise 500ms ease-out 200ms both' }}>
-                <div style={{ width:48, height:48, borderRadius:12, flexShrink:0, background:'rgba(5,122,85,0.25)', border:'1px solid rgba(5,122,85,0.5)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+              <div style={{ padding:'22px 24px', background:'linear-gradient(135deg, rgba(35,89,255,0.14) 0%, rgba(35,89,255,0.04) 100%)', border:'1px solid rgba(35,89,255,0.45)', borderRadius:14, display:'flex', alignItems:'center', gap:18, animation:'hgf-rise 500ms ease-out 200ms both' }}>
+                <div style={{ width:48, height:48, borderRadius:12, flexShrink:0, background:'rgba(35,89,255,0.25)', border:'1px solid rgba(35,89,255,0.5)', display:'flex', alignItems:'center', justifyContent:'center' }}>
                   <i className="fa-solid fa-file-lines" style={{ width:20, height:20, color:HGF.greenBr }} />
                 </div>
                 <div style={{ flex:1, minWidth:0 }}>
                   <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:15, color:HGF.ink, marginBottom:4 }}>{selIds.length > 0 ? `Client proposal — ${selIds.length} note${selIds.length > 1 ? 's' : ''}, ${overlay}% overlay` : 'Select at least one note to build the proposal'}</div>
                   <div style={{ fontFamily:'Inter', fontSize:12.5, color:HGF.muted }}>{selIds.length > 0 ? `${r.client} sees only your selection: ${selIds.map(n => n.name).join(' · ')}` : 'The client only ever sees the notes you check above.'}</div>
                 </div>
-                <button disabled={selIds.length === 0} onClick={() => selIds.length && setShowDeck(true)} style={{ fontFamily:'Inter', fontWeight:600, fontSize:13, padding:'12px 20px', borderRadius:8, cursor: selIds.length ? 'pointer' : 'default', background: selIds.length ? HGF.green : 'rgba(75,85,99,0.4)', border: selIds.length ? `1px solid ${HGF.greenBr}` : `1px solid ${HGF.borderHard}`, color:'#fff', display:'inline-flex', alignItems:'center', gap:8, opacity: selIds.length ? 1 : 0.6, boxShadow: selIds.length ? '0 4px 12px rgba(5,122,85,0.4)' : 'none' }}>
+                <button disabled={selIds.length === 0} onClick={() => selIds.length && setShowDeck(true)} style={{ fontFamily:'Inter', fontWeight:600, fontSize:13, padding:'12px 20px', borderRadius:8, cursor: selIds.length ? 'pointer' : 'default', background: selIds.length ? HGF.green : 'rgba(75,85,99,0.4)', border: selIds.length ? `1px solid ${HGF.greenBr}` : `1px solid ${HGF.borderHard}`, color:'#fff', display:'inline-flex', alignItems:'center', gap:8, opacity: selIds.length ? 1 : 0.6, boxShadow: selIds.length ? '0 4px 12px rgba(35,89,255,0.4)' : 'none' }}>
                   Build client proposal <i className="fa-solid fa-arrow-right" style={{ width:11, height:11 }} />
                 </button>
               </div>

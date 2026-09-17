@@ -41,7 +41,7 @@ const TILE_FOOT = {
 };
 const SEE_MORE = {
   display:'inline-flex', alignItems:'center', gap:4,
-  color:'rgb(5,122,85)', textDecoration:'none', fontSize:12, fontWeight:500, cursor:'pointer',
+  color:'rgb(35,89,255)', textDecoration:'none', fontSize:12, fontWeight:500, cursor:'pointer',
 };
 const OVERFLOW = {
   background:'transparent', border:'none', color:'rgb(163,163,163)', cursor:'pointer',
@@ -281,7 +281,7 @@ function TileInfo({ title }) {
         style={{
           background:'transparent', border:'none', cursor:'pointer', padding:0,
           width:18, height:18, borderRadius:9, display:'inline-flex', alignItems:'center', justifyContent:'center',
-          color: open ? 'rgb(94,214,164)' : 'rgb(120,124,130)', transition:'color 120ms ease',
+          color: open ? 'rgb(151,171,238)' : 'rgb(120,124,130)', transition:'color 120ms ease',
         }}
       >
         <i className="fa-solid fa-circle-info" style={{ width:14, height:14 }} />
@@ -298,7 +298,7 @@ function TileInfo({ title }) {
           }} />
           <div style={{ fontFamily:'Inter', fontSize:13, fontWeight:600, color:'rgb(249,250,251)', paddingBottom:8 }}>{title}</div>
           <Row icon="fa-database" label="Data source" text={info.source} color="rgb(125,178,255)" />
-          {info.method && <Row icon="fa-function" label="How it's calculated" text={info.method} color="rgb(94,214,164)" />}
+          {info.method && <Row icon="fa-function" label="How it's calculated" text={info.method} color="rgb(151,171,238)" />}
           {info.cadence && <Row icon="fa-clock-3" label="Refresh cadence" text={info.cadence} color="rgb(196,181,253)" />}
         </div>
       ), document.body)}
@@ -346,13 +346,13 @@ function UpcomingMeetings({ onMore }) {
           <div key={i} style={{ display:'flex', alignItems:'center', gap:12, padding:'10px 0', borderTop: i? '1px solid rgba(75,85,99,0.45)':'none' }}>
             <div style={{ width:36, textAlign:'center' }}>
               <div style={{ fontFamily:'Inter', fontSize:10, color:'rgb(163,163,163)', letterSpacing:'0.08em' }}>{r.m}</div>
-              <div style={{ fontFamily:'Inter', fontWeight:700, fontSize:18, color:'rgb(5,122,85)', lineHeight:1 }}>{r.d}</div>
+              <div style={{ fontFamily:'Inter', fontWeight:700, fontSize:18, color:'rgb(249,250,251)', lineHeight:1 }}>{r.d}</div>
             </div>
             <div style={{ flex:1, minWidth:0 }}>
               <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                 <span style={{ fontFamily:'Inter', fontWeight:500, fontSize:13, color:'rgb(249,250,251)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{r.t}</span>
                 {r.badge && <span style={{
-                  background:'rgb(5,122,85)', color:'#fff', fontFamily:'Inter', fontWeight:700, fontSize:10,
+                  background:'rgb(35,89,255)', color:'#fff', fontFamily:'Inter', fontWeight:700, fontSize:10,
                   padding:'2px 7px', borderRadius:9999, letterSpacing:'0.04em',
                 }}>{r.badge}</span>}
               </div>
@@ -375,14 +375,14 @@ function Notifications({ onMore }) {
   ];
   const TONE = {
     info:    { bg:'rgba(59,130,246,0.10)', ring:'rgba(59,130,246,0.35)', fg:'rgb(147,197,253)' },
-    success: { bg:'rgba(5,122,85,0.12)',   ring:'rgba(5,122,85,0.45)',   fg:'rgb(16,185,129)'  },
+    success: { bg:'rgba(35,89,255,0.12)',   ring:'rgba(35,89,255,0.45)',   fg:'rgb(84,121,240)'  },
     danger:  { bg:'rgba(220,38,38,0.10)',  ring:'rgba(220,38,38,0.45)',  fg:'rgb(248,113,113)' },
     warning: { bg:'rgba(234,179,8,0.10)',  ring:'rgba(234,179,8,0.40)',  fg:'rgb(234,179,8)'   },
     mute:    { bg:'rgba(255,255,255,0.03)', ring:'rgba(75,85,99,0.6)',   fg:'rgb(163,163,163)' },
   };
   const TAG = {
     info:    { bg:'rgb(37,99,235)',  fg:'#fff' },
-    success: { bg:'rgb(5,122,85)',   fg:'#fff' },
+    success: { bg:'rgb(35,89,255)',   fg:'#fff' },
     danger:  { bg:'rgb(220,38,38)',  fg:'#fff' },
     warning: { bg:'rgba(234,179,8,0.2)',  fg:'rgb(253,224,71)', border:'1px solid rgba(234,179,8,0.5)' },
     mute:    { bg:'rgba(17,24,39,0.8)', fg:'rgb(229,231,235)', border:'1px solid rgb(75,85,99)' },
@@ -405,7 +405,7 @@ function Notifications({ onMore }) {
                 cursor: isClickable ? 'pointer' : 'default',
                 transition:'transform 150ms ease, border-color 150ms ease',
               }}
-              onMouseEnter={isClickable ? (e) => { e.currentTarget.style.borderColor = 'rgb(16,185,129)'; e.currentTarget.style.transform = 'translateY(-1px)'; } : undefined}
+              onMouseEnter={isClickable ? (e) => { e.currentTarget.style.borderColor = 'rgb(84,121,240)'; e.currentTarget.style.transform = 'translateY(-1px)'; } : undefined}
               onMouseLeave={isClickable ? (e) => { e.currentTarget.style.borderColor = t.ring; e.currentTarget.style.transform = 'translateY(0)'; } : undefined}
             >
               <div style={{
@@ -433,8 +433,8 @@ function Notifications({ onMore }) {
 /* 3. Opportunities -------------------------------------------------------- */
 function Opportunities({ onMore }) {
   const rows = [
-    { icon:'arrows-rotate', color:'rgb(16,185,129)',iconBg:'rgba(5,122,85,0.18)', title:'Portfolio Rebalance', subtitle:'David Young', clients:1,  val:'$2.4M', action:'rebalance' },
-    { icon:'lightbulb',color:'rgb(110,231,183)', iconBg:'rgba(5,122,85,0.18)', title:'New Insights', subtitle:'Halo · BlackRock · PIMCO · Blackstone', clients:14, val:'$1.6M', action:'insights' },
+    { icon:'arrows-rotate', color:'rgb(84,121,240)',iconBg:'rgba(35,89,255,0.18)', title:'Portfolio Rebalance', subtitle:'David Young', clients:1,  val:'$2.4M', action:'rebalance' },
+    { icon:'lightbulb',color:'rgb(168,185,241)', iconBg:'rgba(35,89,255,0.18)', title:'New Insights', subtitle:'Halo · BlackRock · PIMCO · Blackstone', clients:14, val:'$1.6M', action:'insights' },
     { icon:'target',      color:'rgb(220,38,38)',  iconBg:'rgba(220,38,38,0.12)',  title:'Tax-Managed Public Equity', clients:14, val:'$18.4M' },
     { icon:'briefcase',   color:'rgb(59,130,246)', iconBg:'rgba(59,130,246,0.12)', title:'State Portfolio',           clients:9,  val:'$14.2M' },
     { icon:'droplet',     color:'rgb(234,179,8)',  iconBg:'rgba(234,179,8,0.12)',  title:'Strategic Liquidation Program', clients:7, val:'$11.6M' },
@@ -462,7 +462,7 @@ function Opportunities({ onMore }) {
                 transition:'background 150ms ease',
                 position:'relative',
               }}
-              onMouseEnter={isClickable ? (e) => e.currentTarget.style.background='rgba(5,122,85,0.08)' : undefined}
+              onMouseEnter={isClickable ? (e) => e.currentTarget.style.background='rgba(35,89,255,0.08)' : undefined}
               onMouseLeave={isClickable ? (e) => e.currentTarget.style.background='transparent' : undefined}
             >
               <div style={{ width:32, height:32, borderRadius:9999, background:r.iconBg, display:'flex', alignItems:'center', justifyContent:'center' }}>
@@ -471,7 +471,7 @@ function Opportunities({ onMore }) {
               <div style={{ minWidth:0 }}>
                 <div style={{ fontFamily:'Inter', fontSize:13, fontWeight:500, display:'flex', alignItems:'center', gap:8 }}>
                   {r.title}
-                  {isClickable && <i className="fa-solid fa-sparkles" style={{ width:10, height:10, color:'rgb(16,185,129)' }} />}
+                  {isClickable && <i className="fa-solid fa-sparkles" style={{ width:10, height:10, color:'rgb(84,121,240)' }} />}
                 </div>
                 {r.subtitle && (
                   <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)', marginTop:2 }}>{r.subtitle}</div>
@@ -491,92 +491,92 @@ const TOP_CLIENTS_BY_PERIOD = {
   'Today': {
     suffix: 'TODAY',
     cards: [
-      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'0.42%' , aum:'$2M',    accent:'rgb(5,122,85)' },
-      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'0.61%' , aum:'$1.8M',  accent:'rgb(5,122,85)' },
+      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'0.42%' , aum:'$2M',    accent:'rgb(249,250,251)' },
+      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'0.61%' , aum:'$1.8M',  accent:'rgb(249,250,251)' },
       { name:'Zaire Herwitz',  review:'6 month ago',  dir:'down', pct:'0.18%' , aum:'$1.4M',  accent:'rgb(248,113,113)' },
-      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'0.09%' , aum:'$1.3M',  accent:'rgb(5,122,85)' },
+      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'0.09%' , aum:'$1.3M',  accent:'rgb(249,250,251)' },
       { name:'Mira Aminoff',   review:'4 month ago',  dir:'down', pct:'0.34%' , aum:null,     accent:'rgb(248,113,113)' },
-      { name:'Chance Curtis',  review:'5 month ago',  dir:'up',   pct:'0.22%' , aum:'$1M',    accent:'rgb(5,122,85)' },
-      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'0.15%' , aum:'$1.8M',  accent:'rgb(5,122,85)' },
-      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'0.51%' , aum:'$2.4M',  accent:'rgb(5,122,85)' },
+      { name:'Chance Curtis',  review:'5 month ago',  dir:'up',   pct:'0.22%' , aum:'$1M',    accent:'rgb(249,250,251)' },
+      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'0.15%' , aum:'$1.8M',  accent:'rgb(249,250,251)' },
+      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'0.51%' , aum:'$2.4M',  accent:'rgb(249,250,251)' },
     ],
   },
   'This week': {
     suffix: 'WK',
     cards: [
-      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'1.84%' , aum:'$2M',    accent:'rgb(5,122,85)' },
-      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'2.41%' , aum:'$1.8M',  accent:'rgb(5,122,85)' },
-      { name:'Zaire Herwitz',  review:'6 month ago',  dir:'up',   pct:'0.62%' , aum:'$1.4M',  accent:'rgb(5,122,85)' },
-      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'2.10%' , aum:'$2.4M',  accent:'rgb(5,122,85)' },
-      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'0.31%' , aum:'$1.3M',  accent:'rgb(5,122,85)' },
+      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'1.84%' , aum:'$2M',    accent:'rgb(249,250,251)' },
+      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'2.41%' , aum:'$1.8M',  accent:'rgb(249,250,251)' },
+      { name:'Zaire Herwitz',  review:'6 month ago',  dir:'up',   pct:'0.62%' , aum:'$1.4M',  accent:'rgb(249,250,251)' },
+      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'2.10%' , aum:'$2.4M',  accent:'rgb(249,250,251)' },
+      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'0.31%' , aum:'$1.3M',  accent:'rgb(249,250,251)' },
       { name:'Mira Aminoff',   review:'4 month ago',  dir:'down', pct:'0.84%' , aum:null,     accent:'rgb(248,113,113)' },
-      { name:'Chance Curtis',  review:'5 month ago',  dir:'up',   pct:'0.74%' , aum:'$1M',    accent:'rgb(5,122,85)' },
-      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'0.52%' , aum:'$1.8M',  accent:'rgb(5,122,85)' },
+      { name:'Chance Curtis',  review:'5 month ago',  dir:'up',   pct:'0.74%' , aum:'$1M',    accent:'rgb(249,250,251)' },
+      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'0.52%' , aum:'$1.8M',  accent:'rgb(249,250,251)' },
     ],
   },
   'This month': {
     suffix: 'MTD',
     cards: [
-      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'5.82%' , aum:'$1.8M',  accent:'rgb(5,122,85)' },
-      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'4.61%' , aum:'$2.4M',  accent:'rgb(5,122,85)' },
-      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'3.94%' , aum:'$2M',    accent:'rgb(5,122,85)' },
-      { name:'Edwards Family', review:'2 month ago',  dir:'up',   pct:'3.18%' , aum:'$1.6M',  accent:'rgb(5,122,85)' },
-      { name:'Zaire Herwitz',  review:'6 month ago',  dir:'up',   pct:'2.42%' , aum:'$1.4M',  accent:'rgb(5,122,85)' },
-      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'1.21%' , aum:'$1.3M',  accent:'rgb(5,122,85)' },
-      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'1.84%' , aum:'$1.8M',  accent:'rgb(5,122,85)' },
+      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'5.82%' , aum:'$1.8M',  accent:'rgb(249,250,251)' },
+      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'4.61%' , aum:'$2.4M',  accent:'rgb(249,250,251)' },
+      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'3.94%' , aum:'$2M',    accent:'rgb(249,250,251)' },
+      { name:'Edwards Family', review:'2 month ago',  dir:'up',   pct:'3.18%' , aum:'$1.6M',  accent:'rgb(249,250,251)' },
+      { name:'Zaire Herwitz',  review:'6 month ago',  dir:'up',   pct:'2.42%' , aum:'$1.4M',  accent:'rgb(249,250,251)' },
+      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'1.21%' , aum:'$1.3M',  accent:'rgb(249,250,251)' },
+      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'1.84%' , aum:'$1.8M',  accent:'rgb(249,250,251)' },
       { name:'Mira Aminoff',   review:'4 month ago',  dir:'down', pct:'1.12%' , aum:null,     accent:'rgb(248,113,113)' },
     ],
   },
   'This quarter': {
     suffix: 'QTD',
     cards: [
-      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'9.41%' , aum:'$1.8M',  accent:'rgb(5,122,85)' },
-      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'7.82%' , aum:'$2.4M',  accent:'rgb(5,122,85)' },
-      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'6.34%' , aum:'$2M',    accent:'rgb(5,122,85)' },
-      { name:'Edwards Family', review:'2 month ago',  dir:'up',   pct:'5.91%' , aum:'$1.6M',  accent:'rgb(5,122,85)' },
-      { name:'Zaire Herwitz',  review:'6 month ago',  dir:'up',   pct:'4.22%' , aum:'$1.4M',  accent:'rgb(5,122,85)' },
-      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'2.18%' , aum:'$1.3M',  accent:'rgb(5,122,85)' },
-      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'3.42%' , aum:'$1.8M',  accent:'rgb(5,122,85)' },
+      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'9.41%' , aum:'$1.8M',  accent:'rgb(249,250,251)' },
+      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'7.82%' , aum:'$2.4M',  accent:'rgb(249,250,251)' },
+      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'6.34%' , aum:'$2M',    accent:'rgb(249,250,251)' },
+      { name:'Edwards Family', review:'2 month ago',  dir:'up',   pct:'5.91%' , aum:'$1.6M',  accent:'rgb(249,250,251)' },
+      { name:'Zaire Herwitz',  review:'6 month ago',  dir:'up',   pct:'4.22%' , aum:'$1.4M',  accent:'rgb(249,250,251)' },
+      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'2.18%' , aum:'$1.3M',  accent:'rgb(249,250,251)' },
+      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'3.42%' , aum:'$1.8M',  accent:'rgb(249,250,251)' },
       { name:'Mira Aminoff',   review:'4 month ago',  dir:'down', pct:'0.84%' , aum:null,     accent:'rgb(248,113,113)' },
     ],
   },
   'Year to date': {
     suffix: 'YTD',
     cards: [
-      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'10.68%', aum:'$2M',    accent:'rgb(5,122,85)' },
-      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'23.68%', aum:'$1.8M',  accent:'rgb(5,122,85)' },
-      { name:'Zaire Herwitz',  review:'6 month ago',  dir:'up',   pct:'7.68%',  aum:'$1.4M',  accent:'rgb(5,122,85)' },
-      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'2.68%',  aum:'$1.3M',  accent:'rgb(5,122,85)' },
+      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'10.68%', aum:'$2M',    accent:'rgb(249,250,251)' },
+      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'23.68%', aum:'$1.8M',  accent:'rgb(249,250,251)' },
+      { name:'Zaire Herwitz',  review:'6 month ago',  dir:'up',   pct:'7.68%',  aum:'$1.4M',  accent:'rgb(249,250,251)' },
+      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'2.68%',  aum:'$1.3M',  accent:'rgb(249,250,251)' },
       { name:'Mira Aminoff',   review:'4 month ago',  dir:'down', pct:'0.68%',  aum:null,     accent:'rgb(248,113,113)' },
-      { name:'Chance Curtis',  review:'5 month ago',  dir:'up',   pct:'7.28%',  aum:'$1M',    accent:'rgb(5,122,85)' },
-      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'4.68%',  aum:'$1.8M',  accent:'rgb(5,122,85)' },
-      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'9.68%',  aum:'$2.4M',  accent:'rgb(5,122,85)' },
+      { name:'Chance Curtis',  review:'5 month ago',  dir:'up',   pct:'7.28%',  aum:'$1M',    accent:'rgb(249,250,251)' },
+      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'4.68%',  aum:'$1.8M',  accent:'rgb(249,250,251)' },
+      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'9.68%',  aum:'$2.4M',  accent:'rgb(249,250,251)' },
     ],
   },
   'Last 12 months': {
     suffix: '12mo',
     cards: [
-      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'34.21%', aum:'$1.8M',  accent:'rgb(5,122,85)' },
-      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'21.84%', aum:'$2M',    accent:'rgb(5,122,85)' },
-      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'18.42%', aum:'$2.4M',  accent:'rgb(5,122,85)' },
-      { name:'Edwards Family', review:'2 month ago',  dir:'up',   pct:'15.31%', aum:'$1.6M',  accent:'rgb(5,122,85)' },
-      { name:'Zaire Herwitz',  review:'6 month ago',  dir:'up',   pct:'12.45%', aum:'$1.4M',  accent:'rgb(5,122,85)' },
-      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'9.62%',  aum:'$1.8M',  accent:'rgb(5,122,85)' },
-      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'6.18%',  aum:'$1.3M',  accent:'rgb(5,122,85)' },
+      { name:'John Smith',     review:'Year ago',     dir:'up',   pct:'34.21%', aum:'$1.8M',  accent:'rgb(249,250,251)' },
+      { name:'Maria Workman',  review:'3 month ago',  dir:'up',   pct:'21.84%', aum:'$2M',    accent:'rgb(249,250,251)' },
+      { name:'David Young',    review:'1 month ago',  dir:'up',   pct:'18.42%', aum:'$2.4M',  accent:'rgb(249,250,251)' },
+      { name:'Edwards Family', review:'2 month ago',  dir:'up',   pct:'15.31%', aum:'$1.6M',  accent:'rgb(249,250,251)' },
+      { name:'Zaire Herwitz',  review:'6 month ago',  dir:'up',   pct:'12.45%', aum:'$1.4M',  accent:'rgb(249,250,251)' },
+      { name:'Alfonso Mango',  review:'2 month ago',  dir:'up',   pct:'9.62%',  aum:'$1.8M',  accent:'rgb(249,250,251)' },
+      { name:'Ryan Korsgaard', review:'7 month ago',  dir:'up',   pct:'6.18%',  aum:'$1.3M',  accent:'rgb(249,250,251)' },
       { name:'Mira Aminoff',   review:'4 month ago',  dir:'down', pct:'2.41%',  aum:null,     accent:'rgb(248,113,113)' },
     ],
   },
   'All time': {
     suffix: 'TOTAL',
     cards: [
-      { name:'Smith Trust',    review:'Client since 2014', dir:'up', pct:'214.6%', aum:'$28.9M', accent:'rgb(5,122,85)' },
-      { name:'Hawkins Family', review:'Client since 2016', dir:'up', pct:'182.4%', aum:'$29.4M', accent:'rgb(5,122,85)' },
-      { name:'Watson Holdings',review:'Client since 2017', dir:'up', pct:'164.3%', aum:'$27.2M', accent:'rgb(5,122,85)' },
-      { name:'Maria Workman',  review:'Client since 2018', dir:'up', pct:'142.8%', aum:'$2M',    accent:'rgb(5,122,85)' },
-      { name:'John Smith',     review:'Client since 2019', dir:'up', pct:'118.4%', aum:'$1.8M',  accent:'rgb(5,122,85)' },
-      { name:'Jones Family',   review:'Client since 2020', dir:'up', pct:'96.2%',  aum:'$18.1M', accent:'rgb(5,122,85)' },
-      { name:'Lang Trust',     review:'Client since 2021', dir:'up', pct:'82.4%',  aum:'$16.4M', accent:'rgb(5,122,85)' },
-      { name:'David Young',    review:'Client since 2022', dir:'up', pct:'68.1%',  aum:'$2.4M',  accent:'rgb(5,122,85)' },
+      { name:'Smith Trust',    review:'Client since 2014', dir:'up', pct:'214.6%', aum:'$28.9M', accent:'rgb(249,250,251)' },
+      { name:'Hawkins Family', review:'Client since 2016', dir:'up', pct:'182.4%', aum:'$29.4M', accent:'rgb(249,250,251)' },
+      { name:'Watson Holdings',review:'Client since 2017', dir:'up', pct:'164.3%', aum:'$27.2M', accent:'rgb(249,250,251)' },
+      { name:'Maria Workman',  review:'Client since 2018', dir:'up', pct:'142.8%', aum:'$2M',    accent:'rgb(249,250,251)' },
+      { name:'John Smith',     review:'Client since 2019', dir:'up', pct:'118.4%', aum:'$1.8M',  accent:'rgb(249,250,251)' },
+      { name:'Jones Family',   review:'Client since 2020', dir:'up', pct:'96.2%',  aum:'$18.1M', accent:'rgb(249,250,251)' },
+      { name:'Lang Trust',     review:'Client since 2021', dir:'up', pct:'82.4%',  aum:'$16.4M', accent:'rgb(249,250,251)' },
+      { name:'David Young',    review:'Client since 2022', dir:'up', pct:'68.1%',  aum:'$2.4M',  accent:'rgb(249,250,251)' },
     ],
   },
 };
@@ -695,10 +695,10 @@ function BillingSummary({ onMore }) {
       area: {
         fillColor: {
           linearGradient: { x1:0, y1:0, x2:0, y2:1 },
-          stops: [[0, 'rgba(5,122,85,0.35)'], [1, 'rgba(5,122,85,0)']],
+          stops: [[0, 'rgba(35,89,255,0.35)'], [1, 'rgba(35,89,255,0)']],
         },
-        lineWidth: 2, color: 'rgb(5,122,85)',
-        marker: { enabled: true, radius: 3.5, fillColor: 'rgb(10,10,10)', lineColor:'rgb(5,122,85)', lineWidth: 2 },
+        lineWidth: 2, color: 'rgb(35,89,255)',
+        marker: { enabled: true, radius: 3.5, fillColor: 'rgb(10,10,10)', lineColor:'rgb(35,89,255)', lineWidth: 2 },
       },
     },
     series: [{ name:'Fees', data: cfg.chart.data }],
@@ -711,7 +711,7 @@ function BillingSummary({ onMore }) {
           <div key={i} style={{ border:'1px solid rgb(75,85,99)', borderRadius:10, padding:'14px 14px', background:'rgba(255,255,255,0.02)' }}>
             <div style={{ fontFamily:'Inter', fontSize:12, color:'rgb(163,163,163)', marginBottom:6 }}>{s.label}</div>
             <div style={{ fontFamily:'Inter', fontWeight:700, fontSize:20, letterSpacing:'-0.01em', color:'rgb(249,250,251)', marginBottom:8, fontVariantNumeric:'tabular-nums' }}>{s.value}</div>
-            <div style={{ fontFamily:'Inter', fontSize:12, color:'rgb(5,122,85)', display:'flex', alignItems:'center', gap:6 }}>
+            <div style={{ fontFamily:'Inter', fontSize:12, color:'rgb(249,250,251)', display:'flex', alignItems:'center', gap:6 }}>
               <i className="fa-solid fa-arrow-up" style={{ fontSize:10 }} />
               <span>{s.delta}</span>
             </div>
@@ -765,12 +765,12 @@ function ContentHub({ onMore }) {
 /* 7. AUM Asset Allocation (donut OR bar chart) -------------------------- */
 function AumAllocation({ onMore, variant = 'donut' }) {
   const slices = [
-    { v:0.28, arc:'rgba( 94, 214, 164, 0.5)', dot:'rgb( 94, 214, 164)', label:'Equities' },
+    { v:0.28, arc:'rgba(151,171,238,0.5)', dot:'rgb(151,171,238)', label:'Equities' },
     { v:0.18, arc:'rgba(120, 160, 230, 0.5)', dot:'rgb(120, 160, 230)', label:'Fixed Income' },
     { v:0.14, arc:'rgba(180, 150, 235, 0.5)', dot:'rgb(180, 150, 235)', label:'Alternatives' },
     { v:0.12, arc:'rgba(245, 200,  90, 0.5)', dot:'rgb(245, 200,  90)', label:'Private' },
     { v:0.10, arc:'rgba(240, 140, 120, 0.5)', dot:'rgb(240, 140, 120)', label:'Real Estate' },
-    { v:0.08, arc:'rgba(120, 200, 210, 0.5)', dot:'rgb(120, 200, 210)', label:'Cash' },
+    { v:0.08, arc:'rgba(162,180,240,0.5)', dot:'rgb(162,180,240)', label:'Cash' },
     { v:0.06, arc:'rgba(200, 170, 130, 0.5)', dot:'rgb(200, 170, 130)', label:'Hedge' },
     { v:0.04, arc:'rgba(160, 170, 185, 0.5)', dot:'rgb(160, 170, 185)', label:'Other' },
   ];
@@ -919,14 +919,14 @@ function AumBars({ onMore }) {
       },
     },
     series: [
-      { name:'Assets Under Management', color:'rgba(5,122,85,0.45)',   borderColor:'rgb(5,122,85)',   borderWidth:1.5, data: rows.map(r => r.aum) },
+      { name:'Assets Under Management', color:'rgba(35,89,255,0.45)',   borderColor:'rgb(35,89,255)',   borderWidth:1.5, data: rows.map(r => r.aum) },
       { name:'Assets Held Away',        color:'rgba(160,170,185,0.45)', borderColor:'rgb(160,170,185)', borderWidth:1.5, data: rows.map(r => r.hold) },
     ],
   }), []);
   return (
     <Tile title="Assets Under Management" onMore={onMore}>
       <div style={{ display:'flex', gap:16, fontFamily:'Inter', fontSize:12, color:'rgb(163,163,163)', paddingTop:2, paddingBottom:6 }}>
-        <span style={{ display:'flex', alignItems:'center', gap:6 }}><span style={{ width:8, height:8, borderRadius:2, background:'rgb(5,122,85)' }} /> Assets Under Management</span>
+        <span style={{ display:'flex', alignItems:'center', gap:6 }}><span style={{ width:8, height:8, borderRadius:2, background:'rgb(35,89,255)' }} /> Assets Under Management</span>
         <span style={{ display:'flex', alignItems:'center', gap:6 }}><span style={{ width:8, height:8, borderRadius:2, background:'rgb(160,170,185)' }} /> Assets Held Away</span>
       </div>
       <div style={{ flex:1, minHeight:260 }}>
@@ -940,7 +940,7 @@ function AumBars({ onMore }) {
 const CASHFLOW_BY_PERIOD = {
   'Today': {
     stats: [
-      { label:"Today's Inflows",  value:'$1.2M',  color:'rgb(5,122,85)' },
+      { label:"Today's Inflows",  value:'$1.2M',  color:'rgb(249,250,251)' },
       { label:"Today's Outflows", value:'-$0.4M', color:'rgb(248,113,113)' },
       { label:"Today's Net",      value:'$0.8M',  color:'rgb(249,250,251)' },
     ],
@@ -948,7 +948,7 @@ const CASHFLOW_BY_PERIOD = {
   },
   'This week': {
     stats: [
-      { label:'Inflows',  value:'$8.5M',  color:'rgb(5,122,85)' },
+      { label:'Inflows',  value:'$8.5M',  color:'rgb(249,250,251)' },
       { label:'Outflows', value:'-$3.1M', color:'rgb(248,113,113)' },
       { label:'Net Flow', value:'$5.4M',  color:'rgb(249,250,251)' },
     ],
@@ -956,7 +956,7 @@ const CASHFLOW_BY_PERIOD = {
   },
   'This month': {
     stats: [
-      { label:'MTD Inflows',  value:'$31M', color:'rgb(5,122,85)' },
+      { label:'MTD Inflows',  value:'$31M', color:'rgb(249,250,251)' },
       { label:'MTD Outflows', value:'-$9M', color:'rgb(248,113,113)' },
       { label:'MTD Net Flow', value:'$22M', color:'rgb(249,250,251)' },
     ],
@@ -964,7 +964,7 @@ const CASHFLOW_BY_PERIOD = {
   },
   'This quarter': {
     stats: [
-      { label:'QTD Inflows',  value:'$57M',  color:'rgb(5,122,85)' },
+      { label:'QTD Inflows',  value:'$57M',  color:'rgb(249,250,251)' },
       { label:'QTD Outflows', value:'-$19M', color:'rgb(248,113,113)' },
       { label:'QTD Net Flow', value:'$38M',  color:'rgb(249,250,251)' },
     ],
@@ -972,7 +972,7 @@ const CASHFLOW_BY_PERIOD = {
   },
   'Year to date': {
     stats: [
-      { label:'YTD Inflows',  value:'$126.0M', color:'rgb(5,122,85)' },
+      { label:'YTD Inflows',  value:'$126.0M', color:'rgb(249,250,251)' },
       { label:'YTD Outflows', value:'-$45.0M', color:'rgb(248,113,113)' },
       { label:'YTD Net Flow', value:'$81.0M',  color:'rgb(249,250,251)' },
     ],
@@ -980,7 +980,7 @@ const CASHFLOW_BY_PERIOD = {
   },
   'Last 12 months': {
     stats: [
-      { label:'12-mo Inflows',  value:'$268M',  color:'rgb(5,122,85)' },
+      { label:'12-mo Inflows',  value:'$268M',  color:'rgb(249,250,251)' },
       { label:'12-mo Outflows', value:'-$98M',  color:'rgb(248,113,113)' },
       { label:'12-mo Net Flow', value:'$170M',  color:'rgb(249,250,251)' },
     ],
@@ -988,7 +988,7 @@ const CASHFLOW_BY_PERIOD = {
   },
   'All time': {
     stats: [
-      { label:'Lifetime Inflows',  value:'$1.2B',  color:'rgb(5,122,85)' },
+      { label:'Lifetime Inflows',  value:'$1.2B',  color:'rgb(249,250,251)' },
       { label:'Lifetime Outflows', value:'-$420M', color:'rgb(248,113,113)' },
       { label:'Lifetime Net',      value:'$780M',  color:'rgb(249,250,251)' },
     ],
@@ -1028,7 +1028,7 @@ function CashFlow({ onMore }) {
       },
     },
     series: [
-      { name:'Inflow',  color:'rgba(5,122,85,0.45)',  borderColor:'rgb(5,122,85)',  borderWidth:1.5, data: cfg.chart.inflow  },
+      { name:'Inflow',  color:'rgba(35,89,255,0.45)',  borderColor:'rgb(35,89,255)',  borderWidth:1.5, data: cfg.chart.inflow  },
       { name:'Outflow', color:'rgba(220,38,38,0.45)', borderColor:'rgb(220,38,38)', borderWidth:1.5, data: cfg.chart.outflow },
     ],
   }), [period]);
@@ -1043,7 +1043,7 @@ function CashFlow({ onMore }) {
         ))}
       </div>
       <div style={{ display:'flex', gap:12, fontFamily:'Inter', fontSize:12, color:'rgb(163,163,163)', margin:'10px 0 4px' }}>
-        <span style={{ display:'flex', alignItems:'center', gap:6 }}><span style={{ width:8, height:8, borderRadius:2, background:'rgb(5,122,85)' }} /> Inflow</span>
+        <span style={{ display:'flex', alignItems:'center', gap:6 }}><span style={{ width:8, height:8, borderRadius:2, background:'rgb(35,89,255)' }} /> Inflow</span>
         <span style={{ display:'flex', alignItems:'center', gap:6 }}><span style={{ width:8, height:8, borderRadius:2, background:'rgb(220,38,38)' }} /> Outflow</span>
       </div>
       <div style={{ flex:1, minHeight:200 }}>
@@ -1073,10 +1073,10 @@ function ProjectedFees({ onMore }) {
       area: {
         fillColor: {
           linearGradient: { x1:0, y1:0, x2:0, y2:1 },
-          stops: [[0, 'rgba(5,122,85,0.35)'], [1, 'rgba(5,122,85,0)']],
+          stops: [[0, 'rgba(35,89,255,0.35)'], [1, 'rgba(35,89,255,0)']],
         },
-        lineWidth: 2, color: 'rgb(5,122,85)',
-        marker: { enabled: true, radius: 3, fillColor: 'rgb(10,10,10)', lineColor:'rgb(5,122,85)', lineWidth: 1.5 },
+        lineWidth: 2, color: 'rgb(35,89,255)',
+        marker: { enabled: true, radius: 3, fillColor: 'rgb(10,10,10)', lineColor:'rgb(35,89,255)', lineWidth: 1.5 },
       },
     },
     series: [
@@ -1134,8 +1134,8 @@ function Holdings({ onMore }) {
     },
     series: [{
       name:'AUM',
-      color:'rgba(5,122,85,0.45)',
-      borderColor:'rgb(5,122,85)',
+      color:'rgba(35,89,255,0.45)',
+      borderColor:'rgb(35,89,255)',
       borderWidth:1.5,
       data,
     }],
@@ -1154,7 +1154,7 @@ function Holdings({ onMore }) {
 function ClientHeat({ onMore }) {
   const cols = 26, rows = 6;
   const cells = Array.from({length:cols*rows}, (_,i) => Math.random());
-  const color = v => v<0.2 ? 'rgba(75,85,99,0.35)' : v<0.5 ? 'rgba(5,122,85,0.45)' : v<0.8 ? 'rgba(5,122,85,0.75)' : 'rgb(5,122,85)';
+  const color = v => v<0.2 ? 'rgba(75,85,99,0.35)' : v<0.5 ? 'rgba(35,89,255,0.45)' : v<0.8 ? 'rgba(35,89,255,0.75)' : 'rgb(35,89,255)';
   return (
     <Tile title="Client Activity" onMore={onMore}>
       <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)', padding:'0 0 6px' }}>Engagement, last 26 weeks</div>
@@ -1166,9 +1166,9 @@ function ClientHeat({ onMore }) {
       <div style={{ display:'flex', alignItems:'center', gap:6, fontFamily:'Inter', fontSize:10.5, color:'rgb(163,163,163)', paddingTop:4 }}>
         Less
         <span style={{ width:10, height:10, borderRadius:2, background:'rgba(75,85,99,0.35)' }} />
-        <span style={{ width:10, height:10, borderRadius:2, background:'rgba(5,122,85,0.45)' }} />
-        <span style={{ width:10, height:10, borderRadius:2, background:'rgba(5,122,85,0.75)' }} />
-        <span style={{ width:10, height:10, borderRadius:2, background:'rgb(5,122,85)' }} />
+        <span style={{ width:10, height:10, borderRadius:2, background:'rgba(35,89,255,0.45)' }} />
+        <span style={{ width:10, height:10, borderRadius:2, background:'rgba(35,89,255,0.75)' }} />
+        <span style={{ width:10, height:10, borderRadius:2, background:'rgb(35,89,255)' }} />
         More
       </div>
     </Tile>
@@ -1191,8 +1191,8 @@ function InsightsTile({ onMore }) {
   const statLbl = { fontFamily:'Inter', fontSize:11.5, color:'rgb(163,163,163)', marginTop:7, lineHeight:1.35 };
   const titleNode = (
     <span style={{ display:'inline-flex', alignItems:'center', gap:9 }}>
-      <span style={{ width:24, height:24, borderRadius:6, background:'rgba(5,122,85,0.18)', border:'1px solid rgba(110,231,183,0.45)', display:'inline-flex', alignItems:'center', justifyContent:'center' }}>
-        <i className="fa-solid fa-lightbulb" style={{ fontSize:12, color:'rgb(110,231,183)' }} />
+      <span style={{ width:24, height:24, borderRadius:6, background:'rgba(35,89,255,0.18)', border:'1px solid rgba(168,185,241,0.45)', display:'inline-flex', alignItems:'center', justifyContent:'center' }}>
+        <i className="fa-solid fa-lightbulb" style={{ fontSize:12, color:'rgb(168,185,241)' }} />
       </span>
       <span>Insights</span>
     </span>
@@ -1201,11 +1201,11 @@ function InsightsTile({ onMore }) {
     <Tile title={titleNode} onMore={onMore} footLabel={`${providers} providers`}>
       <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
         <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
-          <div onClick={onMore} style={statCell} onMouseEnter={e=>{e.currentTarget.style.borderColor='rgba(110,231,183,0.45)';}} onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(75,85,99,0.5)';}}>
+          <div onClick={onMore} style={statCell} onMouseEnter={e=>{e.currentTarget.style.borderColor='rgba(168,185,241,0.45)';}} onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(75,85,99,0.5)';}}>
             <div style={statNum}>{rows.length}</div>
             <div style={statLbl}>Open insights · {clients} clients</div>
           </div>
-          <div onClick={onMore} style={statCell} onMouseEnter={e=>{e.currentTarget.style.borderColor='rgba(110,231,183,0.45)';}} onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(75,85,99,0.5)';}}>
+          <div onClick={onMore} style={statCell} onMouseEnter={e=>{e.currentTarget.style.borderColor='rgba(168,185,241,0.45)';}} onMouseLeave={e=>{e.currentTarget.style.borderColor='rgba(75,85,99,0.5)';}}>
             <div style={statNum}>{totalLabel}</div>
             <div style={statLbl}>Est. advisory impact</div>
           </div>

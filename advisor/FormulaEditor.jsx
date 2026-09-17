@@ -4,9 +4,9 @@
 // Exposes: FIELD_SCHEMA, FN_SCHEMA, evalFormula, formatResult, FormulaEditor,
 //          suggestFormulaFromText  (used by the AI builder handoff)
 
-const FE_BRAND = 'rgb(5,122,85)';
-const FE_BRAND_SOFT = 'rgba(5,122,85,0.18)';
-const FE_BRAND_TXT = 'rgb(110,231,183)';
+const FE_BRAND = 'rgb(35,89,255)';
+const FE_BRAND_SOFT = 'rgba(35,89,255,0.18)';
+const FE_BRAND_TXT = 'rgb(168,185,241)';
 const FE_BORDER = 'rgb(75,85,99)';
 const FE_BORDER_SOFT = 'rgba(75,85,99,0.55)';
 const FE_INK = 'rgb(249,250,251)';
@@ -209,7 +209,7 @@ function FormulaEditor({ value, onChange, format, onFormatChange }) {
 
   const valid = result.ok;
   const stateColor = result.empty ? FE_MUTED : valid ? FE_BRAND_TXT : FE_DANGER;
-  const stateBorder = result.empty ? FE_BORDER : valid ? 'rgba(5,122,85,0.55)' : 'rgba(248,113,113,0.5)';
+  const stateBorder = result.empty ? FE_BORDER : valid ? 'rgba(35,89,255,0.55)' : 'rgba(248,113,113,0.5)';
 
   return (
     <div style={{ position:'relative' }}>
@@ -305,7 +305,7 @@ function FormulaEditor({ value, onChange, format, onFormatChange }) {
       {askOpen && (
         <div style={{
           marginTop:10, display:'flex', alignItems:'center', gap:8, padding:'8px 8px 8px 12px',
-          background:FE_BRAND_SOFT, border:`1px solid rgba(5,122,85,0.4)`, borderRadius:10,
+          background:FE_BRAND_SOFT, border:`1px solid rgba(35,89,255,0.4)`, borderRadius:10,
         }}>
           <i className="fa-solid fa-wand-magic-sparkles" style={{ color:FE_BRAND_TXT, fontSize:13, flexShrink:0 }} />
           <input

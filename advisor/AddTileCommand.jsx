@@ -1,8 +1,8 @@
 // AddTileCommand — ⌘K command palette + LLM tile builder.
 // Lives on top of the dashboard. Posts a 'tile:add' event when a tile is created.
 
-const TC_BRAND = 'rgb(5,122,85)';
-const TC_BRAND_SOFT = 'rgba(5,122,85,0.18)';
+const TC_BRAND = 'rgb(35,89,255)';
+const TC_BRAND_SOFT = 'rgba(35,89,255,0.18)';
 const TC_BORDER = 'rgb(75,85,99)';
 const TC_BORDER_SOFT = 'rgba(75,85,99,0.5)';
 const TC_INK = 'rgb(249,250,251)';
@@ -145,12 +145,12 @@ function AddedTile({ tile, onRemove, onEdit }) {
     }}>
       <div style={{
         position:'absolute', top:0, left:0, right:0, height:3,
-        background:`linear-gradient(90deg, ${TC_BRAND} 0%, rgba(94,214,164,0.6) 100%)`,
+        background:`linear-gradient(90deg, ${TC_BRAND} 0%, rgba(151,171,238,0.6) 100%)`,
       }} />
       <div style={{ display:'flex', alignItems:'center', padding:'14px 16px 10px', gap:10 }}>
         <div style={{
           width:28, height:28, borderRadius:7, background:TC_BRAND_SOFT,
-          border:`1px solid rgba(5,122,85,0.4)`,
+          border:`1px solid rgba(35,89,255,0.4)`,
           display:'inline-flex', alignItems:'center', justifyContent:'center',
         }}>
           <i className={`fa-solid fa-${tile.icon}`} style={{ color:TC_BRAND, fontSize:12 }} />
@@ -162,7 +162,7 @@ function AddedTile({ tile, onRemove, onEdit }) {
           <div style={{ display:'flex', alignItems:'center', gap:5, marginTop:2 }}>
             <span style={{
               fontFamily:'Inter', fontSize:9.5, fontWeight:700, padding:'1px 6px', borderRadius:9999,
-              background:TC_BRAND_SOFT, color:'rgb(134,239,172)', letterSpacing:'0.04em',
+              background:TC_BRAND_SOFT, color:'rgb(182,197,245)', letterSpacing:'0.04em',
             }}>AI · NEW</span>
             <span style={{ fontFamily:'Inter', fontSize:10.5, color:TC_MUTED }}>just now</span>
           </div>
@@ -248,14 +248,14 @@ function AddedChart({ data }) {
       <svg viewBox={`0 0 ${w} ${h}`} style={{ width:'100%', height:'auto', display:'block' }} preserveAspectRatio="none">
         <defs>
           <linearGradient id="tc-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgb(5,122,85)" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="rgb(5,122,85)" stopOpacity="0" />
+            <stop offset="0%" stopColor="rgb(35,89,255)" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="rgb(35,89,255)" stopOpacity="0" />
           </linearGradient>
         </defs>
         <path d={area} fill="url(#tc-grad)" />
-        <path d={path} fill="none" stroke="rgb(5,122,85)" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+        <path d={path} fill="none" stroke="rgb(35,89,255)" strokeWidth="2" vectorEffect="non-scaling-stroke" />
         {data.points.map((v,i) => (
-          <circle key={i} cx={sx(i)} cy={sy(v)} r="2.5" fill="rgb(10,10,10)" stroke="rgb(5,122,85)" strokeWidth="1.5" />
+          <circle key={i} cx={sx(i)} cy={sy(v)} r="2.5" fill="rgb(10,10,10)" stroke="rgb(35,89,255)" strokeWidth="1.5" />
         ))}
       </svg>
       <div style={{
@@ -349,7 +349,7 @@ function AddTileCommand({ open, onClose, onAdd }) {
         maxHeight:'calc(100vh - 96px)', borderRadius:16,
         background:'rgba(20,28,42,0.92)', border:`1px solid ${TC_BORDER}`,
         backdropFilter:'blur(16px) saturate(140%)', WebkitBackdropFilter:'blur(16px) saturate(140%)',
-        boxShadow:'0 30px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(5,122,85,0.1)',
+        boxShadow:'0 30px 80px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(35,89,255,0.1)',
         overflow:'hidden', display:'flex', flexDirection:'column',
       }}>
         {/* Input — only in input/thinking; preview gets a bottom bar instead */}
@@ -377,10 +377,10 @@ function AddTileCommand({ open, onClose, onAdd }) {
             title="Generate (↵)"
             style={{
               height:36, width:36, borderRadius:9, border:'none', flexShrink:0,
-              background: prompt.trim() && phase !== 'thinking' ? TC_BRAND : 'rgba(5,122,85,0.25)',
+              background: prompt.trim() && phase !== 'thinking' ? TC_BRAND : 'rgba(35,89,255,0.25)',
               color:'#fff', cursor: prompt.trim() && phase !== 'thinking' ? 'pointer' : 'not-allowed',
               display:'inline-flex', alignItems:'center', justifyContent:'center',
-              boxShadow: prompt.trim() && phase !== 'thinking' ? '0 2px 8px -2px rgba(5,122,85,0.5)' : 'none',
+              boxShadow: prompt.trim() && phase !== 'thinking' ? '0 2px 8px -2px rgba(35,89,255,0.5)' : 'none',
               transition:'background 120ms ease',
             }}
           >
@@ -440,7 +440,7 @@ function AddTileCommand({ open, onClose, onAdd }) {
         {phase === 'thinking' && (
           <div style={{ padding:'48px 24px', textAlign:'center', flex:'1 1 auto', minHeight:0, overflowY:'auto' }}>
             <div style={{ position:'relative', width:48, height:48, margin:'0 auto 20px' }}>
-              <div style={{ position:'absolute', inset:0, borderRadius:9999, border:`3px solid rgba(5,122,85,0.2)` }} />
+              <div style={{ position:'absolute', inset:0, borderRadius:9999, border:`3px solid rgba(35,89,255,0.2)` }} />
               <div style={{
                 position:'absolute', inset:0, borderRadius:9999,
                 border:`3px solid transparent`, borderTopColor:TC_BRAND,
@@ -483,7 +483,7 @@ function AddTileCommand({ open, onClose, onAdd }) {
             <div style={{
               flex:'1 1 auto', minHeight:0, padding:'18px',
               display:'flex', alignItems:'stretch', justifyContent:'stretch',
-              background:'radial-gradient(circle at 50% 0%, rgba(5,122,85,0.06), transparent 60%)',
+              background:'radial-gradient(circle at 50% 0%, rgba(35,89,255,0.06), transparent 60%)',
             }}>
               <div style={{ flex:1, minHeight:0, minWidth:0, display:'flex' }}>
                 <div style={{ flex:1, minHeight:0, minWidth:0, '--tile-min-height':'0px' }}>
@@ -520,10 +520,10 @@ function AddTileCommand({ open, onClose, onAdd }) {
                   title="Update tile (↵)"
                   style={{
                     height:32, width:32, borderRadius:8, border:'none', flexShrink:0,
-                    background: prompt.trim() ? TC_BRAND : 'rgba(5,122,85,0.25)',
+                    background: prompt.trim() ? TC_BRAND : 'rgba(35,89,255,0.25)',
                     color:'#fff', cursor: prompt.trim() ? 'pointer' : 'not-allowed',
                     display:'inline-flex', alignItems:'center', justifyContent:'center',
-                    boxShadow: prompt.trim() ? '0 2px 8px -2px rgba(5,122,85,0.5)' : 'none',
+                    boxShadow: prompt.trim() ? '0 2px 8px -2px rgba(35,89,255,0.5)' : 'none',
                   }}
                 >
                   <i className="fa-solid fa-arrow-up" style={{ fontSize:12 }} />
@@ -537,7 +537,7 @@ function AddTileCommand({ open, onClose, onAdd }) {
                       background:'transparent', color:TC_MUTED, fontFamily:'Inter', fontSize:11.5, fontWeight:500,
                       cursor:'pointer',
                     }}
-                      onMouseEnter={(e)=>{e.currentTarget.style.color=TC_INK; e.currentTarget.style.borderColor='rgba(5,122,85,0.5)';}}
+                      onMouseEnter={(e)=>{e.currentTarget.style.color=TC_INK; e.currentTarget.style.borderColor='rgba(35,89,255,0.5)';}}
                       onMouseLeave={(e)=>{e.currentTarget.style.color=TC_MUTED; e.currentTarget.style.borderColor=TC_BORDER;}}>
                       {q}
                     </button>
@@ -555,7 +555,7 @@ function AddTileCommand({ open, onClose, onAdd }) {
                     height:36, padding:'0 16px', borderRadius:9, border:'none',
                     background:TC_BRAND, color:'#fff', fontFamily:'Inter', fontWeight:600, fontSize:12.5,
                     cursor:'pointer', display:'inline-flex', alignItems:'center', gap:6,
-                    boxShadow:'0 4px 14px -4px rgba(5,122,85,0.6)',
+                    boxShadow:'0 4px 14px -4px rgba(35,89,255,0.6)',
                   }}>
                     <i className="fa-solid fa-plus" style={{ width:11, height:11 }} />
                     Add to dashboard
@@ -580,7 +580,7 @@ function AddTileTrigger({ onOpen }) {
       backdropFilter:'blur(12px)', WebkitBackdropFilter:'blur(12px)',
       color:TC_INK, fontFamily:'Inter', fontWeight:600, fontSize:13,
       cursor:'pointer', display:'inline-flex', alignItems:'center', gap:10,
-      boxShadow:'0 10px 30px -8px rgba(0,0,0,0.5), 0 0 0 1px rgba(5,122,85,0.15)',
+      boxShadow:'0 10px 30px -8px rgba(0,0,0,0.5), 0 0 0 1px rgba(35,89,255,0.15)',
     }}>
       <i className="fa-solid fa-wand-magic-sparkles" style={{ color:TC_BRAND, width:13, height:13 }} />
       Add a tile

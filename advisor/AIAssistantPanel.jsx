@@ -5,16 +5,16 @@
    visible steps, tool calls, and an actionable result. Persists chat
    thread in component state for the session. */
 
-const AI_BRAND       = 'rgb(5,122,85)';
-const AI_BRAND_SOFT  = 'rgba(5,122,85,0.18)';
-const AI_BRAND_RING  = 'rgba(5,122,85,0.35)';
+const AI_BRAND       = 'rgb(35,89,255)';
+const AI_BRAND_SOFT  = 'rgba(35,89,255,0.18)';
+const AI_BRAND_RING  = 'rgba(35,89,255,0.35)';
 const AI_PANEL_BG    = 'rgba(13, 21, 33, 0.92)';
 const AI_BORDER      = 'rgb(75,85,99)';
 const AI_BORDER_SOFT = 'rgba(75,85,99,0.5)';
 const AI_INK         = 'rgb(249,250,251)';
 const AI_MUTED       = 'rgb(163,163,163)';
 const AI_DIM         = 'rgb(115,115,115)';
-const AI_BUBBLE_USER = 'rgba(5,122,85,0.18)';
+const AI_BUBBLE_USER = 'rgba(35,89,255,0.18)';
 const AI_BUBBLE_AI   = 'rgba(255,255,255,0.04)';
 
 /* -- Suggestions presented at the start of a thread --------------------- */
@@ -160,13 +160,13 @@ function AiToolCall({ step }) {
     <div style={{
       display:'flex', alignItems:'center', gap:10,
       padding:'8px 10px', borderRadius:8,
-      background: done ? 'rgba(255,255,255,0.025)' : 'rgba(5,122,85,0.08)',
+      background: done ? 'rgba(255,255,255,0.025)' : 'rgba(35,89,255,0.08)',
       border:`1px solid ${done ? AI_BORDER_SOFT : AI_BRAND_RING}`,
       transition:'background 200ms ease, border-color 200ms ease',
     }}>
       <div style={{
         width:18, height:18, borderRadius:9999, flexShrink:0,
-        background: done ? 'rgba(5,122,85,0.18)' : 'transparent',
+        background: done ? 'rgba(35,89,255,0.18)' : 'transparent',
         border: done ? `1px solid ${AI_BRAND}` : `1.5px solid ${AI_BRAND_RING}`,
         display:'flex', alignItems:'center', justifyContent:'center',
         color: AI_BRAND,
@@ -196,10 +196,10 @@ function AiResultCard({ step, onAction }) {
   return (
     <div style={{
       borderRadius:12,
-      background:'rgba(5,122,85,0.08)',
+      background:'rgba(35,89,255,0.08)',
       border:`1px solid ${AI_BRAND_RING}`,
       padding:14,
-      boxShadow:'0 8px 24px -10px rgba(5,122,85,0.35)',
+      boxShadow:'0 8px 24px -10px rgba(35,89,255,0.35)',
     }}>
       <div style={{ display:'flex', alignItems:'flex-start', gap:10, marginBottom:10 }}>
         <div style={{
@@ -253,7 +253,7 @@ function AiResultCard({ step, onAction }) {
                 border:`1px solid ${AI_BORDER_SOFT}`,
                 color:'inherit',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(5,122,85,0.10)'; e.currentTarget.style.borderColor = AI_BRAND_RING; }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(35,89,255,0.10)'; e.currentTarget.style.borderColor = AI_BRAND_RING; }}
               onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.025)'; e.currentTarget.style.borderColor = AI_BORDER_SOFT; }}
             >
               <div style={{ minWidth:0 }}>
@@ -467,7 +467,7 @@ function AIAssistantPanel({ open, onClose }) {
         @keyframes aiSlideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
         @keyframes aiFadeIn { from { opacity:0; } to { opacity:1; } }
         @keyframes aiStepIn { from { opacity:0; transform: translateY(4px); } to { opacity:1; transform: translateY(0); } }
-        .ai-suggest:hover { background: rgba(5,122,85,0.10) !important; border-color: ${AI_BRAND_RING} !important; }
+        .ai-suggest:hover { background: rgba(35,89,255,0.10) !important; border-color: ${AI_BRAND_RING} !important; }
         .ai-step > * { animation: aiStepIn 280ms ease both; }
       `}</style>
 
@@ -481,7 +481,7 @@ function AIAssistantPanel({ open, onClose }) {
 
       {/* Panel */}
       {open && (
-        <div role="dialog" aria-label="Field AI" style={{
+        <div role="dialog" aria-label="Halo + AI" style={{
           position:'fixed', top:0, right:0, bottom:0,
           width: 'min(460px, 92vw)',
           background: AI_PANEL_BG,
@@ -501,7 +501,7 @@ function AIAssistantPanel({ open, onClose }) {
           }}>
             <div style={{
               width:30, height:30, borderRadius:8,
-              background:`linear-gradient(135deg, ${AI_BRAND} 0%, rgb(20,160,120) 100%)`,
+              background:`linear-gradient(135deg, ${AI_BRAND} 0%, rgb(79,115,233) 100%)`,
               display:'flex', alignItems:'center', justifyContent:'center',
               color:'#fff', boxShadow:`0 0 0 3px ${AI_BRAND_SOFT}`,
             }}>
@@ -509,7 +509,7 @@ function AIAssistantPanel({ open, onClose }) {
             </div>
             <div style={{ flex:1, minWidth:0 }}>
               <div style={{ fontFamily:'Inter', fontSize:13.5, fontWeight:600, color:AI_INK, lineHeight:1.2 }}>
-                Field AI
+                Halo + AI
               </div>
               <div style={{ fontFamily:'Inter', fontSize:11, color:AI_MUTED, lineHeight:1.2, marginTop:1 }}>
                 Your assistant
@@ -607,7 +607,7 @@ function AIAssistantPanel({ open, onClose }) {
               fontFamily:'Inter', fontSize:10, color:AI_DIM,
               marginTop:8, textAlign:'center',
             }}>
-              Field AI can take actions on your behalf · review results before sending to clients
+              Halo + AI can take actions on your behalf · review results before sending to clients
             </div>
           </form>
           )}
@@ -637,7 +637,7 @@ function AIAssistantPanel({ open, onClose }) {
               padding:'12px 16px', borderBottom:`1px solid ${AI_BORDER_SOFT}`,
               background:'rgba(255,255,255,0.03)', flexShrink:0,
             }}>
-              <i className="fa-solid fa-file-lines" style={{ fontSize:13, color:'rgb(16,185,129)' }} />
+              <i className="fa-solid fa-file-lines" style={{ fontSize:13, color:'rgb(84,121,240)' }} />
               <div style={{ flex:1, minWidth:0 }}>
                 <div style={{ fontFamily:'Inter', fontSize:13, fontWeight:600, color:AI_INK }}>Rebalance deck · David Young</div>
                 <div style={{ fontFamily:'Inter', fontSize:11, color:AI_MUTED, marginTop:1 }}>6 slides · branded recommendation</div>
@@ -728,7 +728,7 @@ function AiEmptyState({ input, setInput, onSubmit, onPick }) {
           <div style={{ flex:1 }} />
           <button type="submit" disabled={!input.trim()} title="Send" style={{
             width:30, height:30, borderRadius:8, border:'none',
-            background: input.trim() ? AI_BRAND : 'rgba(5,122,85,0.35)',
+            background: input.trim() ? AI_BRAND : 'rgba(35,89,255,0.35)',
             color:'#fff',
             cursor: input.trim() ? 'pointer' : 'not-allowed',
             display:'flex', alignItems:'center', justifyContent:'center',

@@ -9,7 +9,7 @@ function BackToDashboard() {
         background:'rgba(255,255,255,0.04)', border:'1px solid rgb(75,85,99)', color:'rgb(229,231,235)',
         fontFamily:'Inter', fontSize:12, display:'inline-flex', alignItems:'center', gap:8,
       }}
-      onMouseEnter={(e)=>{ e.currentTarget.style.borderColor='rgb(5,122,85)'; e.currentTarget.style.color='rgb(94,214,164)'; }}
+      onMouseEnter={(e)=>{ e.currentTarget.style.borderColor='rgb(35,89,255)'; e.currentTarget.style.color='rgb(151,171,238)'; }}
       onMouseLeave={(e)=>{ e.currentTarget.style.borderColor='rgb(75,85,99)'; e.currentTarget.style.color='rgb(229,231,235)'; }}>
       <i className="fa-solid fa-chevron-left" style={{ fontSize:10 }} /> Back to dashboard
     </button>
@@ -18,7 +18,7 @@ function BackToDashboard() {
 
 const haloTone = {
   warning: { bg:'rgba(234,179,8,0.14)', fg:'rgb(253,224,71)', ring:'rgba(234,179,8,0.45)' },
-  success: { bg:'rgba(5,122,85,0.18)',  fg:'rgb(52,211,153)', ring:'rgba(5,122,85,0.5)' },
+  success: { bg:'rgba(35,89,255,0.18)',  fg:'rgb(128,152,234)', ring:'rgba(35,89,255,0.5)' },
   info:    { bg:'rgba(59,130,246,0.14)',fg:'rgb(147,197,253)',ring:'rgba(59,130,246,0.4)' },
   mute:    { bg:'rgba(255,255,255,0.05)',fg:'rgb(163,163,163)',ring:'rgba(75,85,99,0.6)' },
 };
@@ -33,7 +33,7 @@ const LIFECYCLE_EVENTS = [
 ];
 const LC_SERIES = {
   maturity: { label:'Maturity', color:'rgb(118,169,250)', vals:[0, 4, 10, 6, 46] },
-  coupon:   { label:'Coupon',   color:'rgb(16,185,129)',  vals:[6, 14, 12, 8, 5] },
+  coupon:   { label:'Coupon',   color:'rgb(84,121,240)',  vals:[6, 14, 12, 8, 5] },
   autocall: { label:'Autocall', color:'rgb(227,160,8)',   vals:[88, 190, 0, 52, 0] },
 };
 const LC_MONTHS = ['Aug','Sep','Oct','Nov','Dec'];
@@ -66,7 +66,7 @@ function PortfolioLifecycle({ onMore }) {
                       ))}
                     </div>
                   )}
-                  <div style={{ width:'100%', maxWidth:42, height:190, display:'flex', flexDirection:'column-reverse', borderRadius:4, overflow:'hidden', background:'rgba(255,255,255,0.03)', outline: hoverMo===i ? '1px solid rgba(94,214,164,0.6)' : 'none' }}>
+                  <div style={{ width:'100%', maxWidth:42, height:190, display:'flex', flexDirection:'column-reverse', borderRadius:4, overflow:'hidden', background:'rgba(255,255,255,0.03)', outline: hoverMo===i ? '1px solid rgba(151,171,238,0.6)' : 'none' }}>
                     {parts.map(k => {
                       const h = Math.round(LC_SERIES[k].vals[i] / max * 190);
                       return h ? <div key={k} style={{ height:h, background:LC_SERIES[k].color, opacity: hoverMo===null||hoverMo===i ? 1 : 0.45 }}></div> : null;
@@ -91,9 +91,9 @@ function PortfolioLifecycle({ onMore }) {
               <button key={id} onClick={()=>setTab(id)} style={{
                 fontFamily:'Inter', fontSize:11.5, fontWeight: tab===id?600:500, cursor:'pointer',
                 padding:'5px 12px', borderRadius:9999,
-                border:`1px solid ${tab===id ? 'rgb(5,122,85)' : 'rgb(75,85,99)'}`,
-                background: tab===id ? 'rgba(5,122,85,0.22)' : 'transparent',
-                color: tab===id ? 'rgb(94,214,164)' : 'rgb(163,163,163)',
+                border:`1px solid ${tab===id ? 'rgb(35,89,255)' : 'rgb(75,85,99)'}`,
+                background: tab===id ? 'rgba(35,89,255,0.22)' : 'transparent',
+                color: tab===id ? 'rgb(151,171,238)' : 'rgb(163,163,163)',
               }}>{lbl}</button>
             ))}
           </div>
@@ -106,7 +106,7 @@ function PortfolioLifecycle({ onMore }) {
               <div key={i} style={{ display:'grid', gridTemplateColumns:'36px minmax(0,1fr) auto', alignItems:'center', gap:8, padding:'6px 0', borderTop: i ? '1px solid rgba(75,85,99,0.4)' : 'none' }}>
                 <div style={{ textAlign:'center' }}>
                   <div style={{ fontFamily:'Inter', fontSize:9, color:'rgb(163,163,163)', letterSpacing:'0.08em' }}>{e.m}</div>
-                  <div style={{ fontFamily:'Inter', fontWeight:700, fontSize:14, color:'rgb(5,122,85)', lineHeight:1 }}>{e.d}</div>
+                  <div style={{ fontFamily:'Inter', fontWeight:700, fontSize:14, color:'rgb(249,250,251)', lineHeight:1 }}>{e.d}</div>
                 </div>
                 <div style={{ minWidth:0 }}>
                   <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:12, color:'rgb(249,250,251)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{e.title}</div>
@@ -133,7 +133,7 @@ function PortfolioLifecycle({ onMore }) {
 const LC_PAGE_MONTHS = ['Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
 const LC_PAGE_SERIES = {
   maturity: { label:'Maturity', color:'rgb(118,169,250)', vals:[0, 4, 10, 6, 46, 0, 120, 18] },
-  coupon:   { label:'Coupon',   color:'rgb(16,185,129)',  vals:[6, 14, 12, 8, 5, 11, 9, 13] },
+  coupon:   { label:'Coupon',   color:'rgb(84,121,240)',  vals:[6, 14, 12, 8, 5, 11, 9, 13] },
   autocall: { label:'Autocall', color:'rgb(227,160,8)',   vals:[88, 190, 0, 52, 0, 64, 0, 30] },
 };
 const LC_PAGE_EVENTS = [
@@ -202,7 +202,7 @@ function LifecyclePage() {
                       ))}
                     </div>
                   )}
-                  <div style={{ width:'100%', maxWidth:34, height:200, display:'flex', flexDirection:'column-reverse', borderRadius:4, overflow:'hidden', background:'rgba(255,255,255,0.03)', outline: hoverMo===i ? '1px solid rgba(94,214,164,0.6)' : 'none' }}>
+                  <div style={{ width:'100%', maxWidth:34, height:200, display:'flex', flexDirection:'column-reverse', borderRadius:4, overflow:'hidden', background:'rgba(255,255,255,0.03)', outline: hoverMo===i ? '1px solid rgba(151,171,238,0.6)' : 'none' }}>
                     {parts.map(k => {
                       const h = Math.round(LC_PAGE_SERIES[k].vals[i] / max * 200);
                       return h ? <div key={k} style={{ height:h, background:LC_PAGE_SERIES[k].color, opacity: hoverMo===null||hoverMo===i ? 1 : 0.45 }}></div> : null;
@@ -226,7 +226,7 @@ function LifecyclePage() {
             <div style={{ fontSize:13.5, fontWeight:700, color:'rgb(249,250,251)' }}>Upcoming events</div>
             <div style={{ display:'flex', gap:6 }}>
               {tabs.map(([id, lbl]) => (
-                <button key={id} onClick={()=>setTab(id)} style={{ fontFamily:'Inter', fontSize:11, fontWeight: tab===id?600:500, cursor:'pointer', padding:'4px 11px', borderRadius:9999, border:`1px solid ${tab===id ? 'rgb(5,122,85)' : 'rgb(75,85,99)'}`, background: tab===id ? 'rgba(5,122,85,0.22)' : 'transparent', color: tab===id ? 'rgb(94,214,164)' : 'rgb(163,163,163)' }}>{lbl}</button>
+                <button key={id} onClick={()=>setTab(id)} style={{ fontFamily:'Inter', fontSize:11, fontWeight: tab===id?600:500, cursor:'pointer', padding:'4px 11px', borderRadius:9999, border:`1px solid ${tab===id ? 'rgb(35,89,255)' : 'rgb(75,85,99)'}`, background: tab===id ? 'rgba(35,89,255,0.22)' : 'transparent', color: tab===id ? 'rgb(151,171,238)' : 'rgb(163,163,163)' }}>{lbl}</button>
               ))}
             </div>
           </div>
@@ -240,13 +240,13 @@ function LifecyclePage() {
                 <div key={i} style={{ display:'grid', gridTemplateColumns:'40px minmax(0,1.4fr) minmax(0,1fr) auto auto', alignItems:'center', gap:10, padding:'8px 0', borderTop: i ? '1px solid rgba(75,85,99,0.4)' : 'none' }}>
                   <div style={{ textAlign:'center' }}>
                     <div style={{ fontSize:9, color:'rgb(163,163,163)', letterSpacing:'0.08em' }}>{e.m}</div>
-                    <div style={{ fontWeight:700, fontSize:15, color:'rgb(5,122,85)', lineHeight:1 }}>{e.d}</div>
+                    <div style={{ fontWeight:700, fontSize:15, color:'rgb(249,250,251)', lineHeight:1 }}>{e.d}</div>
                   </div>
                   <div style={{ minWidth:0 }}>
                     <div style={{ fontWeight:600, fontSize:12.5, color:'rgb(249,250,251)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{e.title}</div>
                     <div style={{ fontSize:10.5, color:'rgb(163,163,163)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{e.sub}</div>
                   </div>
-                  <a onClick={() => window.dispatchEvent(new CustomEvent('client:open', { detail:{ client:e.client } }))} style={{ fontSize:12, fontWeight:500, color:'rgb(94,214,164)', cursor:'pointer', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{e.client}</a>
+                  <a onClick={() => window.dispatchEvent(new CustomEvent('client:open', { detail:{ client:e.client } }))} style={{ fontSize:12, fontWeight:500, color:'rgb(151,171,238)', cursor:'pointer', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{e.client}</a>
                   <span style={{ fontWeight:600, fontSize:10, padding:'2px 8px', borderRadius:9999, background:t.bg, color:t.fg, border:`1px solid ${t.ring}`, whiteSpace:'nowrap' }}>{e.status}</span>
                   <div style={{ textAlign:'right' }}>
                     <div style={{ fontWeight:600, fontSize:12.5, color:'rgb(249,250,251)', whiteSpace:'nowrap' }}>{e.amt}</div>
@@ -262,7 +262,7 @@ function LifecyclePage() {
         <div style={{ ...CARD, padding:'16px 18px' }}>
           <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:4 }}>
             <div style={{ fontSize:13.5, fontWeight:700, color:'rgb(249,250,251)' }}>Proceeds to reinvest</div>
-            <a onClick={() => window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'watchlist' } }))} style={{ fontSize:11.5, fontWeight:600, color:'rgb(94,214,164)', cursor:'pointer' }}>View live auctions →</a>
+            <a onClick={() => window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'watchlist' } }))} style={{ fontSize:11.5, fontWeight:600, color:'rgb(151,171,238)', cursor:'pointer' }}>View live auctions →</a>
           </div>
           <div style={{ fontSize:11.5, color:'rgb(163,163,163)', marginBottom:10 }}>Called and maturing notes settling soon — candidates for rolling into current terms.</div>
           {LC_PROCEEDS.map((p, i) => (
@@ -271,7 +271,7 @@ function LifecyclePage() {
                 <div style={{ fontSize:12.5, fontWeight:600, color:'rgb(249,250,251)' }}>{p.title}</div>
                 <div style={{ fontSize:11, color:'rgb(163,163,163)' }}>{p.client} · {p.when}</div>
               </div>
-              <span style={{ fontSize:14, fontWeight:700, color:'rgb(52,211,153)', whiteSpace:'nowrap' }}>{p.amt}</span>
+              <span style={{ fontSize:14, fontWeight:700, color:'rgb(128,152,234)', whiteSpace:'nowrap' }}>{p.amt}</span>
             </div>
           ))}
         </div>
@@ -288,7 +288,7 @@ function LifecyclePage() {
                 <span style={{ fontSize:12, fontWeight:700, color: p.dist < 10 ? 'rgb(253,224,71)' : 'rgb(209,213,219)', whiteSpace:'nowrap' }}>{p.dist}% to breach</span>
               </div>
               <div style={{ height:6, borderRadius:9999, background:'rgba(255,255,255,0.06)', marginTop:8, overflow:'hidden' }}>
-                <div style={{ width:`${100 - p.dist * 2.5}%`, height:'100%', borderRadius:9999, background: p.dist < 10 ? 'rgb(227,160,8)' : 'rgb(5,122,85)' }}></div>
+                <div style={{ width:`${100 - p.dist * 2.5}%`, height:'100%', borderRadius:9999, background: p.dist < 10 ? 'rgb(227,160,8)' : 'rgb(35,89,255)' }}></div>
               </div>
             </div>
           ))}
@@ -369,22 +369,22 @@ function JournalTile({ onMore }) {
         <div onClick={() => open(act)} style={{ flex:'0 0 38%', borderRadius:10, cursor:'pointer', minHeight:280, position:'relative', overflow:'hidden', border:'1px solid rgba(75,85,99,0.6)' }}>
           {tileArts.map((a, i) => (
             <div key={a.id} style={{ position:'absolute', inset:0, opacity: i === activeIdx ? 1 : 0, transition:'opacity 220ms ease', pointerEvents: i === activeIdx ? 'auto' : 'none' }}>
-              <image-slot id={`journal-card-${a.id}`} shape="rect" placeholder="Drop article image"></image-slot>
+              <img src="assets/journal.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
             </div>
           ))}
           <div style={{ position:'absolute', left:0, right:0, bottom:0, padding:'26px 12px 12px', background:'linear-gradient(transparent, rgba(10,18,30,0.92))', pointerEvents:'none' }}>
-            <span style={{ fontFamily:'Inter', fontSize:10, fontWeight:600, letterSpacing:'0.06em', color:'rgb(94,214,164)', textTransform:'uppercase' }}>{act.tag}</span>
+            <span style={{ fontFamily:'Inter', fontSize:10, fontWeight:600, letterSpacing:'0.06em', color:'rgb(151,171,238)', textTransform:'uppercase' }}>{act.tag}</span>
             <div style={{ fontFamily:'Inter', fontSize:12, fontWeight:600, color:'rgb(249,250,251)', lineHeight:1.35, marginTop:3, display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{act.t}</div>
           </div>
         </div>
         <div style={{ flex:1, minWidth:0, display:'flex', flexDirection:'column' }}>
           {tileArts.map((a, i) => (
-            <div key={a.id} onClick={() => open(a)} onMouseEnter={()=>setActiveIdx(i)} style={{ padding:'10px 0', borderTop: i ? '1px solid rgba(75,85,99,0.45)' : 'none', cursor:'pointer', background: i === activeIdx ? 'rgba(5,122,85,0.06)' : 'transparent' }}>
+            <div key={a.id} onClick={() => open(a)} onMouseEnter={()=>setActiveIdx(i)} style={{ padding:'10px 14px', borderRadius:8, borderTop: i ? '1px solid rgba(75,85,99,0.45)' : 'none', cursor:'pointer', background: i === activeIdx ? 'rgba(35,89,255,0.06)' : 'transparent' }}>
               <div style={{ display:'flex', justifyContent:'space-between', gap:10 }}>
                 <span style={{ fontFamily:'Inter', fontSize:10.5, color:'rgb(163,163,163)' }}>{a.tag}</span>
                 <span style={{ fontFamily:'Inter', fontSize:10.5, color:'rgb(163,163,163)', whiteSpace:'nowrap' }}>{a.ago}</span>
               </div>
-              <div style={{ fontFamily:'Inter', fontSize:12.5, fontWeight:500, color: i === activeIdx ? 'rgb(94,214,164)' : 'rgb(249,250,251)', lineHeight:1.4, marginTop:3, transition:'color 120ms ease' }}>{a.t}</div>
+              <div style={{ fontFamily:'Inter', fontSize:12.5, fontWeight:500, color: i === activeIdx ? 'rgb(151,171,238)' : 'rgb(249,250,251)', lineHeight:1.4, marginTop:3, transition:'color 120ms ease' }}>{a.t}</div>
             </div>
           ))}
         </div>
@@ -403,13 +403,13 @@ function WatchlistTile({ onMore }) {
           const t = haloTone[r.tone];
           return (
             <div key={r.id} onClick={() => window.dispatchEvent(new CustomEvent('note:open', { detail:{ id:r.id } }))} style={{ display:'grid', gridTemplateColumns:'minmax(0,1fr) auto auto', alignItems:'center', gap:10, padding:'9px 0', borderTop: i ? '1px solid rgba(75,85,99,0.45)' : 'none', cursor:'pointer' }}
-              onMouseEnter={(e)=>{ e.currentTarget.firstChild.firstChild.style.color = 'rgb(94,214,164)'; }}
+              onMouseEnter={(e)=>{ e.currentTarget.firstChild.firstChild.style.color = 'rgb(151,171,238)'; }}
               onMouseLeave={(e)=>{ e.currentTarget.firstChild.firstChild.style.color = 'rgb(249,250,251)'; }}>
               <div style={{ minWidth:0 }}>
                 <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:12.5, color:'rgb(249,250,251)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', transition:'color 120ms ease' }}>{r.unds.join(' / ')}</div>
                 <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{r.term} · {r.prot} · {r.feat}</div>
               </div>
-              <span style={{ fontFamily:'Inter', fontSize:13, fontWeight:700, color:'rgb(52,211,153)', whiteSpace:'nowrap' }}>{r.yield}</span>
+              <span style={{ fontFamily:'Inter', fontSize:13, fontWeight:700, color:'rgb(128,152,234)', whiteSpace:'nowrap' }}>{r.yield}</span>
               <span style={{ fontFamily:'Inter', fontWeight:600, fontSize:10, padding:'2px 8px', borderRadius:9999, background:t.bg, color:t.fg, border:`1px solid ${t.ring}`, whiteSpace:'nowrap' }}>{r.status.replace('Auction closed', 'Closed')}</span>
             </div>
           );
@@ -428,21 +428,21 @@ function JournalArticlePage({ articleId, onBack }) {
     <div style={{ padding:'28px 32px 64px', fontFamily:'Inter' }}>
       <div style={{ maxWidth:1060, margin:'0 auto' }}>
         <div style={{ display:'flex', alignItems:'center', gap:8, fontSize:12.5, fontFamily:'Inter', marginBottom:22 }}>
-          <a onClick={() => window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'dashboard' } }))} style={{ color:'rgb(5,122,85)', fontWeight:500, cursor:'pointer' }}>Dashboard</a>
+          <a onClick={() => window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'dashboard' } }))} style={{ color:'rgb(35,89,255)', fontWeight:500, cursor:'pointer' }}>Dashboard</a>
           <i className="fa-solid fa-chevron-right" style={{ width:10, height:10, color:'rgb(107,114,128)' }} />
-          <a onClick={onBack} style={{ color:'rgb(5,122,85)', fontWeight:500, cursor:'pointer' }}>Journals</a>
+          <a onClick={onBack} style={{ color:'rgb(35,89,255)', fontWeight:500, cursor:'pointer' }}>Journals</a>
           <i className="fa-solid fa-chevron-right" style={{ width:10, height:10, color:'rgb(107,114,128)' }} />
           <span style={{ color:'rgb(163,163,163)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:420 }}>{a.t}</span>
         </div>
         <div style={{ display:'grid', gridTemplateColumns:'minmax(0,1fr) 280px', gap:36, alignItems:'start' }}>
           <div>
             <div>
-              <span style={{ fontSize:11, fontWeight:600, letterSpacing:'0.07em', textTransform:'uppercase', color:'rgb(94,214,164)', background:'rgba(5,122,85,0.15)', border:'1px solid rgba(5,122,85,0.4)', borderRadius:9999, padding:'4px 12px' }}>{a.tag}</span>
+              <span style={{ fontSize:11, fontWeight:600, letterSpacing:'0.07em', textTransform:'uppercase', color:'rgb(151,171,238)', background:'rgba(35,89,255,0.15)', border:'1px solid rgba(35,89,255,0.4)', borderRadius:9999, padding:'4px 12px' }}>{a.tag}</span>
               <h1 style={{ fontSize:28, fontWeight:700, lineHeight:1.25, color:'rgb(249,250,251)', margin:'16px 0 8px', letterSpacing:'-0.015em', textWrap:'pretty' }}>{a.t}</h1>
               <div style={{ fontSize:12.5, color:'rgb(163,163,163)' }}>Halo Journal · {a.date} · {a.read}</div>
             </div>
             <div style={{ margin:'24px 0 28px', height:320 }}>
-              <image-slot id={`journal-hero-${a.id}`} shape="rounded" radius="14" placeholder="Drop a hero image for this article"></image-slot>
+              <img src="assets/journal.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block', borderRadius:14 }} />
             </div>
             <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
               {a.sections.map((s, i) => (
@@ -452,8 +452,8 @@ function JournalArticlePage({ articleId, onBack }) {
                 </div>
               ))}
             </div>
-            <div style={{ margin:'28px 0 0', padding:'18px 22px', borderRadius:12, background:'rgba(5,122,85,0.10)', border:'1px solid rgba(5,122,85,0.35)' }}>
-              <div style={{ fontSize:11, fontWeight:700, letterSpacing:'0.07em', textTransform:'uppercase', color:'rgb(94,214,164)', marginBottom:6 }}>From the desk</div>
+            <div style={{ margin:'28px 0 0', padding:'18px 22px', borderRadius:12, background:'rgba(35,89,255,0.10)', border:'1px solid rgba(35,89,255,0.35)' }}>
+              <div style={{ fontSize:11, fontWeight:700, letterSpacing:'0.07em', textTransform:'uppercase', color:'rgb(151,171,238)', marginBottom:6 }}>From the desk</div>
               <div style={{ fontSize:13.5, lineHeight:1.65, color:'rgb(209,213,219)' }}>Structured notes are a defined-outcome vehicle, not an asset class — the same equity and rate exposures your clients already hold, repackaged with protection and payoff terms you choose up front.</div>
             </div>
           </div>
@@ -462,13 +462,13 @@ function JournalArticlePage({ articleId, onBack }) {
             <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
               {others.map(o => (
                 <div key={o.id} style={{ display:'flex', gap:10, alignItems:'flex-start', padding:10, borderRadius:12, background:'rgba(255,255,255,0.05)', border:'1px solid rgb(75,85,99)' }}
-                  onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(5,122,85)'; }}
+                  onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(35,89,255)'; }}
                   onMouseLeave={(e)=>{ e.currentTarget.style.borderColor = 'rgb(75,85,99)'; }}>
                   <div style={{ width:64, height:64, flexShrink:0 }}>
-                    <image-slot id={`journal-card-${o.id}`} shape="rounded" radius="8" placeholder=" "></image-slot>
+                    <image-slot src="assets/journal.png" id={`journal-card-${o.id}`} shape="rounded" radius="8" placeholder=" "></image-slot>
                   </div>
                   <div onClick={() => window.dispatchEvent(new CustomEvent('journal:open', { detail:{ id:o.id } }))} style={{ minWidth:0, cursor:'pointer' }}>
-                    <div style={{ fontSize:10, fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase', color:'rgb(94,214,164)' }}>{o.tag}</div>
+                    <div style={{ fontSize:10, fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase', color:'rgb(151,171,238)' }}>{o.tag}</div>
                     <div style={{ fontSize:12, fontWeight:600, lineHeight:1.4, color:'rgb(249,250,251)', marginTop:3, display:'-webkit-box', WebkitLineClamp:3, WebkitBoxOrient:'vertical', overflow:'hidden' }}>{o.t}</div>
                     <div style={{ fontSize:10.5, color:'rgb(163,163,163)', marginTop:3 }}>{o.ago}</div>
                   </div>
@@ -524,9 +524,9 @@ function BenefitClients() {
       <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:12 }}>
         {BENEFIT_CLIENTS.map(c => (
           <div key={c.name} onClick={() => window.dispatchEvent(new CustomEvent('client:open', { detail:{ client:c.name } }))} style={{ display:'flex', gap:12, alignItems:'flex-start', padding:'12px 14px', borderRadius:12, background:'rgba(255,255,255,0.05)', border:'1px solid rgb(75,85,99)', cursor:'pointer' }}
-            onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(5,122,85)'; }}
+            onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(35,89,255)'; }}
             onMouseLeave={(e)=>{ e.currentTarget.style.borderColor = 'rgb(75,85,99)'; }}>
-            <div style={{ width:34, height:34, borderRadius:9999, flexShrink:0, background:'rgba(5,122,85,0.2)', border:'1px solid rgba(5,122,85,0.5)', color:'rgb(94,214,164)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Inter', fontSize:12, fontWeight:700 }}>{c.name.split(' ').map(w=>w[0]).join('')}</div>
+            <div style={{ width:34, height:34, borderRadius:9999, flexShrink:0, background:'rgba(35,89,255,0.2)', border:'1px solid rgba(35,89,255,0.5)', color:'rgb(151,171,238)', display:'flex', alignItems:'center', justifyContent:'center', fontFamily:'Inter', fontSize:12, fontWeight:700 }}>{c.name.split(' ').map(w=>w[0]).join('')}</div>
             <div style={{ minWidth:0 }}>
               <div style={{ display:'flex', alignItems:'baseline', gap:8 }}>
                 <span style={{ fontFamily:'Inter', fontSize:12.5, fontWeight:600, color:'rgb(249,250,251)' }}>{c.name}</span>
@@ -545,8 +545,8 @@ function WatchButton({ on, onClick }) {
     <button onClick={(e)=>{ e.stopPropagation(); onClick(); }} title={on ? 'Remove from watchlist' : 'Add to watchlist'} style={{
       display:'inline-flex', alignItems:'center', gap:6,
       fontFamily:'Inter', fontSize:11, fontWeight:600, cursor:'pointer',
-      color: on ? 'rgb(94,214,164)' : 'rgb(209,213,219)',
-      background:'rgba(17,24,39,0.85)', border:`1px solid ${on ? 'rgba(5,122,85,0.7)' : 'rgb(75,85,99)'}`,
+      color: on ? 'rgb(151,171,238)' : 'rgb(209,213,219)',
+      background:'rgba(17,24,39,0.85)', border:`1px solid ${on ? 'rgba(35,89,255,0.7)' : 'rgb(75,85,99)'}`,
       borderRadius:9999, padding:'4px 10px',
     }}>
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -570,7 +570,7 @@ function NoteCard({ r, watched, onToggle }) {
       <div style={{ padding:'12px 14px 14px', display:'flex', flexDirection:'column', gap:10, flex:1 }}>
         <div style={{ fontFamily:'Inter', fontSize:13.5, fontWeight:600, color:'rgb(249,250,251)', lineHeight:1.45 }}>{r.post}</div>
         <div style={{ display:'flex', alignItems:'baseline', gap:6 }}>
-          <span style={{ fontFamily:'Inter', fontSize:20, fontWeight:700, color:'rgb(52,211,153)', letterSpacing:'-0.01em' }}>{r.yield}</span>
+          <span style={{ fontFamily:'Inter', fontSize:20, fontWeight:700, color:'rgb(128,152,234)', letterSpacing:'-0.01em' }}>{r.yield}</span>
           <span style={{ fontFamily:'Inter', fontSize:10.5, color:'rgb(163,163,163)' }}>{r.yield.includes('%') && !r.yield.includes('cap') && !r.yield.includes('to') ? 'annualized yield' : 'payoff'}</span>
         </div>
         <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
@@ -579,8 +579,8 @@ function NoteCard({ r, watched, onToggle }) {
           ))}
         </div>
         <div style={{ marginTop:'auto', paddingTop:4 }}>
-          <button onClick={() => window.dispatchEvent(new CustomEvent('note:open', { detail:{ id:r.id } }))} style={{ display:'inline-flex', alignItems:'center', gap:7, fontFamily:'Inter', fontSize:11.5, fontWeight:600, color:'rgb(94,214,164)', background:'transparent', border:'1px solid rgba(5,122,85,0.55)', borderRadius:9999, padding:'6px 13px', cursor:'pointer' }}
-            onMouseEnter={(e)=>{ e.currentTarget.style.background = 'rgba(5,122,85,0.15)'; }}
+          <button onClick={() => window.dispatchEvent(new CustomEvent('note:open', { detail:{ id:r.id } }))} style={{ display:'inline-flex', alignItems:'center', gap:7, fontFamily:'Inter', fontSize:11.5, fontWeight:600, color:'rgb(151,171,238)', background:'transparent', border:'1px solid rgba(35,89,255,0.55)', borderRadius:9999, padding:'6px 13px', cursor:'pointer' }}
+            onMouseEnter={(e)=>{ e.currentTarget.style.background = 'rgba(35,89,255,0.15)'; }}
             onMouseLeave={(e)=>{ e.currentTarget.style.background = 'transparent'; }}>
             <i className="fa-solid fa-arrow-up-right-from-square" style={{ width:11, height:11 }} /> View Full Post
           </button>
@@ -619,7 +619,7 @@ function WatchlistPage() {
           <div style={HEAD}>Recent auction</div>
           <span style={SUB}>Halo auctions · live pricing</span>
         </div>
-        <button style={{ display:'inline-flex', alignItems:'center', gap:7, fontFamily:'Inter', fontSize:12, fontWeight:600, color:'#fff', background:'rgb(5,122,85)', border:'none', borderRadius:8, padding:'8px 14px', cursor:'pointer' }}>
+        <button style={{ display:'inline-flex', alignItems:'center', gap:7, fontFamily:'Inter', fontSize:12, fontWeight:600, color:'#fff', background:'rgb(35,89,255)', border:'none', borderRadius:8, padding:'8px 14px', cursor:'pointer' }}>
           <i className="fa-solid fa-circle-plus" style={{ width:13, height:13 }} /> Create post
         </button>
       </div>
@@ -632,7 +632,7 @@ function WatchlistPage() {
           return (
             <div key={r.id} style={{ display:'grid', gridTemplateColumns:'70px 2.4fr 1.1fr 0.9fr 0.9fr 1.2fr 1.2fr 110px', gap:12, alignItems:'center', padding:'11px 16px', borderTop: idx ? '1px solid rgba(75,85,99,0.4)' : 'none' }}>
               <button onClick={()=>toggle(r.id)} title="Add to watchlist" style={{ width:30, height:30, borderRadius:8, border:'1px solid rgb(75,85,99)', background:'transparent', color:'rgb(163,163,163)', cursor:'pointer', display:'inline-flex', alignItems:'center', justifyContent:'center' }}
-                onMouseEnter={(e)=>{ e.currentTarget.style.color = 'rgb(94,214,164)'; e.currentTarget.style.borderColor = 'rgb(5,122,85)'; }}
+                onMouseEnter={(e)=>{ e.currentTarget.style.color = 'rgb(151,171,238)'; e.currentTarget.style.borderColor = 'rgb(35,89,255)'; }}
                 onMouseLeave={(e)=>{ e.currentTarget.style.color = 'rgb(163,163,163)'; e.currentTarget.style.borderColor = 'rgb(75,85,99)'; }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
               </button>
@@ -640,12 +640,12 @@ function WatchlistPage() {
                 <div style={{ fontFamily:'Inter', fontSize:12.5, fontWeight:600, color:'rgb(249,250,251)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{r.post}</div>
                 <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)', marginTop:2 }}>{r.unds.join(' / ')}</div>
               </div>
-              <span style={{ fontFamily:'Inter', fontSize:13, fontWeight:700, color:'rgb(52,211,153)', whiteSpace:'nowrap' }}>{r.yield}</span>
+              <span style={{ fontFamily:'Inter', fontSize:13, fontWeight:700, color:'rgb(128,152,234)', whiteSpace:'nowrap' }}>{r.yield}</span>
               <span style={{ fontFamily:'Inter', fontSize:12, color:'rgb(209,213,219)' }}>{r.term}</span>
               <span style={{ fontFamily:'Inter', fontSize:12, color:'rgb(209,213,219)' }}>{r.prot}</span>
               <span style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(163,163,163)' }}>{r.feat}</span>
               <span style={{ justifySelf:'start', fontFamily:'Inter', fontWeight:600, fontSize:10.5, padding:'3px 10px', borderRadius:9999, background:t.bg, color:t.fg, border:`1px solid ${t.ring}`, whiteSpace:'nowrap' }}>{r.status}</span>
-              <button onClick={() => window.dispatchEvent(new CustomEvent('note:open', { detail:{ id:r.id } }))} style={{ fontFamily:'Inter', fontSize:11.5, fontWeight:600, color:'rgb(94,214,164)', background:'transparent', border:'none', cursor:'pointer', textAlign:'right', whiteSpace:'nowrap', justifySelf:'end' }}>View post →</button>
+              <button onClick={() => window.dispatchEvent(new CustomEvent('note:open', { detail:{ id:r.id } }))} style={{ fontFamily:'Inter', fontSize:11.5, fontWeight:600, color:'rgb(151,171,238)', background:'transparent', border:'none', cursor:'pointer', textAlign:'right', whiteSpace:'nowrap', justifySelf:'end' }}>View post →</button>
             </div>
           );
         })}
@@ -664,9 +664,9 @@ function NotePostPage({ noteId, onBack }) {
     <div style={{ padding:'28px 32px 64px', fontFamily:'Inter' }}>
       <div style={{ maxWidth:860, margin:'0 auto' }}>
         <div style={{ display:'flex', alignItems:'center', gap:8, fontSize:12.5, marginBottom:22 }}>
-          <a onClick={() => window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'dashboard' } }))} style={{ color:'rgb(5,122,85)', fontWeight:500, cursor:'pointer' }}>Dashboard</a>
+          <a onClick={() => window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'dashboard' } }))} style={{ color:'rgb(35,89,255)', fontWeight:500, cursor:'pointer' }}>Dashboard</a>
           <i className="fa-solid fa-chevron-right" style={{ width:10, height:10, color:'rgb(107,114,128)' }} />
-          <a onClick={onBack} style={{ color:'rgb(5,122,85)', fontWeight:500, cursor:'pointer' }}>Watchlist</a>
+          <a onClick={onBack} style={{ color:'rgb(35,89,255)', fontWeight:500, cursor:'pointer' }}>Watchlist</a>
           <i className="fa-solid fa-chevron-right" style={{ width:10, height:10, color:'rgb(107,114,128)' }} />
           <span style={{ color:'rgb(163,163,163)', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:460 }}>{r.post}</span>
         </div>
@@ -680,7 +680,7 @@ function NotePostPage({ noteId, onBack }) {
           {stats.map(([lbl, val]) => (
             <div key={lbl} style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgb(75,85,99)', borderRadius:12, padding:'12px 14px' }}>
               <div style={{ fontSize:10.5, fontWeight:600, letterSpacing:'0.05em', textTransform:'uppercase', color:'rgb(163,163,163)', marginBottom:4 }}>{lbl}</div>
-              <div style={{ fontSize:15, fontWeight:700, color: lbl === 'Annualized yield' ? 'rgb(52,211,153)' : 'rgb(249,250,251)' }}>{val}</div>
+              <div style={{ fontSize:15, fontWeight:700, color: lbl === 'Annualized yield' ? 'rgb(128,152,234)' : 'rgb(249,250,251)' }}>{val}</div>
             </div>
           ))}
         </div>
@@ -706,14 +706,14 @@ function JournalsPage() {
       <BackToDashboard />
       <div style={{ display:'grid', gridTemplateColumns:'1.2fr 1fr', gap:16, marginBottom:16 }}>
         <div style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgb(75,85,99)', borderRadius:12, overflow:'hidden', display:'flex', flexDirection:'column' }}
-          onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(5,122,85)'; }}
+          onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(35,89,255)'; }}
           onMouseLeave={(e)=>{ e.currentTarget.style.borderColor = 'rgb(75,85,99)'; }}>
           <div style={{ height:240 }}>
-            <image-slot id={`journal-card-${featured.id}`} shape="rect" placeholder="Featured article image"></image-slot>
+            <img src="assets/journal.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
           </div>
           <div onClick={() => open(featured)} style={{ padding:'16px 18px 18px', display:'flex', flexDirection:'column', gap:8, flex:1, cursor:'pointer' }}>
             <div style={{ display:'flex', justifyContent:'space-between', gap:8 }}>
-              <span style={{ fontSize:10.5, fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase', color:'rgb(94,214,164)' }}>{featured.tag}</span>
+              <span style={{ fontSize:10.5, fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase', color:'rgb(151,171,238)' }}>{featured.tag}</span>
               <span style={{ fontSize:11, color:'rgb(163,163,163)', whiteSpace:'nowrap' }}>{featured.ago}</span>
             </div>
             <div style={{ fontSize:17, fontWeight:700, lineHeight:1.35, color:'rgb(249,250,251)', letterSpacing:'-0.01em' }}>{featured.t}</div>
@@ -723,14 +723,14 @@ function JournalsPage() {
         <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
           {rest.map(a => (
             <div key={a.id} style={{ display:'flex', gap:14, background:'rgba(255,255,255,0.05)', border:'1px solid rgb(75,85,99)', borderRadius:12, overflow:'hidden', flex:1 }}
-              onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(5,122,85)'; }}
+              onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(35,89,255)'; }}
               onMouseLeave={(e)=>{ e.currentTarget.style.borderColor = 'rgb(75,85,99)'; }}>
               <div style={{ width:130, flexShrink:0 }}>
-                <image-slot id={`journal-card-${a.id}`} shape="rect" placeholder=" "></image-slot>
+                <image-slot src="assets/journal.png" id={`journal-card-${a.id}`} shape="rect" placeholder=" "></image-slot>
               </div>
               <div onClick={() => open(a)} style={{ padding:'12px 14px 12px 0', display:'flex', flexDirection:'column', gap:5, cursor:'pointer', justifyContent:'center', minWidth:0 }}>
                 <div style={{ display:'flex', justifyContent:'space-between', gap:8 }}>
-                  <span style={{ fontSize:10, fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase', color:'rgb(94,214,164)' }}>{a.tag}</span>
+                  <span style={{ fontSize:10, fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase', color:'rgb(151,171,238)' }}>{a.tag}</span>
                   <span style={{ fontSize:10.5, color:'rgb(163,163,163)', whiteSpace:'nowrap' }}>{a.ago}</span>
                 </div>
                 <div style={{ fontSize:13, fontWeight:600, lineHeight:1.4, color:'rgb(249,250,251)' }}>{a.t}</div>
@@ -742,14 +742,14 @@ function JournalsPage() {
       <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:16 }}>
         {more.map(a => (
           <div key={a.id} style={{ background:'rgba(255,255,255,0.05)', border:'1px solid rgb(75,85,99)', borderRadius:12, overflow:'hidden', display:'flex', flexDirection:'column' }}
-            onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(5,122,85)'; }}
+            onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(35,89,255)'; }}
             onMouseLeave={(e)=>{ e.currentTarget.style.borderColor = 'rgb(75,85,99)'; }}>
             <div style={{ height:130 }}>
-              <image-slot id={`journal-card-${a.id}`} shape="rect" placeholder="Article image"></image-slot>
+              <img src="assets/journal.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
             </div>
             <div onClick={() => open(a)} style={{ padding:'12px 14px 14px', display:'flex', flexDirection:'column', gap:6, flex:1, cursor:'pointer' }}>
               <div style={{ display:'flex', justifyContent:'space-between', gap:8 }}>
-                <span style={{ fontSize:10, fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase', color:'rgb(94,214,164)' }}>{a.tag}</span>
+                <span style={{ fontSize:10, fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase', color:'rgb(151,171,238)' }}>{a.tag}</span>
                 <span style={{ fontSize:10.5, color:'rgb(163,163,163)', whiteSpace:'nowrap' }}>{a.ago}</span>
               </div>
               <div style={{ fontSize:13, fontWeight:600, lineHeight:1.4, color:'rgb(249,250,251)' }}>{a.t}</div>

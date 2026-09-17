@@ -13,12 +13,12 @@ const RB_CLIENT = {
   riskTolerance:'Moderate Growth',
   current:[
     { label:'Fixed Income',         pct:22, color:'rgb(56,189,248)' },
-    { label:'Domestic Equity',      pct:58, color:'rgb(16,185,129)' },
+    { label:'Domestic Equity',      pct:58, color:'rgb(84,121,240)' },
     { label:'International Equity', pct:20, color:'rgb(234,88,12)'  },
   ],
   recommended:[
     { label:'Fixed Income',         pct:15, delta:-7, color:'rgb(56,189,248)' },
-    { label:'Domestic Equity',      pct:65, delta:+7, color:'rgb(16,185,129)' },
+    { label:'Domestic Equity',      pct:65, delta:+7, color:'rgb(84,121,240)' },
     { label:'International Equity', pct:20, delta:0,  color:'rgb(234,88,12)'  },
   ],
 };
@@ -31,7 +31,7 @@ const RB_THINKING_LINES = [
   { type:'thinking', text:'Computing risk-adjusted return optimization…' },
   { type:'response', text:'Based on my analysis, David Young\'s portfolio has drifted from target allocation. Fixed income is overweight at 22% (target 15%), while domestic equity is underweight at 58% (target 65%). Current market conditions favor reducing fixed income exposure given stabilizing yields, and increasing equity allocation aligns with his Moderate Growth objective.' },
   { type:'response', text:'Tax-efficient implementation is feasible — recommended trades qualify for harvest opportunities, and gradual execution over 2–3 days minimizes market impact. Estimated total cost: ~0.05% of portfolio value.' },
-  { type:'response', text:'I recommend proceeding with the rebalance. I\'ve prepared a client-ready presentation covering rationale, recommended adjustments, efficient frontier analysis, trade cost management, and implementation timeline.' },
+  { type:'response', text:'Recommended implementation is the BlackRock Target Allocation model, funded with iShares ETFs (ITOT for the domestic equity add, IEFA unchanged internationally) \u2014 it matches the Moderate Growth policy at a 0.12% blended expense ratio. I recommend proceeding with the rebalance. I\'ve prepared a client-ready presentation covering rationale, recommended adjustments, efficient frontier analysis, trade cost management, and implementation timeline.' },
 ];
 
 const RB_PILLARS = [
@@ -74,7 +74,7 @@ function RBStreamLine({ line, delay, onComplete }) {
         display:'flex', alignItems:'center', gap:10, padding:'6px 0',
         fontFamily:'Inter', fontSize:13, color:'rgb(163,163,163)', fontStyle:'italic',
       }}>
-        <i className={`fa-solid fa-${done ? 'check' : 'circle-notch'} ${done ? '' : 'fa-spin'}`} style={{ width:11, height:11, color: done ? 'rgb(16,185,129)' : 'rgb(163,163,163)' }} />
+        <i className={`fa-solid fa-${done ? 'check' : 'circle-notch'} ${done ? '' : 'fa-spin'}`} style={{ width:11, height:11, color: done ? 'rgb(84,121,240)' : 'rgb(163,163,163)' }} />
         <span>{shown}</span>
       </div>
     );
@@ -82,11 +82,11 @@ function RBStreamLine({ line, delay, onComplete }) {
   return (
     <div style={{
       padding:'12px 16px', marginTop:8,
-      background:'rgba(5,122,85,0.06)', border:'1px solid rgba(5,122,85,0.3)', borderRadius:10,
+      background:'rgba(35,89,255,0.06)', border:'1px solid rgba(35,89,255,0.3)', borderRadius:10,
       fontFamily:'Inter', fontSize:14, color:'rgb(229,231,235)', lineHeight:1.6,
     }}>
       {shown}
-      {!done && <span style={{ display:'inline-block', width:7, height:14, background:'rgb(16,185,129)', marginLeft:2, verticalAlign:'middle', animation:'rb-blink 1s infinite' }} />}
+      {!done && <span style={{ display:'inline-block', width:7, height:14, background:'rgb(84,121,240)', marginLeft:2, verticalAlign:'middle', animation:'rb-blink 1s infinite' }} />}
     </div>
   );
 }
@@ -162,7 +162,7 @@ function RebalanceFlow() {
       const reply = await window.claude.complete({
         messages: [{
           role:'user',
-          content: `You are Field Intelligence, an AI assistant helping a financial advisor analyze a portfolio rebalance for client David Young (currently 22% Fixed Income / 58% Domestic Equity / 20% International Equity, target 15/65/20, Moderate Growth profile, $2.4M portfolio). Answer this advisor's follow-up question concisely (2-4 sentences, professional tone): ${q}`,
+          content: `You are Halo + Intelligence, an AI assistant helping a financial advisor analyze a portfolio rebalance for client David Young (currently 22% Fixed Income / 58% Domestic Equity / 20% International Equity, target 15/65/20, Moderate Growth profile, $2.4M portfolio). Answer this advisor's follow-up question concisely (2-4 sentences, professional tone): ${q}`,
         }],
       });
       setFollowUps(prev => prev.map((m, i) => i === prev.length - 1 ? { role:'assistant', text:reply, streaming:false } : m));
@@ -189,7 +189,7 @@ function RebalanceFlow() {
         @keyframes rb-fadein { from { opacity:0; } to { opacity:1; } }
         @keyframes rb-blink  { 0%,49% { opacity:1; } 50%,100% { opacity:0; } }
         @keyframes rb-rise   { from { opacity:0; transform: translateY(12px); } to { opacity:1; transform: translateY(0); } }
-        @keyframes rb-pulse  { 0%,100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.5); } 50% { box-shadow: 0 0 0 8px rgba(16,185,129,0); } }
+        @keyframes rb-pulse  { 0%,100% { box-shadow: 0 0 0 0 rgba(84,121,240,0.5); } 50% { box-shadow: 0 0 0 8px rgba(84,121,240,0); } }
       `}</style>
 
       {/* Header */}
@@ -226,14 +226,14 @@ function RebalanceFlow() {
           <>
             <div style={{
               width:36, height:36, borderRadius:9999,
-              background:'linear-gradient(135deg, rgb(5,122,85) 0%, rgb(16,185,129) 100%)',
+              background:'linear-gradient(135deg, rgb(35,89,255) 0%, rgb(84,121,240) 100%)',
               display:'flex', alignItems:'center', justifyContent:'center',
               animation:'rb-pulse 2.5s infinite',
             }}>
               <i className="fa-solid fa-wand-magic-sparkles" style={{ width:16, height:16, color:'#fff' }} />
             </div>
             <div style={{ flex:1, minWidth:0 }}>
-              <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:14, color:'rgb(249,250,251)' }}>Field Intelligence</div>
+              <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:14, color:'rgb(249,250,251)' }}>Halo + Intelligence</div>
               <div style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(163,163,163)' }}>Analyzing rebalance opportunity for {RB_CLIENT.name}</div>
             </div>
           </>
@@ -283,14 +283,14 @@ function RebalanceFlow() {
             </div>
             <div style={{
               fontFamily:'Inter', fontWeight:600, fontSize:11, padding:'5px 10px', borderRadius:6,
-              background:'rgba(5,122,85,0.2)', color:'rgb(16,185,129)', border:'1px solid rgba(5,122,85,0.45)',
+              background:'rgba(35,89,255,0.2)', color:'rgb(84,121,240)', border:'1px solid rgba(35,89,255,0.45)',
             }}>REBALANCE OPPORTUNITY</div>
           </div>
 
           {/* Section header */}
           <div style={{
             fontFamily:'Inter', fontSize:11, fontWeight:600, letterSpacing:'0.12em',
-            textTransform:'uppercase', color:'rgb(16,185,129)', marginBottom:14,
+            textTransform:'uppercase', color:'rgb(84,121,240)', marginBottom:14,
             animation:'rb-rise 400ms ease-out',
           }}>Analysis in progress</div>
 
@@ -311,7 +311,7 @@ function RebalanceFlow() {
             <div style={{ marginBottom:28, animation:'rb-rise 500ms ease-out' }}>
               <div style={{
                 fontFamily:'Inter', fontSize:11, fontWeight:600, letterSpacing:'0.12em',
-                textTransform:'uppercase', color:'rgb(16,185,129)', marginBottom:14,
+                textTransform:'uppercase', color:'rgb(84,121,240)', marginBottom:14,
               }}>Why portfolio rebalancing matters</div>
               <div style={{
                 paddingTop:8, borderTop:'1px solid rgba(75,85,99,0.5)',
@@ -338,7 +338,7 @@ function RebalanceFlow() {
             <div style={{ marginBottom:28, animation:'rb-rise 500ms ease-out' }}>
               <div style={{
                 fontFamily:'Inter', fontSize:11, fontWeight:600, letterSpacing:'0.12em',
-                textTransform:'uppercase', color:'rgb(16,185,129)', marginBottom:14,
+                textTransform:'uppercase', color:'rgb(84,121,240)', marginBottom:14,
               }}>Recommended adjustments</div>
               <div style={{
                 paddingTop:8, borderTop:'1px solid rgba(75,85,99,0.5)',
@@ -361,7 +361,7 @@ function RebalanceFlow() {
                 </div>
                 {/* Arrow */}
                 <div style={{ display:'flex', justifyContent:'center', alignItems:'center', height:'100%' }}>
-                  <i className="fa-solid fa-arrow-right" style={{ width:24, height:24, color:'rgb(16,185,129)' }} />
+                  <i className="fa-solid fa-arrow-right" style={{ width:24, height:24, color:'rgb(84,121,240)' }} />
                 </div>
                 {/* Recommended */}
                 <div>
@@ -370,7 +370,7 @@ function RebalanceFlow() {
                     {RB_CLIENT.recommended.map((a, i) => (
                       <div key={i} style={{
                         padding:'12px 14px',
-                        background:'rgba(5,122,85,0.06)', border:'1px solid rgba(5,122,85,0.45)', borderRadius:10,
+                        background:'rgba(35,89,255,0.06)', border:'1px solid rgba(35,89,255,0.45)', borderRadius:10,
                         display:'flex', alignItems:'center', justifyContent:'space-between', gap:8,
                       }}>
                         <div>
@@ -380,9 +380,9 @@ function RebalanceFlow() {
                         {a.delta !== 0 && (
                           <div style={{
                             fontFamily:'Inter', fontWeight:700, fontSize:11.5, padding:'4px 9px', borderRadius:6,
-                            background: a.delta > 0 ? 'rgba(5,122,85,0.3)' : 'rgba(220,38,38,0.25)',
-                            color:     a.delta > 0 ? 'rgb(16,185,129)'   : 'rgb(248,113,113)',
-                            border:    a.delta > 0 ? '1px solid rgba(5,122,85,0.55)' : '1px solid rgba(220,38,38,0.5)',
+                            background: a.delta > 0 ? 'rgba(35,89,255,0.3)' : 'rgba(220,38,38,0.25)',
+                            color:     a.delta > 0 ? 'rgb(84,121,240)'   : 'rgb(248,113,113)',
+                            border:    a.delta > 0 ? '1px solid rgba(35,89,255,0.55)' : '1px solid rgba(220,38,38,0.5)',
                           }}>{a.delta > 0 ? '+' : ''}{a.delta}%</div>
                         )}
                       </div>
@@ -398,7 +398,7 @@ function RebalanceFlow() {
             <div style={{ marginBottom:32, animation:'rb-rise 500ms ease-out' }}>
               <div style={{
                 fontFamily:'Inter', fontSize:11, fontWeight:600, letterSpacing:'0.12em',
-                textTransform:'uppercase', color:'rgb(16,185,129)', marginBottom:14,
+                textTransform:'uppercase', color:'rgb(84,121,240)', marginBottom:14,
               }}>September 2025 market assessment</div>
               <div style={{ paddingTop:8, borderTop:'1px solid rgba(75,85,99,0.5)' }}>
                 <div style={{ fontFamily:'Inter', fontSize:13, color:'rgb(209,213,219)', lineHeight:1.55, marginBottom:14 }}>
@@ -412,7 +412,7 @@ function RebalanceFlow() {
                     }}>
                       <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:12.5, color:'rgb(249,250,251)', marginBottom:6 }}>{m.label}</div>
                       <div style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(209,213,219)', lineHeight:1.5, marginBottom:8 }}>{m.body}</div>
-                      <div style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(16,185,129)', lineHeight:1.5 }}>{m.accent}</div>
+                      <div style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(84,121,240)', lineHeight:1.5 }}>{m.accent}</div>
                     </div>
                   ))}
                 </div>
@@ -424,17 +424,17 @@ function RebalanceFlow() {
           {showCta && (
             <div style={{
               padding:'22px 24px',
-              background:'linear-gradient(135deg, rgba(5,122,85,0.12) 0%, rgba(5,122,85,0.04) 100%)',
-              border:'1px solid rgba(5,122,85,0.45)', borderRadius:14,
+              background:'linear-gradient(135deg, rgba(35,89,255,0.12) 0%, rgba(35,89,255,0.04) 100%)',
+              border:'1px solid rgba(35,89,255,0.45)', borderRadius:14,
               display:'flex', alignItems:'center', gap:18,
               animation:'rb-rise 500ms ease-out 200ms both',
             }}>
               <div style={{
                 width:48, height:48, borderRadius:12, flexShrink:0,
-                background:'rgba(5,122,85,0.25)', border:'1px solid rgba(5,122,85,0.5)',
+                background:'rgba(35,89,255,0.25)', border:'1px solid rgba(35,89,255,0.5)',
                 display:'flex', alignItems:'center', justifyContent:'center',
               }}>
-                <i className="fa-solid fa-file-powerpoint" style={{ width:20, height:20, color:'rgb(16,185,129)' }} />
+                <i className="fa-solid fa-file-powerpoint" style={{ width:20, height:20, color:'rgb(84,121,240)' }} />
               </div>
               <div style={{ flex:1, minWidth:0 }}>
                 <div style={{ fontFamily:'Inter', fontWeight:600, fontSize:15, color:'rgb(249,250,251)', marginBottom:4 }}>Client presentation ready</div>
@@ -445,9 +445,9 @@ function RebalanceFlow() {
               <button onClick={handleGenerate} style={{
                 fontFamily:'Inter', fontWeight:600, fontSize:13,
                 padding:'12px 20px', borderRadius:8, cursor:'pointer',
-                background:'rgb(5,122,85)', border:'1px solid rgb(16,185,129)',
+                background:'rgb(35,89,255)', border:'1px solid rgb(84,121,240)',
                 color:'#fff', display:'inline-flex', alignItems:'center', gap:8,
-                boxShadow:'0 4px 12px rgba(5,122,85,0.4)',
+                boxShadow:'0 4px 12px rgba(35,89,255,0.4)',
               }}>
                 Open Presentation
                 <i className="fa-solid fa-arrow-right" style={{ width:11, height:11 }} />
@@ -472,9 +472,9 @@ function RebalanceFlow() {
                                        animation:'rb-rise 300ms ease-out' }}>
                   {m.streaming && !m.text ? (
                     <span style={{ display:'inline-flex', gap:4, alignItems:'center', color:'rgb(163,163,163)' }}>
-                      <span style={{ width:6, height:6, borderRadius:9999, background:'rgb(16,185,129)', animation:'rb-blink 1s infinite' }} />
-                      <span style={{ width:6, height:6, borderRadius:9999, background:'rgb(16,185,129)', animation:'rb-blink 1s infinite 0.15s' }} />
-                      <span style={{ width:6, height:6, borderRadius:9999, background:'rgb(16,185,129)', animation:'rb-blink 1s infinite 0.3s' }} />
+                      <span style={{ width:6, height:6, borderRadius:9999, background:'rgb(84,121,240)', animation:'rb-blink 1s infinite' }} />
+                      <span style={{ width:6, height:6, borderRadius:9999, background:'rgb(84,121,240)', animation:'rb-blink 1s infinite 0.15s' }} />
+                      <span style={{ width:6, height:6, borderRadius:9999, background:'rgb(84,121,240)', animation:'rb-blink 1s infinite 0.3s' }} />
                     </span>
                   ) : m.text}
                 </div>
@@ -523,8 +523,8 @@ function RebalanceFlow() {
               />
               <button onClick={handleAsk} disabled={busy || !draft.trim()} style={{
                 width:32, height:32, borderRadius:8, cursor: busy || !draft.trim() ? 'default' : 'pointer',
-                background: busy || !draft.trim() ? 'rgba(75,85,99,0.4)' : 'rgb(5,122,85)',
-                border: busy || !draft.trim() ? '1px solid rgba(75,85,99,0.6)' : '1px solid rgb(16,185,129)',
+                background: busy || !draft.trim() ? 'rgba(75,85,99,0.4)' : 'rgb(35,89,255)',
+                border: busy || !draft.trim() ? '1px solid rgba(75,85,99,0.6)' : '1px solid rgb(84,121,240)',
                 color:'#fff', display:'flex', alignItems:'center', justifyContent:'center',
                 opacity: busy || !draft.trim() ? 0.6 : 1,
               }}>

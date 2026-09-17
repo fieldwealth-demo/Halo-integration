@@ -19,8 +19,8 @@ const CR_VALUE = { fontFamily:'Inter', fontWeight:700, fontSize:18, letterSpacin
 const CR_TITLE = { fontFamily:'Inter', fontWeight:600, fontSize:13, letterSpacing:'-0.01em' };
 const CR_DIVIDER = '1px solid rgba(75,85,99,0.45)';
 
-const CR_GREEN  = 'rgb(5,122,85)';
-const CR_GREEN_SOFT = 'rgba(5,122,85,0.18)';
+const CR_GREEN  = 'rgb(35,89,255)';
+const CR_GREEN_SOFT = 'rgba(35,89,255,0.18)';
 const CR_RED    = 'rgb(248,113,113)';
 const CR_RED_SOFT = 'rgba(248,113,113,0.16)';
 const CR_BLUE   = 'rgb(56,189,248)';
@@ -80,7 +80,7 @@ function PortfolioTrend() {
       {
         name:'Portfolio Value', data: portfolio, color:CR_GREEN,
         marker:{ lineColor:CR_GREEN },
-        fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(5,122,85,0.35)'],[1,'rgba(5,122,85,0)']] },
+        fillColor:{ linearGradient:{x1:0,y1:0,x2:0,y2:1}, stops:[[0,'rgba(35,89,255,0.35)'],[1,'rgba(35,89,255,0)']] },
       },
       {
         name:'S&P 500 Benchmark', data: benchmark, color:'rgb(160,170,185)',
@@ -123,7 +123,7 @@ function PortfolioTrend() {
 /* ---- Allocation donut ---------------------------------------------- */
 function AllocationDonut() {
   const data = [
-    { name:'Domestic Stock Funds',   y:62, fill:'rgba( 94,214,164,0.55)', dot:'rgb( 94,214,164)', amt:'$529,220' },
+    { name:'Domestic Stock Funds',   y:62, fill:'rgba(151,171,238,0.55)', dot:'rgb(151,171,238)', amt:'$529,220' },
     { name:'Bond Funds',             y:18, fill:'rgba(120,160,230,0.55)', dot:'rgb(120,160,230)', amt:'$153,720' },
     { name:'International Equities', y:11, fill:'rgba(180,150,235,0.55)', dot:'rgb(180,150,235)', amt:'$93,940' },
     { name:'Cash',                   y:5,  fill:'rgba(245,200, 90,0.55)', dot:'rgb(245,200, 90)', amt:'$42,700' },
@@ -246,7 +246,7 @@ function TransactionsTable() {
   ];
   const badge = (t) => {
     const map = {
-      BUY:  { bg:CR_GREEN_SOFT, bd:'rgba(5,122,85,0.55)',  c:'rgb(52,211,153)' },
+      BUY:  { bg:CR_GREEN_SOFT, bd:'rgba(35,89,255,0.55)',  c:'rgb(128,152,234)' },
       SELL: { bg:CR_RED_SOFT,   bd:'rgba(248,113,113,0.55)', c:'rgb(252,165,165)' },
       DIV:  { bg:CR_BLUE_SOFT,  bd:'rgba(56,189,248,0.55)',  c:'rgb(125,211,252)' },
     }[t];
