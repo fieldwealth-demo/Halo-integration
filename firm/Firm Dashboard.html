@@ -1,0 +1,75 @@
+<!doctype html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Firm Manager · Halo +</title>
+  <link rel="stylesheet" href="../colors_and_type.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/a08997c4a1.js" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/highcharts@11.4.8/highcharts.js"></script>
+  <script src="https://unpkg.com/highcharts@11.4.8/highcharts-more.js"></script>
+  <script src="https://unpkg.com/highcharts@11.4.8/modules/map.js"></script>
+  <script src="src/network-data.js"></script>
+  <script src="src/mc-data.js"></script>
+  <script src="image-slot.js"></script>
+  <style>
+    html, body { margin:0; padding:0; color: rgb(249,250,251); min-height:100vh; font-family: Inter, sans-serif; }
+    body {
+      background-color: rgb(11,21,36);
+      background-image:
+        radial-gradient(ellipse 70% 90% at 72% 20%, rgba(29,88,255,0.28) 0%, rgba(20,60,160,0.14) 28%, transparent 55%),
+        radial-gradient(ellipse 65% 85% at 28% 75%, rgba(20,60,160,0.12) 0%, transparent 55%),
+        linear-gradient(135deg, rgb(10, 20, 34) 0%, rgb(11, 22, 36) 50%, rgb(9, 18, 30) 100%);
+      background-attachment: fixed;
+    }
+    * { font-family: Inter, sans-serif; box-sizing: border-box; }
+    button { font-family: Inter, sans-serif; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .page-fade { animation: fadeIn 220ms ease-out; }
+    .scroll-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+    .scroll-thin::-webkit-scrollbar-track { background: transparent; }
+    .scroll-thin::-webkit-scrollbar-thumb { background: rgba(75,85,99,0.5); border-radius: 9999px; }
+    .scroll-thin { scrollbar-width: thin; scrollbar-color: rgba(75,85,99,0.5) transparent; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(75,85,99,0.5); border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(107,114,128,0.7); }
+    .glass-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgb(75,85,99);
+      border-radius: 12px;
+      backdrop-filter: blur(12px) saturate(140%);
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
+    }
+    .row-hover:hover { background: rgba(255,255,255,0.025); }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel" src="ui/HC.jsx"></script>
+  <script type="text/babel" src="src/Shell.jsx"></script>
+  <script type="text/babel" src="src/Common.jsx"></script>
+  <script type="text/babel" src="src/Dashboard.jsx"></script>
+  <script type="text/babel" src="src/Goals.jsx"></script>
+  <script type="text/babel" src="src/ClientList.jsx"></script>
+  <script type="text/babel" src="src/Advisors.jsx"></script>
+  <script type="text/babel" src="src/GeoMap.jsx"></script>
+  <script type="text/babel" src="src/Geographics.jsx"></script>
+  <script type="text/babel" src="src/ManagerConcentrationModal.jsx"></script>
+  <script type="text/babel" src="src/ManagerConcentration.jsx"></script>
+  <script type="text/babel" src="src/Opportunities.jsx"></script>
+  <script type="text/babel" src="src/Positions.jsx"></script>
+  <script type="text/babel" src="src/Revenue.jsx"></script>
+  <script type="text/babel" src="src/Valuation.jsx"></script>
+  <script type="text/babel" src="src/ClientReports.jsx"></script>
+  <script type="text/babel" src="src/ClientDetail.jsx"></script>
+  <script type="text/babel" src="src/RebalanceFlow.jsx"></script>
+  <script type="text/babel" src="src/SarahBerryDrawer.jsx"></script>
+  <script type="text/babel" src="../advisor/AccountMenu.jsx"></script>
+  <script type="text/babel" src="src/App.jsx"></script>
+</body>
+</html>
