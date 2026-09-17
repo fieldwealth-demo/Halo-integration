@@ -104,8 +104,8 @@ function SelectionChip({ label, icon, onRemove }) {
   return (
     <div style={{
       display:'inline-flex', alignItems:'center', gap:6, height:24, padding:'0 8px',
-      borderRadius:6, background:'rgba(5,122,85,0.22)', border:'1px solid rgba(5,122,85,0.55)',
-      fontFamily:'Inter', fontSize:11, color:'rgb(110,240,180)',
+      borderRadius:6, background:'rgba(35,89,255,0.22)', border:'1px solid rgba(35,89,255,0.55)',
+      fontFamily:'Inter', fontSize:11, color:'rgb(168,186,246)',
     }}>
       {icon && <i className={`fa-solid fa-${icon}`} style={{ fontSize:10 }} />}
       {label}
@@ -127,10 +127,10 @@ function TopbarButton({ variant = 'ghost', icon, active, children, ...rest }) {
   };
   let style;
   if (variant === 'primary') {
-    style = { background:'rgb(5,122,85)', border:'1px solid rgb(5,122,85)', color:'#fff' };
+    style = { background:'rgb(35,89,255)', border:'1px solid rgb(35,89,255)', color:'#fff' };
   } else if (variant === 'outline') {
     style = active
-      ? { background:'rgba(5,122,85,0.22)', border:'1px solid rgb(5,122,85)', color:'rgb(52,211,153)' }
+      ? { background:'rgba(35,89,255,0.22)', border:'1px solid rgb(35,89,255)', color:'rgb(128,152,234)' }
       : { background:'rgba(255,255,255,0.03)', border:'1px solid rgb(75,85,99)', color:'rgb(249,250,251)' };
   } else {
     style = { background:'rgba(255,255,255,0.03)', border:'1px solid rgb(75,85,99)', color:'rgb(249,250,251)' };

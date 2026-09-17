@@ -35,10 +35,10 @@ const SB_BORDER   = 'rgb(75,85,99)';
 const SB_INK_DIM  = 'rgb(163,163,163)';
 const SB_INK      = 'rgb(209,213,219)';
 const SB_INK_HI   = 'rgb(249,250,251)';
-const SB_ACCENT   = 'rgb(52,211,153)';
-const SB_ACCENT_BG= 'rgba(5,122,85,0.22)';
+const SB_ACCENT   = 'rgb(128,152,234)';
+const SB_ACCENT_BG= 'rgba(35,89,255,0.22)';
 const SB_HOVER_BG = 'rgba(255,255,255,0.04)';
-const SB_DOT      = 'rgb(52,211,153)';
+const SB_DOT      = 'rgb(128,152,234)';
 const W_COLLAPSED = 56;
 const W_EXPANDED  = 240;
 const FLYOUT_GRACE_MS = 150;
@@ -551,7 +551,7 @@ function ProfileCluster({ expanded, user, footerItems = [], signOutHref, signOut
   const initials = user ? (user.initials || (user.name || '').split(' ').map(w => w[0]).slice(0,2).join('')) : '';
   const handleSignOut = (e) => {
     e.preventDefault();
-    if (signOutHref) window.open(signOutHref, '_blank', 'noopener,noreferrer');
+    if (signOutHref) { if (/^https?:/i.test(signOutHref)) window.open(signOutHref, '_blank', 'noopener,noreferrer'); else window.location.href = signOutHref; }
   };
 
   if (!user && !footerItems.length && !signOutHref) return null;
@@ -591,7 +591,7 @@ function ProfileCluster({ expanded, user, footerItems = [], signOutHref, signOut
         }}>
           <div style={{
             width:30, height:30, borderRadius:9999, flexShrink:0,
-            background:'linear-gradient(135deg, rgb(16,185,129), rgb(5,122,85))',
+            background:'linear-gradient(135deg, rgb(84,121,240), rgb(35,89,255))',
             color:SB_INK_HI, fontFamily:'Inter', fontWeight:700, fontSize:11,
             display:'flex', alignItems:'center', justifyContent:'center',
             border:'1px solid rgba(255,255,255,0.08)',

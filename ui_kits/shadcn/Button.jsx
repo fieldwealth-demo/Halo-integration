@@ -26,12 +26,12 @@ function Button({
     icon: { height: 36, width: 36, padding: 0, fontSize: 14 },
   }[size];
   const variants = {
-    primary: { background: 'rgb(5,122,85)', color: 'rgb(249,250,251)' },
+    primary: { background: 'rgb(35,89,255)', color: 'rgb(249,250,251)' },
     secondary: { background: 'rgba(255,255,255,0.05)', color: 'rgb(249,250,251)', borderColor: 'rgb(75,85,99)' },
     destructive: { background: 'rgb(220,38,38)', color: '#fff' },
     outline: { background: 'transparent', color: 'rgb(249,250,251)', borderColor: 'rgb(75,85,99)' },
     ghost:   { background: 'transparent', color: 'rgb(249,250,251)', borderColor: 'transparent', boxShadow: 'none' },
-    link:    { background: 'transparent', color: 'rgb(5,122,85)', borderColor: 'transparent', boxShadow: 'none', textDecoration: 'underline', textUnderlineOffset: '2px' },
+    link:    { background: 'transparent', color: 'rgb(35,89,255)', borderColor: 'transparent', boxShadow: 'none', textDecoration: 'underline', textUnderlineOffset: '2px' },
   }[variant];
 
   const ref = React.useRef();

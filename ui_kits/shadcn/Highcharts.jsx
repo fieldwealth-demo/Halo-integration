@@ -30,12 +30,12 @@
 //   • Backgrounds are transparent so charts sit directly on a glass tile.
 
 const FIELD_CHART_PALETTE = [
-  'rgb( 94, 214, 164)', // Equities
+  'rgb(151,171,238)', // Equities
   'rgb(120, 160, 230)', // Fixed Income
   'rgb(180, 150, 235)', // Alternatives
   'rgb(245, 200,  90)', // Private
   'rgb(240, 140, 120)', // Real Estate
-  'rgb(120, 200, 210)', // Cash
+  'rgb(162,180,240)', // Cash
   'rgb(200, 170, 130)', // Hedge
   'rgb(160, 170, 185)', // Other
 ];

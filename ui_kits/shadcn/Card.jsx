@@ -40,7 +40,7 @@ function StatCard({ title, value, delta, icon }) {
       {delta && (
         <div style={{
           fontFamily:'Inter', fontSize:12,
-          color: delta.startsWith('-') ? 'rgb(248,113,113)' : 'rgb(134,239,172)',
+          color: delta.startsWith('-') ? 'rgb(248,113,113)' : 'rgb(182,197,245)',
         }}>
           {delta.startsWith('-') ? '▼ ' : '▲ '}{delta.replace(/^-/, '')}
         </div>
@@ -53,7 +53,7 @@ function Badge({ children, variant = 'default' }) {
   const v = {
     default: { background:'rgb(249,250,251)', color:'rgb(10,10,10)', border: '1px solid transparent' },
     secondary: { background:'rgba(255,255,255,0.08)', color:'rgb(249,250,251)', border: '1px solid rgb(75,85,99)' },
-    success: { background:'rgba(5,122,85,0.18)', color:'rgb(134,239,172)', border: '1px solid rgba(5,122,85,0.35)' },
+    success: { background:'rgba(35,89,255,0.18)', color:'rgb(182,197,245)', border: '1px solid rgba(35,89,255,0.35)' },
     info:    { background:'rgba(0,144,255,0.15)', color:'rgb(94,177,239)', border: '1px solid rgba(0,144,255,0.35)' },
     warning: { background:'rgba(234,179,8,0.18)', color:'rgb(234,179,8)', border: '1px solid rgba(234,179,8,0.35)' },
     danger:  { background:'rgba(220,38,38,0.18)', color:'rgb(248,113,113)', border: '1px solid rgba(248,113,113,0.35)' },

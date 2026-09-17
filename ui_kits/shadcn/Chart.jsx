@@ -45,7 +45,7 @@ function ChartFrame({ children, style }) {
 }
 
 // Chart — lightweight SVG area chart, 5-series palette from design tokens.
-function AreaChart({ data, width = 560, height = 180, colors = ['rgb(5,122,85)','rgb(0,144,255)'] }) {
+function AreaChart({ data, width = 560, height = 180, colors = ['rgb(35,89,255)','rgb(0,144,255)'] }) {
   const max = Math.max(...data.flatMap(s => s.values));
   const min = 0;
   const pts = (vals) => vals.map((v, i) => {

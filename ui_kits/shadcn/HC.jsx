@@ -29,12 +29,12 @@
   // Each entry has a translucent "fill" for the body of the shape and a
   // vivid "line" for the highlight border / dot. Index 0 is the brand green.
   window.FIELD_PALETTE = [
-    { fill: 'rgba( 94,214,164,0.55)', line: 'rgb( 94,214,164)' },
+    { fill: 'rgba(151,171,238,0.55)', line: 'rgb(151,171,238)' },
     { fill: 'rgba(120,160,230,0.55)', line: 'rgb(120,160,230)' },
     { fill: 'rgba(180,150,235,0.55)', line: 'rgb(180,150,235)' },
     { fill: 'rgba(245,200, 90,0.55)', line: 'rgb(245,200, 90)' },
     { fill: 'rgba(240,140,120,0.55)', line: 'rgb(240,140,120)' },
-    { fill: 'rgba(120,200,210,0.55)', line: 'rgb(120,200,210)' },
+    { fill: 'rgba(162,180,240,0.55)', line: 'rgb(162,180,240)' },
     { fill: 'rgba(200,170,130,0.55)', line: 'rgb(200,170,130)' },
     { fill: 'rgba(160,170,185,0.55)', line: 'rgb(160,170,185)' },
   ];

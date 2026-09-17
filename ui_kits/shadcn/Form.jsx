@@ -15,8 +15,8 @@ function Input({ type = 'text', placeholder, value, onChange, style, invalid, ..
       style={{
         height: 36, padding: '4px 12px', width: '100%', boxSizing: 'border-box',
         borderRadius: 8, background:'rgba(255,255,255,0.05)',
-        border: `1px solid ${invalid ? 'rgb(248,113,113)' : (focused ? 'rgb(5,122,85)' : 'rgb(75,85,99)')}`,
-        boxShadow: focused ? '0 0 0 3px rgba(5,122,85,0.30)' : 'none',
+        border: `1px solid ${invalid ? 'rgb(248,113,113)' : (focused ? 'rgb(35,89,255)' : 'rgb(75,85,99)')}`,
+        boxShadow: focused ? '0 0 0 3px rgba(35,89,255,0.30)' : 'none',
         color: 'rgb(249,250,251)', fontFamily:'Inter, sans-serif', fontSize: 14,
         outline: 'none', ...style,
       }}
@@ -34,8 +34,8 @@ function Textarea({ placeholder, value, onChange, rows = 3, style }) {
       style={{
         padding: '8px 12px', width: '100%', boxSizing: 'border-box', resize: 'vertical',
         borderRadius: 8, background:'rgba(255,255,255,0.05)',
-        border: `1px solid ${focused ? 'rgb(5,122,85)' : 'rgb(75,85,99)'}`,
-        boxShadow: focused ? '0 0 0 3px rgba(5,122,85,0.30)' : 'none',
+        border: `1px solid ${focused ? 'rgb(35,89,255)' : 'rgb(75,85,99)'}`,
+        boxShadow: focused ? '0 0 0 3px rgba(35,89,255,0.30)' : 'none',
         color: 'rgb(249,250,251)', fontFamily:'Inter, sans-serif', fontSize: 14,
         outline: 'none', ...style,
       }}
@@ -59,8 +59,8 @@ function Checkbox({ checked, onChange, label }) {
     <label style={{ display:'inline-flex', alignItems:'center', gap:8, cursor:'pointer', color:'rgb(249,250,251)', fontFamily:'Inter', fontSize:14 }}>
       <span style={{
         width: 16, height: 16, borderRadius: 4,
-        border: `1px solid ${checked ? 'rgb(5,122,85)' : 'rgb(75,85,99)'}`,
-        background: checked ? 'rgb(5,122,85)' : 'transparent',
+        border: `1px solid ${checked ? 'rgb(35,89,255)' : 'rgb(75,85,99)'}`,
+        background: checked ? 'rgb(35,89,255)' : 'transparent',
         display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
       }}>
         {checked && <span style={{
