@@ -166,11 +166,11 @@ function afSharedItems() {
 /* Asset-manager house views, surfaced next to the provider insights so the
    feed carries market context and not only firm-generated signals. */
 const AF_RESEARCH = [
-  { id:'blackrock-fi', who:'BlackRock \u00b7 Fundamental Fixed Income', initials:'BR', eyebrow:'Fixed income',
-    title:'Front-end yields still pay for patience',
-    body:'The house view favors high-quality duration in the 3\u20135 year part of the curve, where carry is competitive with cash and the roll-down adds return if policy rates fall.',
-    stats:[{ k:'Preferred duration', v:'3\u20135 yr' }, { k:'Credit stance', v:'Up in quality' }, { k:'Cash vs. bonds', v:'Bonds' }],
-    meta:['Fixed income', 'Rates & duration', 'Published today'] },
+  { id:'blackrock-fi', who:'BlackRock \u00b7 Target Allocation Models', initials:'BR', eyebrow:'Models & ETFs',
+    title:'Model update moves emerging markets to 8%',
+    body:'The BLK Target Allocation model raises emerging-market exposure and trims the domestic overweight, implemented in iShares ETFs at 0.12% expense with minimal turnover.',
+    stats:[{ k:'Expense ratio', v:'0.12%' }, { k:'EM target', v:'8%' }, { k:'Turnover', v:'Low' }],
+    meta:['ETF model portfolio', 'Asset allocation', 'Published today'] },
   { id:'blackstone', who:'Blackstone \u00b7 Private Wealth Solutions', initials:'BX', eyebrow:'Private markets',
     title:'Private credit spreads still clear the public-bond hurdle',
     body:'Direct lending continues to price above comparable public credit, and the firm\u2019s view is that disciplined underwriting matters more than vintage timing for long-horizon households.',
@@ -307,7 +307,7 @@ function AfPost({ item }) {
         <div onClick={item.open} style={{ padding:'0 18px 14px', cursor:'pointer' }}><AfStats stats={item.stats} /></div>
       ) : item.hero ? (
         <div onClick={item.open} style={{ height:340, cursor:'pointer', borderTop:`1px solid ${AF_LINE}`, borderBottom:`1px solid ${AF_LINE}` }}>
-          <img src="assets/journal-globe.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+          <img src={(window.journalArt && item.id) ? window.journalArt(item.id) : 'assets/journal-globe.png'} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
         </div>
       ) : (
         <div onClick={item.open} style={{ padding:'0 18px 14px', cursor:'pointer' }}>{item.chart}</div>
@@ -393,9 +393,8 @@ function AipHomeFeed() {
   return (
     <section style={{ width:'100%', maxWidth:680, margin:'0 auto', display:'flex', flexDirection:'column', gap:14 }}>
       <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', padding:'0 2px 4px' }}>
-        <div style={{ fontFamily:'Inter', fontSize:12, fontWeight:600, color:AF_INK_2, letterSpacing:'0.04em', textTransform:'uppercase' }}>For you</div>
         <div style={{ flex:1 }} />
-        {[['all','All'],['shared','Shared'],['insight','Insights'],['research','Research'],['watchlist','Watchlist'],['journal','Journal']].map(([id,label]) => (
+        {[['all','All'],...(all.some(i => i.kind === 'shared') ? [['shared','Shared']] : []),['insight','Insights'],['research','Research'],['watchlist','Watchlist'],['journal','Journal']].map(([id,label]) => (
           <AfFilter key={id} label={label} active={filter===id} onClick={()=>{ setFilter(id); setLimit(6); }} />
         ))}
       </div>

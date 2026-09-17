@@ -952,7 +952,7 @@ function OnbTilePicker({ answers, selected, onToggle, onNext, onBack }) {
           display: 'inline-flex', alignItems: 'center', gap: 8,
           boxShadow: '0 4px 14px -4px rgba(35,89,255,0.6)'
         }}>
-          Build my dashboard <i className="fa-solid fa-wand-sparkles" style={{ width: 13, height: 13 }} />
+          Build my experience <i className="fa-solid fa-wand-sparkles" style={{ width: 13, height: 13 }} />
         </button>
       </div>
     </div>);
@@ -998,7 +998,7 @@ function OnbBuilding({ tileCount, onDone }) {
         <h2 style={{
           fontFamily: 'Inter', fontWeight: 700, fontSize: 30, lineHeight: 1.1,
           letterSpacing: '-0.02em', color: ONB_INK, margin: '0 0 8px'
-        }}>Building your dashboard</h2>
+        }}>Building your experience</h2>
         <p style={{ fontFamily: 'Inter', fontSize: 14.5, color: ONB_MUTED, margin: 0 }}>
           Wiring up {tileCount} tile{tileCount === 1 ? '' : 's'} and connecting your data feeds.
         </p>
@@ -1041,7 +1041,7 @@ function OnbBuilding({ tileCount, onDone }) {
 /* Connect integrations stage                                              */
 /* ----------------------------------------------------------------------- */
 const ONB_INTEGRATIONS = [
-{ id: 'custodian', name: 'Custodian', provider: 'Schwab · Fidelity · Pershing', desc: 'Stream holdings, balances, and transactions for every account in your book.', icon: 'building-columns', color: 'rgb(35,89,255)', sampleAcct: 'Alpine Advisors · 3 custodians · 1,284 accounts' },
+{ id: 'custodian', name: 'Custodian', provider: 'Raymond James · Fidelity · Pershing', desc: 'Stream holdings, balances, and transactions for every account in your book.', icon: 'building-columns', color: 'rgb(35,89,255)', sampleAcct: 'Alpine Advisors · 3 custodians · 1,284 accounts' },
 { id: 'planning', name: 'Planning', provider: 'eMoney / MoneyGuidePro', desc: 'Sync client plans, goals, and funding status into the planning tiles.', icon: 'compass-drafting', color: 'rgb(94,124,246)', sampleAcct: 'Alpine Advisors · 412 active plans' },
 { id: 'datawarehouse', name: 'Data warehouse', provider: 'Snowflake / BigQuery', desc: 'Push a nightly copy of your book to the firm warehouse for reporting.', icon: 'database', color: 'rgb(125,150,250)', sampleAcct: 'alpine_prod.analytics · nightly 02:00 ET' },
 { id: 'email', name: 'Email', provider: 'Gmail / Outlook', desc: 'Pull client emails into your inbox tile and surface unanswered threads.', icon: 'envelope', color: 'rgb(220,38,38)', sampleAcct: 'sarah.berry@alpineadvisors.com' },
@@ -1262,7 +1262,7 @@ function OnbConnect({ selectedTiles, connections, onConnect, onDisconnect, onNex
 /* ----------------------------------------------------------------------- */
 /* Root                                                                    */
 /* ----------------------------------------------------------------------- */
-function OnboardingFlow({ advisorName = 'Sarah', onComplete }) {
+function OnboardingFlow({ advisorName = 'Avery', onComplete }) {
   // stages: 'welcome' | step index | 'connect' | 'tiles' | 'building'
   const [stage, setStage] = React.useState('welcome');
   const [answers, setAnswers] = React.useState({
@@ -1276,7 +1276,7 @@ function OnboardingFlow({ advisorName = 'Sarah', onComplete }) {
   /* Firm-level data stages. Custodians are firm agreements and already flow
      when the advisor arrives; Orion, Redtail and eMoney are left to connect
      live so there is something to click in the demo. */
-  const [sources, setSources] = React.useState({ schwab: 'connected', fidelity: 'connected', pershing: 'connected' });
+  const [sources, setSources] = React.useState({ rj: 'connected', fidelity: 'connected', pershing: 'connected' });
   const [resolved, setResolved] = React.useState({});
   const [heldAway, setHeldAway] = React.useState(false);
   const connectSource = (id) => {
@@ -1305,7 +1305,7 @@ function OnboardingFlow({ advisorName = 'Sarah', onComplete }) {
       return s + 1;
     }
     if (s === 'sources') return 'resolve';
-    if (s === 'resolve') return 'heldaway';
+    if (s === 'resolve') return 'tiles';
     if (s === 'heldaway') return 'building';
     if (s === 'tiles') return 'building';
     if (s === 'connect') return 'tiles';
@@ -1316,8 +1316,8 @@ function OnboardingFlow({ advisorName = 'Sarah', onComplete }) {
     if (s === 'sources') return ONB_STEPS.length - 1;
     if (s === 'resolve') return 'sources';
     if (s === 'heldaway') return 'resolve';
-    if (s === 'tiles') return 'heldaway';
-    if (s === 'connect') return 'heldaway';
+    if (s === 'tiles') return 'resolve';
+    if (s === 'connect') return 'resolve';
     return s;
   };
 
@@ -1361,11 +1361,10 @@ function OnboardingFlow({ advisorName = 'Sarah', onComplete }) {
         }
         <div style={{ fontFamily: 'Inter', fontSize: 12.5, color: ONB_MUTED }}>
           {stage === 'welcome' ? "Setup" :
-          stage === 'sources' ? `Step 2 of 4` :
-          stage === 'resolve' ? `Step 3 of 4` :
-          stage === 'heldaway' ? `Step 4 of 4` :
+          stage === 'sources' ? `Step 2 of 3` :
+          stage === 'resolve' ? `Step 3 of 3` :
           stage === 'building' ? "Almost there" :
-          `Step 1 of 4`}
+          `Step 1 of 3`}
         </div>
       </header>
 

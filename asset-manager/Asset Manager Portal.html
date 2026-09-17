@@ -73,6 +73,7 @@
   <script type="text/babel" src="tilestudio/TileStudio.jsx"></script>
   <script type="text/babel" src="tilestudio/TilePreview.jsx"></script>
   <script type="text/babel" src="custom-reports.jsx"></script>
+  <script type="text/babel" src="../advisor/AccountMenu.jsx"></script>
   <script type="text/babel">
     function App() {
       const [active, setActive] = React.useState(() => {
@@ -134,9 +135,7 @@
         { id: 'reports', label: 'Custom Reports', icon: 'table-columns' },
       ];
       const NAV_FOOTER = [
-        { id: 'settings', label: 'Settings', icon: 'gear' },
         { id: 'datapacks', label: 'Data Packs', icon: 'database' },
-        { id: 'help', label: 'Help & support', icon: 'circle-question' },
       ];
 
       const [filterOpen, setFilterOpen] = React.useState(false);
@@ -233,16 +232,18 @@
           <Sidebar
             items={NAV}
             footerItems={NAV_FOOTER}
-            user={{ name: 'Morgan Vance', role: 'Distribution Lead' }}
             active={active}
             onSelect={setActive}
             brand="HALO +"
-            signOutHref="../Advisor Dashboard.html"
-            signOutLabel="Advisor Portal demo"
             persistKey="amp_sb_expanded"
             persistAccordionKey="amp_sb_accordion"
             onWidthChange={setSbWidth}
           />
+          {window.AccountMenu && <AccountMenu
+            user={{ name:'Morgan Vance', role:'Distribution Lead' }}
+            view="am" base="../" onSelect={setActive}
+            expanded={sbWidth > 100} width={sbWidth - 16}
+            left={sbWidth > 100 ? 8 : Math.max(6, (sbWidth - 46) / 2)} />}
           <div style={{ flex:1, marginLeft: sbWidth + (sbWidth > 100 ? 24 : 0), display:'flex', flexDirection:'column', minWidth:0, transition:'margin-left 220ms cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
             {active === 'home' && (
               <>

@@ -178,6 +178,8 @@
     i.fa-arrow-trend-down::before { -webkit-mask-image: var(--ic-trending-down);    mask-image: var(--ic-trending-down); }
     i.fa-up-down::before          { -webkit-mask-image: var(--ic-chevrons-up-down); mask-image: var(--ic-chevrons-up-down); }
     i.fa-gear::before             { -webkit-mask-image: var(--ic-settings);         mask-image: var(--ic-settings); }
+    i.fa-rotate-left::before      { -webkit-mask-image: var(--ic-rotate-left);      mask-image: var(--ic-rotate-left); }
+    i.fa-circle-question::before  { -webkit-mask-image: var(--ic-help-circle);      mask-image: var(--ic-help-circle); }
     i.fa-magnifying-glass::before { -webkit-mask-image: var(--ic-search);           mask-image: var(--ic-search); }
     i.fa-download::before         { -webkit-mask-image: var(--ic-download);         mask-image: var(--ic-download); }
     i.fa-wand-magic-sparkles::before { -webkit-mask-image: var(--ic-sparkles);      mask-image: var(--ic-sparkles); }
@@ -272,6 +274,8 @@
       --ic-layers:           url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z'/><path d='m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65'/><path d='m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65'/></svg>");
       --ic-message-circle:   url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M7.9 20A9 9 0 1 0 4 16.1L2 22z'/></svg>");
       --ic-folder:           url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2z'/></svg>");
+      --ic-rotate-left:      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8'/><path d='M3 3v5h5'/></svg>");
+      --ic-help-circle:      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='10'/><path d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'/><path d='M12 17h.01'/></svg>");
       --ic-external-link:    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M15 3h6v6'/><path d='M10 14 21 3'/><path d='M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6'/></svg>");
       --ic-share:            url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='18' cy='5' r='3'/><circle cx='6' cy='12' r='3'/><circle cx='18' cy='19' r='3'/><line x1='8.59' x2='15.42' y1='13.51' y2='17.49'/><line x1='15.41' x2='8.59' y1='6.51' y2='10.49'/></svg>");
       --ic-home:             url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/><polyline points='9 22 9 12 15 12 15 22'/></svg>");
@@ -339,6 +343,7 @@
     aside i.fa-circle-check::before,  header i.fa-circle-check::before  { content: "\f058 " !important; }
     aside i.fa-circle-plus::before,   header i.fa-circle-plus::before   { content: "\f055 " !important; }
     aside i.fa-gear::before,          header i.fa-gear::before          { content: "\f013 " !important; }
+    aside i.fa-rotate-left::before,   header i.fa-rotate-left::before   { content: "\f2ea " !important; }
     aside i.fa-circle-question::before, header i.fa-circle-question::before { content: "\f059 " !important; }
     aside i.fa-house::before,         header i.fa-house::before         { content: "\f015 " !important; }
     aside i.fa-eye::before,           header i.fa-eye::before           { content: "\f06e " !important; }
@@ -396,6 +401,7 @@
   <script type="text/babel" src="advisor/AIAssistantPanel.jsx"></script>
   <script type="text/babel" src="advisor/AdvisorAIFeed.jsx"></script>
   <script type="text/babel" src="advisor/AdvisorAIPage.jsx"></script>
+  <script type="text/babel" src="advisor/AccountMenu.jsx"></script>
   <script type="text/babel">
     function App() {
       const nav = [
@@ -411,8 +417,6 @@
         ] },
       ];
       const NAV_FOOTER = [
-        { id:'settings', label:'Settings',       icon:'gear' },
-        { id:'help',     label:'Help & support', icon:'circle-question' },
       ];
       const [active, setActive] = React.useState('assistant');
       const [selectedClient, setSelectedClient] = React.useState(null);
@@ -639,20 +643,27 @@
           <Sidebar
             items={nav}
             footerItems={NAV_FOOTER}
-            user={{ name:'Avery Chen', role:'Senior Advisor' }}
             active={active}
             onSelect={(id) => {
               if (id === 'connections') { setConnectionsOpen(true); return; }
+              if (id === 'restart') {
+                try { Object.keys(localStorage).filter(k => /^(field\.|adv\.)/.test(k)).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+                window.location.href = 'index.html';
+                return;
+              }
               go(id);
             }}
             brand="HALO +"
             defaultExpanded={true}
-            signOutHref={SIGN_OUT_HREF}
-            signOutLabel="Asset Manager Portal demo"
             persistKey="adv.sb.expanded.v2"
             persistAccordionKey="adv.sb.accordion"
             onWidthChange={setSbWidth}
           />
+          {window.AccountMenu && <AccountMenu
+            user={{ name:'Avery Chen', role:'Senior Advisor' }}
+            view="advisor" onSelect={go}
+            expanded={sbWidth > 100} width={sbWidth - 16}
+            left={sbWidth > 100 ? 8 : Math.max(6, (sbWidth - 46) / 2)} />}
           <div style={{ flex:1, minWidth:0, marginLeft: sbWidth + (sbWidth > 100 ? 24 : 0), display:'flex', flexDirection:'column', transition:'margin-left 220ms cubic-bezier(0.22, 0.61, 0.36, 1)' }}>
             <AdvisorTopbar
               active={active}

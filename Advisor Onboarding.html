@@ -1,0 +1,107 @@
+<!doctype html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Advisor Onboarding · Halo +</title>
+  <link rel="stylesheet" href="colors_and_type.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/fontawesome.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/solid.min.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+  <style>
+    html, body { margin:0; padding:0; color: rgb(249,250,251); min-height:100vh; font-family: Inter, sans-serif; }
+    body { background-color: rgb(11,21,36); background-image: var(--app-bg-image); background-attachment: fixed; }
+    * { font-family: Inter, sans-serif; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes onbFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    main > * { animation: onbFadeIn 320ms ease-out; }
+    button:focus-visible, [role="button"]:focus-visible {
+      outline: 2px solid rgba(35,89,255,0.6); outline-offset: 2px;
+    }
+    kbd { font-family: 'Geist Mono', ui-monospace, monospace; }
+  </style>
+</head>
+<body>
+  <div id="root" data-screen-label="Advisor Onboarding"></div>
+  <script type="text/babel" src="advisor/FirmOnboarding.jsx"></script>
+  <script type="text/babel" src="advisor/OnboardingFlow.jsx"></script>
+  <script type="text/babel">
+    function App() {
+      const [done, setDone] = React.useState(false);
+      const [result, setResult] = React.useState(null);
+      if (done && result) {
+        // Done state — confetti + handoff card
+        return (
+          <div style={{
+            minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center',
+            padding:'40px 24px', flexDirection:'column', gap:32, textAlign:'center',
+          }}>
+            <div style={{
+              width:88, height:88, borderRadius:9999,
+              background: 'linear-gradient(135deg, rgb(35,89,255) 0%, rgb(10,65,246) 100%)',
+              display:'inline-flex', alignItems:'center', justifyContent:'center',
+              boxShadow:'0 0 0 10px rgba(35,89,255,0.15), 0 20px 50px -10px rgba(35,89,255,0.5)',
+            }}>
+              <i className="fa-solid fa-check" style={{ fontSize:40, color:'#fff' }} />
+            </div>
+            <div>
+              <h1 style={{
+                fontFamily:'Inter', fontWeight:700, fontSize:40, lineHeight:1.05,
+                letterSpacing:'-0.02em', color:'rgb(249,250,251)', margin:'0 0 12px',
+              }}>You're all set.</h1>
+              <p style={{
+                fontFamily:'Inter', fontSize:16, color:'rgb(163,163,163)', margin:'0 auto', maxWidth:480, lineHeight:1.5,
+              }}>
+                Your dashboard has {result.selected.length} tile{result.selected.length === 1 ? '' : 's'}. Open it any time —
+                add new tiles any time with the <span style={{
+                  fontFamily:'Inter', fontSize:12, padding:'2px 8px', borderRadius:6,
+                  background:'rgba(35,89,255,0.2)', border:'1px solid rgba(35,89,255,0.4)', color:'rgb(182,197,245)',
+                  fontWeight:600,
+                }}>+ Add a tile</span> button on your dashboard.
+              </p>
+            </div>
+            <div style={{ display:'flex', gap:12 }}>
+              <a href="Advisor Dashboard.html" style={{
+                height:52, padding:'0 28px', borderRadius:12,
+                background:'rgb(35,89,255)', color:'#fff', textDecoration:'none',
+                fontFamily:'Inter', fontWeight:600, fontSize:15,
+                display:'inline-flex', alignItems:'center', gap:10,
+                boxShadow:'0 8px 24px -8px rgba(35,89,255,0.6)',
+              }}>
+                Open my dashboard <i className="fa-solid fa-arrow-right" style={{ width:14, height:14 }} />
+              </a>
+              <button onClick={() => { setDone(false); setResult(null); }} style={{
+                height:52, padding:'0 22px', borderRadius:12,
+                background:'transparent', border:'1px solid rgb(75,85,99)', color:'rgb(249,250,251)',
+                fontFamily:'Inter', fontWeight:500, fontSize:14, cursor:'pointer',
+              }}>
+                Restart onboarding
+              </button>
+            </div>
+            <details style={{ marginTop:24, fontFamily:'Inter', fontSize:12.5, color:'rgb(163,163,163)' }}>
+              <summary style={{ cursor:'pointer' }}>View captured preferences</summary>
+              <pre style={{
+                marginTop:12, padding:'14px 16px', borderRadius:10,
+                background:'rgba(255,255,255,0.04)', border:'1px solid rgb(75,85,99)',
+                fontFamily:'Geist Mono, monospace', fontSize:11.5, color:'rgb(209,213,219)',
+                textAlign:'left', maxWidth:520,
+              }}>{JSON.stringify(result, null, 2)}</pre>
+            </details>
+          </div>
+        );
+      }
+      return (
+        <OnboardingFlow
+          advisorName="Avery"
+          onComplete={() => { window.location.href = 'Advisor Dashboard.html'; }}
+        />
+      );
+    }
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>

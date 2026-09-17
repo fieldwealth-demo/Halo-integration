@@ -136,8 +136,8 @@ function FoNav({
 /* ------------------------------------------------------------------------ */
 
 const FO_SOURCES = [{
-  id: 'schwab',
-  name: 'Charles Schwab',
+  id: 'rj',
+  name: 'Raymond James',
   cat: 'Custodian',
   cred: 'API key',
   carries: 'Positions, transactions, accounts',
@@ -182,6 +182,20 @@ const FO_SOURCES = [{
 /* Typing "Bl" should offer Black Diamond, BlackRock and Blackstone — the
    disambiguation moment from the journey text. */
 const FO_SEARCH_POOL = FO_SOURCES.concat([{
+  id: 'schwab',
+  name: 'Charles Schwab',
+  cat: 'Custodian',
+  cred: 'API key',
+  carries: 'Positions, transactions, accounts',
+  accounts: 0
+}, {
+  id: 'goldman',
+  name: 'Goldman Sachs',
+  cat: 'Custodian',
+  cred: 'API key',
+  carries: 'Positions, transactions, accounts',
+  accounts: 0
+}, {
   id: 'blackdiamond',
   name: 'Black Diamond',
   cat: 'Portfolio accounting',
@@ -221,7 +235,7 @@ const FO_SEARCH_POOL = FO_SOURCES.concat([{
 /* Connecting a source is not an end in itself — it is what makes a tile
    buildable. Tile names are the real ONB_TILE_CATALOG entries. */
 const FO_UNLOCKS = {
-  schwab: ['Top Holdings', 'AUM by Allocation', 'Cash Flow'],
+  rj: ['Top Holdings', 'AUM by Allocation', 'Cash Flow'],
   fidelity: ['AUM Trend', 'Allocation Drift'],
   pershing: ['Top Clients'],
   orion: ['Billing Summary', 'Projected Fees'],
@@ -430,7 +444,7 @@ function OnbSources({
     style: FO_SHELL
   }, /*#__PURE__*/React.createElement("div", {
     style: FO_EYEBROW
-  }, "Step 2 of 4 \xB7 The firm"), /*#__PURE__*/React.createElement("h1", {
+  }, "Step 2 of 3 \xB7 The firm"), /*#__PURE__*/React.createElement("h1", {
     style: FO_H
   }, "Connect every system"), /*#__PURE__*/React.createElement("p", {
     style: FO_SUB
@@ -570,14 +584,14 @@ const FO_PROPOSED = [{
   household: 'Watson',
   people: 'John & Kristin Watson',
   confidence: 98,
-  accounts: ['Joint taxable · Schwab', 'Family trust · Fidelity', 'Rollover IRA · Schwab'],
+  accounts: ['Joint taxable · Raymond James', 'Family trust · Fidelity', 'Rollover IRA · Raymond James'],
   note: 'Matched on tax ID and address'
 }, {
   id: 'p2',
   household: 'Hawkins',
   people: 'Ricardo & Cameron Hawkins',
   confidence: 96,
-  accounts: ['Joint taxable · Schwab', 'Roth IRA · Schwab', 'SEP IRA · Fidelity', '+4 more'],
+  accounts: ['Joint taxable · Raymond James', 'Roth IRA · Raymond James', 'SEP IRA · Fidelity', '+4 more'],
   note: 'Matched on tax ID'
 }, {
   id: 'p3',
@@ -591,7 +605,7 @@ const FO_PROPOSED = [{
   household: 'Smith / Smith Trust',
   people: 'Keith & Asheley Smith',
   confidence: 71,
-  accounts: ['Joint taxable · Schwab', 'Smith Family Trust · Fidelity'],
+  accounts: ['Joint taxable · Raymond James', 'Smith Family Trust · Fidelity'],
   note: 'Trust may be a separate household — confirm or split',
   flag: true
 }];
@@ -643,7 +657,7 @@ function OnbResolve({
     style: FO_SHELL
   }, /*#__PURE__*/React.createElement("div", {
     style: FO_EYEBROW
-  }, "Step 3 of 4 \xB7 The firm"), /*#__PURE__*/React.createElement("h1", {
+  }, "Step 3 of 3 \xB7 The firm"), /*#__PURE__*/React.createElement("h1", {
     style: FO_H
   }, "Resolve the household"), /*#__PURE__*/React.createElement("p", {
     style: FO_SUB
@@ -654,7 +668,7 @@ function OnbResolve({
       gap: 12,
       marginBottom: 18
     }
-  }, [['Accounts ingested', '351'], ['Households proposed', '142'], ['In the queue', String(total - doneCount)]].map(([l, v], i) => /*#__PURE__*/React.createElement("div", {
+  }, [['Accounts ingested', '351'], ['Households', String(142 - Object.values(resolved).filter(x => x === 'confirm').length + Object.values(resolved).filter(x => x === 'split').length)], ['In the queue', String(total - doneCount)]].map(([l, v], i) => /*#__PURE__*/React.createElement("div", {
     key: i,
     style: {
       ...FO_CARD,
@@ -787,7 +801,7 @@ function OnbResolve({
   })), /*#__PURE__*/React.createElement(FoNav, {
     onBack: onBack,
     onNext: onNext,
-    nextLabel: "Add held-away assets",
+    nextLabel: "Choose your tiles",
     note: doneCount < total ? `${total - doneCount} left in the queue — ops can finish these` : 'Queue clear'
   }));
 }

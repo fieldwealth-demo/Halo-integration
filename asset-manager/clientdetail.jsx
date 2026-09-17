@@ -264,7 +264,7 @@ function DetailHeader({ d }) {
           <div style={{ display:'flex', alignItems:'center', justifyContent:'flex-end', gap:8, paddingRight:2, fontFamily:'Inter', fontSize:10.5, color:'rgb(107,114,128)' }}>
             {d.fieldPack && (
               <span style={{ display:'inline-flex', alignItems:'center', gap:5, color:'rgb(163,163,163)' }}>
-                <img src="assets/field-glyph.svg" alt="Halo +" style={{ width:9, height:9, display:'block' }} />Halo + Data Pack
+                <img src="assets/field-mark.png" alt="Halo +" style={{ width:9, height:9, display:'block' }} />Halo + Data Pack
                 <span style={{ width:3, height:3, borderRadius:'50%', background:'rgb(75,85,99)' }}></span>
               </span>
             )}
