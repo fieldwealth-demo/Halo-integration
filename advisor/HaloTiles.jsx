@@ -358,6 +358,11 @@ const JOURNAL_ARTICLES = [
       { h:'Choosing between them', t:'Income notes do not participate in upside the way growth notes do, but their yields can spike in turbulent markets. The choice tracks the client’s objective: replace equity upside, or replace bond income at higher yield.' },
     ]},
 ];
+const JOURNAL_ART_POOL = ['assets/journal-globe.png','assets/journal-puzzle.png','assets/journal.jpg','assets/journal-vault.png','assets/journal-blocks.png','assets/journal-launch.png'];
+function journalArt(id) {
+  const i = JOURNAL_ARTICLES.findIndex(a => a.id === id);
+  return JOURNAL_ART_POOL[(i < 0 ? 0 : i) % JOURNAL_ART_POOL.length];
+}
 function JournalTile({ onMore }) {
   const [activeIdx, setActiveIdx] = React.useState(0);
   const open = (a) => window.dispatchEvent(new CustomEvent('journal:open', { detail:{ id:a.id } }));
@@ -369,7 +374,7 @@ function JournalTile({ onMore }) {
         <div onClick={() => open(act)} style={{ flex:'0 0 38%', borderRadius:10, cursor:'pointer', minHeight:280, position:'relative', overflow:'hidden', border:'1px solid rgba(75,85,99,0.6)' }}>
           {tileArts.map((a, i) => (
             <div key={a.id} style={{ position:'absolute', inset:0, opacity: i === activeIdx ? 1 : 0, transition:'opacity 220ms ease', pointerEvents: i === activeIdx ? 'auto' : 'none' }}>
-              <img src="assets/journal.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+              <img src={journalArt(a.id)} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
             </div>
           ))}
           <div style={{ position:'absolute', left:0, right:0, bottom:0, padding:'26px 12px 12px', background:'linear-gradient(transparent, rgba(10,18,30,0.92))', pointerEvents:'none' }}>
@@ -442,7 +447,7 @@ function JournalArticlePage({ articleId, onBack }) {
               <div style={{ fontSize:12.5, color:'rgb(163,163,163)' }}>Halo Journal · {a.date} · {a.read}</div>
             </div>
             <div style={{ margin:'24px 0 28px', height:320 }}>
-              <img src="assets/journal.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block', borderRadius:14 }} />
+              <img src={journalArt(a.id)} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block', borderRadius:14 }} />
             </div>
             <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
               {a.sections.map((s, i) => (
@@ -465,7 +470,7 @@ function JournalArticlePage({ articleId, onBack }) {
                   onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(35,89,255)'; }}
                   onMouseLeave={(e)=>{ e.currentTarget.style.borderColor = 'rgb(75,85,99)'; }}>
                   <div style={{ width:64, height:64, flexShrink:0 }}>
-                    <image-slot src="assets/journal.png" id={`journal-card-${o.id}`} shape="rounded" radius="8" placeholder=" "></image-slot>
+                    <image-slot src={journalArt(o.id)} id={`journal-card-${o.id}`} shape="rounded" radius="8" placeholder=" "></image-slot>
                   </div>
                   <div onClick={() => window.dispatchEvent(new CustomEvent('journal:open', { detail:{ id:o.id } }))} style={{ minWidth:0, cursor:'pointer' }}>
                     <div style={{ fontSize:10, fontWeight:600, letterSpacing:'0.06em', textTransform:'uppercase', color:'rgb(151,171,238)' }}>{o.tag}</div>
@@ -709,7 +714,7 @@ function JournalsPage() {
           onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(35,89,255)'; }}
           onMouseLeave={(e)=>{ e.currentTarget.style.borderColor = 'rgb(75,85,99)'; }}>
           <div style={{ height:240 }}>
-            <img src="assets/journal.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+            <img src={journalArt(featured.id)} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
           </div>
           <div onClick={() => open(featured)} style={{ padding:'16px 18px 18px', display:'flex', flexDirection:'column', gap:8, flex:1, cursor:'pointer' }}>
             <div style={{ display:'flex', justifyContent:'space-between', gap:8 }}>
@@ -726,7 +731,7 @@ function JournalsPage() {
               onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(35,89,255)'; }}
               onMouseLeave={(e)=>{ e.currentTarget.style.borderColor = 'rgb(75,85,99)'; }}>
               <div style={{ width:130, flexShrink:0 }}>
-                <image-slot src="assets/journal.png" id={`journal-card-${a.id}`} shape="rect" placeholder=" "></image-slot>
+                <image-slot src={journalArt(a.id)} id={`journal-card-${a.id}`} shape="rect" placeholder=" "></image-slot>
               </div>
               <div onClick={() => open(a)} style={{ padding:'12px 14px 12px 0', display:'flex', flexDirection:'column', gap:5, cursor:'pointer', justifyContent:'center', minWidth:0 }}>
                 <div style={{ display:'flex', justifyContent:'space-between', gap:8 }}>
@@ -745,7 +750,7 @@ function JournalsPage() {
             onMouseEnter={(e)=>{ e.currentTarget.style.borderColor = 'rgb(35,89,255)'; }}
             onMouseLeave={(e)=>{ e.currentTarget.style.borderColor = 'rgb(75,85,99)'; }}>
             <div style={{ height:130 }}>
-              <img src="assets/journal.png" alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+              <img src={journalArt(a.id)} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
             </div>
             <div onClick={() => open(a)} style={{ padding:'12px 14px 14px', display:'flex', flexDirection:'column', gap:6, flex:1, cursor:'pointer' }}>
               <div style={{ display:'flex', justifyContent:'space-between', gap:8 }}>
@@ -762,4 +767,4 @@ function JournalsPage() {
   );
 }
 
-Object.assign(window, { PortfolioLifecycle, JournalTile, JournalArticlePage, WatchlistPage, JournalsPage, NotePostPage, WatchlistTile, LifecyclePage, JOURNAL_ARTICLES, WATCHLIST_ROWS });
+Object.assign(window, { journalArt, JOURNAL_ART_POOL, PortfolioLifecycle, JournalTile, JournalArticlePage, WatchlistPage, JournalsPage, NotePostPage, WatchlistTile, LifecyclePage, JOURNAL_ARTICLES, WATCHLIST_ROWS });
