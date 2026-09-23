@@ -364,12 +364,6 @@ function NotificationsPage() {
 
   return (
     <div style={{ padding:'18px 28px 48px', maxWidth:1200, margin:'0 auto' }}>
-      {/* Header w/ back */}
-      <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:18 }}>
-        <div style={{ fontFamily:'Inter', fontSize:18, fontWeight:600, color:'rgb(249,250,251)', letterSpacing:'-0.01em' }}>
-          Notifications
-        </div>
-      </div>
 
       {/* Filter chips */}
       <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:16, flexWrap:'wrap' }}>

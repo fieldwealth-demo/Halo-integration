@@ -332,7 +332,7 @@ function AfPost({ item }) {
         <div onClick={item.open} style={{ padding:'0 18px 14px', cursor:'pointer' }}><AfStats stats={item.stats} /></div>
       ) : item.hero ? (
         <div onClick={item.open} style={{ height:340, cursor:'pointer', borderTop:`1px solid ${AF_LINE}`, borderBottom:`1px solid ${AF_LINE}` }}>
-          <img src={(window.journalArt && item.id) ? window.journalArt(item.id) : 'assets/journal-globe.png'} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
+          <img src={window.journalArt ? window.journalArt(String(item.id).replace(/^jr-/, '')) : 'assets/journal-globe.png'} alt="" style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
         </div>
       ) : (
         <div onClick={item.open} style={{ padding:'0 18px 14px', cursor:'pointer' }}>{item.chart}</div>
