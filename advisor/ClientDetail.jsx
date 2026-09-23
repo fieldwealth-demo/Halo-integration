@@ -1,6 +1,6 @@
 /* Client Detail — David Young. Matches Figma: 4 top tiles (Net Worth, Asset Allocation,
    Investment Overview, General+Opportunities column) and 3 bottom tiles (Performance,
-   Unrealized, Tax Summary). Follows Field Shadcn tile patterns. */
+   Unrealized, Tax Summary). Follows Halo Shadcn tile patterns. */
 
 const CD_TILE = {
   background: 'rgba(255,255,255,0.05)',
@@ -275,7 +275,19 @@ function InvestmentOverview() {
 }
 
 /* 4. Left sidebar column — General + Activities + Opportunities, single scrollable container */
-function ClientSidebar({ onBack, highlightOpp }) {
+const CD_PEOPLE = {
+  'David Young':            { age:59, email:'joe.smith@gmail.com',      phone:'215-555-5555' },
+  'Margaret Holloway':      { age:61, email:'m.holloway@outlook.com',   phone:'215-555-0182' },
+  'Watson Family Trust':    { age:64, email:'trustees@watsonfamily.co', phone:'215-555-0447' },
+  'Priya Raghunathan':      { age:48, email:'priya.r@fastmail.com',     phone:'215-555-0913' },
+  'Okonkwo Household':      { age:52, email:'n.okonkwo@gmail.com',      phone:'215-555-0326' },
+  'Sterling Bequest Trust': { age:71, email:'admin@sterlingbequest.org',phone:'215-555-0765' },
+  'Marcus Ellery':          { age:57, email:'m.ellery@elleryco.com',    phone:'215-555-0298' },
+};
+function ClientSidebar({ onBack, highlightOpp, clientName='David Young' }) {
+  const person = CD_PEOPLE[clientName] || CD_PEOPLE['David Young'];
+  const hp = haloHelmPending();
+  const helm = hp && hp.client === clientName ? hp : null;
   const sectionHead = {
     display:'flex', alignItems:'center', padding:'16px 0 8px',
   };
@@ -301,20 +313,20 @@ function ClientSidebar({ onBack, highlightOpp }) {
             display:'flex', alignItems:'center', justifyContent:'center',
             color:'#fff', fontWeight:700, fontSize:16, flexShrink:0,
             border:'1px solid rgba(255,255,255,0.15)',
-          }}>D</div>
+          }}>{clientName.charAt(0)}</div>
           <div style={{ flex:1, minWidth:0 }}>
-            <div style={{ fontFamily:'Inter', fontSize:14, fontWeight:600 }}>David Young</div>
+            <div style={{ fontFamily:'Inter', fontSize:14, fontWeight:600 }}>{clientName}</div>
           </div>
-          <div style={{ fontFamily:'Inter', fontSize:22, fontWeight:300, color:'rgb(163,163,163)' }}>59</div>
+          <div style={{ fontFamily:'Inter', fontSize:22, fontWeight:300, color:'rgb(163,163,163)' }}>{person.age}</div>
         </div>
         <div style={{ display:'flex', flexDirection:'column', gap:6, marginTop:12, fontFamily:'Inter', fontSize:12, color:'rgb(209,213,219)' }}>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
             <i className="fa-solid fa-envelope" style={{ width:12, height:12, color:'rgb(163,163,163)' }} />
-            <span>joe.smith@gmail.com</span>
+            <span>{person.email}</span>
           </div>
           <div style={{ display:'flex', alignItems:'center', gap:8 }}>
             <i className="fa-solid fa-phone" style={{ width:12, height:12, color:'rgb(163,163,163)' }} />
-            <span>215-555-5555</span>
+            <span>{person.phone}</span>
           </div>
         </div>
         <button data-no-hint style={{
@@ -323,7 +335,7 @@ function ClientSidebar({ onBack, highlightOpp }) {
           color:'rgb(249,250,251)', fontFamily:'Inter', fontSize:12.5, fontWeight:500, cursor:'pointer',
         }}>Schedule Appointment</button>
         <button
-          onClick={() => window.dispatchEvent(new CustomEvent('share:open', { detail:{ client:'David Young', email:'joe.smith@gmail.com', phone:'215-555-5555' } }))}
+          onClick={() => window.dispatchEvent(new CustomEvent('share:open', { detail:{ client:clientName, email:person.email, phone:person.phone } }))}
           data-no-hint
           style={{
             width:'100%', marginTop:8, height:34, borderRadius:8,
@@ -341,6 +353,20 @@ function ClientSidebar({ onBack, highlightOpp }) {
         <div style={CD_TITLE}>Opportunities</div>
       </div>
       <div style={{ padding:'0 0 16px', display:'flex', flexDirection:'column', gap:10 }}>
+        {clientName === 'Marcus Ellery' && <OppCard
+          title="Capital Call Due"
+          body="Kestermark Growth Fund (TRELLIS) — $125,000 due Oct 2 against a $500,000 commitment. Available cash is $38,000, so $87,000 has to be raised. Halo has a funding plan ready."
+          meta="Action required · call 3"
+          highlight={highlightOpp === 'call'}
+          clientName={clientName}
+        />}
+        {!helm && (window.DF_CLIENTS || []).some(x => x.name === clientName) && <OppCard
+          title="Helm Private Markets Fund X"
+          body="Open for subscription, minimum $100,000. This household runs alternatives below its IPS target and holds idle cash, so a commitment can be funded without disturbing the equity sleeve. Halo scored it a 96 fit."
+          meta="Helm · private markets"
+          highlight={highlightOpp === 'helmx'}
+          clientName={clientName}
+        />}
         <OppCard
           title="Portfolio Enhancement"
           body="Implementing APME for 15% of fixed income allocation"
@@ -360,6 +386,7 @@ function ClientSidebar({ onBack, highlightOpp }) {
         </button>
       </div>
       <div style={{ padding:'0 0 16px', display:'flex', flexDirection:'column' }}>
+        {helm && <HelmProgress commit={helm.commit} highlight={highlightOpp === 'helmx-progress'} />}
         <ActivityRow icon="file-invoice-dollar" iconColor="rgb(35,89,255)" title="Billed Q4 Advisory Fee" meta="$2,648 · Nov 18, 2025" />
         <ActivityRow icon="file-lines" iconColor="rgb(56,189,248)" title="Quarterly Report Created" meta="Q3 Performance · Nov 12, 2025" />
         <ActivityRow icon="envelope" iconColor="rgb(163,163,163)" title="Email Sent" meta="Portfolio Rebalance Review · Nov 5, 2025" />
@@ -396,6 +423,65 @@ function CustodianRow({ source, label, amount, muted }) {
   );
 }
 
+
+/* Helm subscription left in progress after the Delio hand-off (persisted so a
+   refresh keeps it; Restart demo clears halo.* keys). */
+function haloHelmPending() {
+  try { return window.HALO_HELMX || JSON.parse(localStorage.getItem('halo.helmx') || 'null'); } catch (e) { return null; }
+}
+
+function HelmProgress({ commit, highlight }) {
+  const USD = (n) => '$' + Math.round(n).toLocaleString('en-US');
+  const steps = [
+    { t:'Proposal approved by client', d:'Today', s:'done' },
+    { t:'Soft commitment recorded in Delio', d:USD(commit), s:'done' },
+    { t:'KYC checks complete', d:'Today', s:'done' },
+    { t:'Subscription agreement signed', d:'Today', s:'done' },
+    { t:'Funds sent', d:'Quoting the Delio payment reference', s:'done' },
+    { t:'Funds received by Delio', d:'Expected in 2–3 business days', s:'now' },
+    { t:'Initial close · units issued', d:'1 Dec', s:'wait' },
+  ];
+  const doneN = steps.filter(x => x.s === 'done').length;
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    if (!highlight || !ref.current) return;
+    const t = setTimeout(() => {
+      let p = ref.current && ref.current.parentElement;
+      while (p && !(p.scrollHeight > p.clientHeight + 4 && /(auto|scroll)/.test(getComputedStyle(p).overflowY))) p = p.parentElement;
+      if (p) p.scrollTo({ top: ref.current.getBoundingClientRect().top - p.getBoundingClientRect().top + p.scrollTop - 60, behavior:'smooth' });
+    }, 250);
+    return () => clearTimeout(t);
+  }, [highlight]);
+  return (
+    <div ref={ref} style={{ margin:'0 0 8px', padding:'14px 14px 6px', borderRadius:12,
+      border:`1px solid ${highlight ? 'rgb(84,121,240)' : 'rgba(75,85,99,0.55)'}`,
+      background: highlight ? 'rgba(35,89,255,0.10)' : 'rgba(255,255,255,0.03)',
+      boxShadow: highlight ? '0 0 0 3px rgba(35,89,255,0.22)' : 'none', transition:'all 300ms ease' }}>
+      <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+        <div style={{ fontFamily:'Inter', fontSize:13, fontWeight:600, color:'rgb(249,250,251)', flex:1, minWidth:0 }}>Helm Private Markets Fund X</div>
+        <span style={{ fontFamily:'Inter', fontSize:10.5, fontWeight:600, padding:'3px 9px', borderRadius:9999, background:'rgba(35,89,255,0.18)', color:'rgb(168,185,241)', border:'1px solid rgba(35,89,255,0.45)' }}>In progress</span>
+      </div>
+      <div style={{ fontFamily:'Inter', fontSize:11.5, color:'rgb(163,163,163)', marginTop:3 }}>Subscription in Delio · {doneN} of {steps.length} steps</div>
+      <div style={{ height:4, borderRadius:9999, background:'rgba(75,85,99,0.5)', margin:'10px 0 8px', overflow:'hidden' }}>
+        <div style={{ width:`${(doneN + 0.5) / steps.length * 100}%`, height:'100%', background:'rgb(52,106,255)' }} />
+      </div>
+      {steps.map((x, i) => (
+        <div key={i} style={{ display:'grid', gridTemplateColumns:'18px minmax(0,1fr)', gap:10, padding:'6px 0', alignItems:'start' }}>
+          <span style={{ width:16, height:16, marginTop:1, borderRadius:9999, display:'inline-flex', alignItems:'center', justifyContent:'center',
+            background: x.s === 'done' ? 'rgb(35,89,255)' : 'transparent',
+            border: x.s === 'done' ? '1px solid rgb(35,89,255)' : x.s === 'now' ? '1.5px solid rgb(168,185,241)' : '1px solid rgba(107,114,128,0.8)' }}>
+            {x.s === 'done' ? <span style={{ color:'#fff', fontSize:9, fontWeight:700, lineHeight:1 }}>✓</span> : x.s === 'now' ? <span style={{ width:6, height:6, borderRadius:9999, background:'rgb(168,185,241)' }} /> : null}
+          </span>
+          <div style={{ minWidth:0 }}>
+            <div style={{ fontFamily:'Inter', fontSize:12.5, fontWeight: x.s === 'now' ? 600 : 500, color: x.s === 'wait' ? 'rgb(163,163,163)' : 'rgb(229,231,235)' }}>{x.t}</div>
+            <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)', marginTop:1 }}>{x.d}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function ActivityRow({ icon, iconColor, title, meta, last }) {
   return (
     <div style={{
@@ -416,8 +502,17 @@ function ActivityRow({ icon, iconColor, title, meta, last }) {
     </div>
   );
 }
-function OppCard({ title, body, highlight }) {
+function OppCard({ title, body, highlight, meta, clientName }) {
   const isRebalance = title === 'Rebalancing Opportunity';
+  const isHelm = title === 'Helm Private Markets Fund X';
+  const isCall = title === 'Capital Call Due';
+  const onExecute = isRebalance
+    ? () => window.dispatchEvent(new CustomEvent('rebalance:open'))
+    : isHelm
+      ? () => window.dispatchEvent(new CustomEvent('delio:execute', { detail:{ client: clientName } }))
+      : isCall
+        ? () => window.dispatchEvent(new CustomEvent('call:open'))
+        : undefined;
   return (
     <div style={{
       border: highlight ? '1px solid rgb(84,121,240)' : '1px solid rgba(75,85,99,0.6)',
@@ -434,18 +529,19 @@ function OppCard({ title, body, highlight }) {
           50%      { box-shadow: 0 0 0 6px rgba(84,121,240,0.30), 0 8px 24px rgba(35,89,255,0.32); }
         }
       `}</style>
+      {meta && <div style={{ fontFamily:'Inter', fontSize:9.5, fontWeight:600, letterSpacing:'0.09em', textTransform:'uppercase', color: isCall ? 'rgb(245,200,90)' : 'rgb(56,189,248)', marginBottom:5 }}>{meta}</div>}
       <div style={{ fontFamily:'Inter', fontSize:12.5, fontWeight:600, marginBottom:4 }}>{title}</div>
       <div style={{ fontFamily:'Inter', fontSize:11, color:'rgb(163,163,163)', lineHeight:1.45 }}>{body}</div>
       <div style={{ display:'flex', alignItems:'center', marginTop:10, gap:10 }}>
         <button
-          onClick={isRebalance ? () => window.dispatchEvent(new CustomEvent('rebalance:open')) : undefined}
-          data-no-hint={isRebalance ? undefined : true}
+          onClick={onExecute}
+          data-no-hint={onExecute ? undefined : true}
           style={{
             height:26, padding:'0 12px', borderRadius:7,
             background: highlight ? 'rgb(35,89,255)' : 'rgba(35,89,255,0.2)',
             border: highlight ? '1px solid rgb(84,121,240)' : '1px solid rgba(35,89,255,0.5)',
             color:'rgb(249,250,251)', fontFamily:'Inter', fontSize:11, fontWeight:600, cursor:'pointer',
-        }}>Execute</button>
+        }}>{isCall ? 'Fund the call' : 'Execute'}</button>
       </div>
     </div>
   );
@@ -604,7 +700,7 @@ function ClientDetail({ clientName='David Young', onBack, highlightOpp, tab: tab
       {tab === 'Profile' && (
         <Provider {...providerProps}>
           <div style={{ display:'grid', gridTemplateColumns:'minmax(320px, 400px) minmax(0, 1fr)', alignItems:'stretch' }}>
-            <ClientSidebar onBack={onBack} highlightOpp={highlightOpp} />
+            <ClientSidebar onBack={onBack} highlightOpp={highlightOpp} clientName={clientName} />
             <div style={{ padding:'16px 24px 32px', display:'flex', flexDirection:'column', gap:16, minWidth:0 }}>
               <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr', gap:16 }}>
                 <NetWorth />

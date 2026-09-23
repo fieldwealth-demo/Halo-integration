@@ -12,6 +12,7 @@ const AF_GREEN = 'rgb(128,152,234)';
 const AF_BLUE  = 'rgb(96,165,250)';
 const AF_VIO   = 'rgb(167,139,250)';
 const AF_RED   = 'rgb(248,113,113)';
+const AF_SKY   = 'rgb(56,189,248)';
 
 const AF_KINDS = {
   answer:    { label:'Halo + AI',  icon:'wand-magic-sparkles', color:AF_GREEN },
@@ -20,6 +21,7 @@ const AF_KINDS = {
   journal:   { label:'Journal',   icon:'file-lines',     color:AF_VIO   },
   research:  { label:'Manager research', icon:'building-columns', color:AF_INK_2 },
   shared:    { label:'Shared with your practice', icon:'paper-plane', color:AF_GREEN },
+  private:   { label:'Helm', icon:'building-columns', color:AF_SKY },
 };
 
 /* ---- deterministic series so a card looks the same on every render ---- */
@@ -239,10 +241,25 @@ function afJournalItems() {
 }
 
 /* Interleave so the stream never reads as three stacked sections. */
+function afPrivateItems() {
+  return [{
+    kind:'private', id:'pm-helmx', when:'Today',
+    who:'Helm · Private markets', eyebrow:'Open for subscription', initials:'HX',
+    title:'Helm Private Markets Fund X is open. 14 of your 121 eligible clients are a fit.',
+    body:'Ranked, with a reason each \u2014 underweight alts, idle cash, no upcoming calls. Minimum commitment $100,000; initial close 1 Dec.',
+    heroSrc:'assets/helm-fund-x.png',
+    stats:[{ k:'Eligible clients', v:'121' }, { k:'Good fit', v:'14' }, { k:'Minimum', v:'$100K' }],
+    meta:['Evergreen fund', 'Multi-asset', '12% target return', 'Subscription in Delio'],
+    action:'Review the 14 fits',
+    open:()=>window.dispatchEvent(new CustomEvent('delio:open')),
+  }];
+}
+
 function afBuildFeed() {
   const cols = [afInsightItems(), afWatchItems(), afJournalItems(), afAnswerItems()];
   const research = afResearchItems();
   const out = afSharedItems();
+  const lead = out.length;
   // Answer first, then a note and an article inside the first screenful, so the
   // stream never reads as four stacked sections.
   for (let i = 0; i < 5; i++) {
@@ -250,6 +267,9 @@ function afBuildFeed() {
     // Manager research sits directly under the Halo / Watson insight cards.
     if (research[i]) out.splice(out.length - (cols.length - 1), 0, research[i]);
   }
+  // Helm sits directly above the BlackRock Target Allocation Models card.
+  const br = out.findIndex(x => x.id === 'res-blackrock-fi');
+  out.splice(br >= 0 ? br : Math.min(out.length, lead + cols.length + 1), 0, ...afPrivateItems());
   return out;
 }
 
@@ -303,7 +323,12 @@ function AfPost({ item }) {
       </div>
 
       {/* media — full-width image for articles, chart for insights & notes */}
-      {item.stats ? (
+      {item.heroSrc ? (
+        <div onClick={item.open} style={{ cursor:'pointer', borderTop:`1px solid ${AF_LINE}` }}>
+          <img src={item.heroSrc} alt="" style={{ display:'block', width:'100%', height:260, objectFit:'cover' }} />
+          {item.stats && <div style={{ padding:'14px 18px' }}><AfStats stats={item.stats} /></div>}
+        </div>
+      ) : item.stats ? (
         <div onClick={item.open} style={{ padding:'0 18px 14px', cursor:'pointer' }}><AfStats stats={item.stats} /></div>
       ) : item.hero ? (
         <div onClick={item.open} style={{ height:340, cursor:'pointer', borderTop:`1px solid ${AF_LINE}`, borderBottom:`1px solid ${AF_LINE}` }}>
@@ -394,7 +419,7 @@ function AipHomeFeed() {
     <section style={{ width:'100%', maxWidth:680, margin:'0 auto', display:'flex', flexDirection:'column', gap:14 }}>
       <div style={{ display:'flex', alignItems:'center', gap:10, flexWrap:'wrap', padding:'0 2px 4px' }}>
         <div style={{ flex:1 }} />
-        {[['all','All'],...(all.some(i => i.kind === 'shared') ? [['shared','Shared']] : []),['insight','Insights'],['research','Research'],['watchlist','Watchlist'],['journal','Journal']].map(([id,label]) => (
+        {[['all','All'],...(all.some(i => i.kind === 'shared') ? [['shared','Shared']] : []),['private','Private markets'],['insight','Insights'],['research','Research'],['watchlist','Watchlist'],['journal','Journal']].map(([id,label]) => (
           <AfFilter key={id} label={label} active={filter===id} onClick={()=>{ setFilter(id); setLimit(6); }} />
         ))}
       </div>

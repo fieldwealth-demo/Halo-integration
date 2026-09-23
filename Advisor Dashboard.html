@@ -390,6 +390,10 @@
   <script type="text/babel" src="advisor/InsightsPage.jsx"></script>
   <script type="text/babel" src="advisor/InsightProposalFlow.jsx"></script>
   <script type="text/babel" src="advisor/HaloGuidedFlow.jsx"></script>
+  <script type="text/babel" src="advisor/DelioPortal.jsx"></script>
+  <script type="text/babel" src="advisor/DelioAllocationFlow.jsx"></script>
+  <script type="text/babel" src="advisor/CustodianTrade.jsx"></script>
+  <script type="text/babel" src="advisor/CapitalCallFlow.jsx"></script>
   <script type="text/babel" src="advisor/ios-frame.jsx"></script>
   <script type="text/babel" src="advisor/ShareWithClient.jsx"></script>
   <script type="text/babel" src="advisor/AddTileCommand.jsx"></script>
@@ -435,7 +439,13 @@
           localStorage.setItem('halo.adoptions', '[]');
           localStorage.setItem('halo.adoptions.dismissed', '[]');
           localStorage.setItem('halo.adoptions.read', '0');
+          localStorage.removeItem('halo.helmx');
         } catch (e) {}
+        // Helm subscription and capital call start over too.
+        window.HALO_HELMX = null;
+        window.FIELD_CALL_PAID = false;
+        window.dispatchEvent(new CustomEvent('helmx:pending'));
+        window.dispatchEvent(new CustomEvent('call:paid'));
       };
       const [connTick, setConnTick] = React.useState(0);
       const connections = React.useMemo(() => {
@@ -867,6 +877,8 @@
           )}
           <InsightProposalFlow />
           <HaloGuidedFlow />
+          <DelioAllocationFlow />
+          <CapitalCallFlow />
           <ShareWithClient />
           <ConnectionsPanel open={connectionsOpen} onClose={() => { setConnectionsOpen(false); setConnTick(t => t + 1); }} />
           <AIAssistantPanel open={aiOpen} onClose={() => setAiOpen(false)} />

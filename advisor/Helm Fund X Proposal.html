@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Private Markets Allocation · Helm Private Markets Fund X</title>
+<link rel="stylesheet" href="../colors_and_type.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="deck-stage.js"></script>
+<style>
+html,body{background:#0a0e16;color:#f9fafb;font-family:'Inter',-apple-system,sans-serif;margin:0;padding:0}
+deck-stage > section{width:1920px;height:1080px;box-sizing:border-box;background:rgb(13,22,38);color:rgb(249,250,251);padding:80px 120px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.slide-title{position:absolute;top:80px;left:120px;right:120px;font-weight:600;font-size:32px;letter-spacing:-0.01em;padding-bottom:18px;border-bottom:1px solid rgba(75,85,99,0.5)}
+.slide-sub{font-size:22px;color:rgb(209,213,219);margin-top:-28px;margin-bottom:44px;line-height:1.5}
+.card{padding:32px 36px;background:rgba(255,255,255,0.03);border:1px solid rgba(75,85,99,0.5);border-radius:14px}
+.card.stripe::before{content:'';position:absolute;top:-1px;left:-1px;right:-1px;height:6px;background:rgb(84,121,240);border-radius:14px 14px 0 0}
+.k{font-size:18px;color:rgb(156,163,175);letter-spacing:0.06em;text-transform:uppercase}
+.v{font-weight:700;font-size:52px;letter-spacing:-0.02em;line-height:1.05;margin-top:12px;font-variant-numeric:tabular-nums}
+.s{font-size:19px;color:rgb(163,163,163);margin-top:12px;line-height:1.5}
+.body{font-size:24px;line-height:1.6;color:rgb(209,213,219)}
+table{width:100%;border-collapse:collapse;font-size:22px}
+th{text-align:left;font-size:17px;letter-spacing:0.07em;text-transform:uppercase;color:rgb(156,163,175);font-weight:500;padding:0 0 16px}
+td{padding:22px 0;border-top:1px solid rgba(75,85,99,0.45);color:rgb(229,231,235);font-variant-numeric:tabular-nums}
+.num{text-align:right}
+.green{color:rgb(84,121,240)}
+.amber{color:rgb(245,200,90)}
+.step{display:flex;gap:22px;align-items:flex-start;padding:26px 0;border-top:1px solid rgba(75,85,99,0.45)}
+.dot{width:38px;height:38px;border-radius:10px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+.owner{font-size:15px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;padding:6px 12px;border-radius:6px;white-space:nowrap}
+.own-field{color:rgb(140,175,255);background:rgba(35,89,255,0.16);border:1px solid rgba(35,89,255,0.5)}
+.own-delio{color:rgb(56,189,248);background:rgba(56,189,248,0.10);border:1px solid rgba(56,189,248,0.45)}
+.own-cust{color:rgb(163,163,163);background:rgba(255,255,255,0.05);border:1px solid rgba(75,85,99,0.6)}
+#approve{height:96px;padding:0 56px;border-radius:14px;border:1px solid rgb(84,121,240);background:rgb(35,89,255);color:#fff;font-family:'Inter';font-weight:600;font-size:30px;cursor:pointer;display:inline-flex;align-items:center;gap:18px}
+#approve:hover{background:rgb(6,148,103)}
+#approve[disabled]{background:rgba(35,89,255,0.25);border-color:rgba(84,121,240,0.4);color:rgb(140,175,255);cursor:default}
+</style>
+</head>
+<body>
+<deck-stage>
+
+<section data-screen-label="01 Cover" style="padding:0;flex-direction:row">
+  <div style="flex:1;min-width:0;overflow:hidden"><img src="../assets/helm-fund-x.png" alt="City skyline at dusk" style="width:100%;height:100%;object-fit:cover" /></div>
+  <div style="width:940px;padding:120px 110px;display:flex;flex-direction:column;justify-content:space-between">
+    <div style="font-size:20px;letter-spacing:0.14em;text-transform:uppercase;color:rgb(56,189,248)">Helm · Private markets</div>
+    <div>
+      <h1 style="font-weight:700;font-size:80px;line-height:1.06;letter-spacing:-0.03em;margin:0 0 24px;color:rgb(84,121,240)">Private Markets<br />Allocation</h1>
+      <div style="font-size:30px;color:rgb(209,213,219);margin-bottom:72px">Helm Private Markets Fund X</div>
+      <div style="font-size:22px;color:rgb(229,231,235)">Prepared for <span id="c-name">Margaret Holloway</span></div>
+    </div>
+    <div style="font-size:14px;color:rgb(107,114,128);line-height:1.5;max-width:640px">Prepared by Avery Chen. This recommendation reflects your stated objectives, your IPS alternatives band, and the liquidity in your accounts today. The subscription is administered by the fund through Delio.</div>
+  </div>
+</section>
+
+<section data-screen-label="02 Why this fits">
+  <div class="slide-title">Why this fits your plan</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+    <div class="card stripe" style="position:relative"><div class="k">Alternatives today</div><div class="v"><span id="alts-now">4</span>%</div><div class="s">Against a <span id="alts-tgt">15</span>% target in your investment policy statement. The gap has been open for four quarters.</div></div>
+    <div class="card stripe" style="position:relative"><div class="k">Idle cash</div><div class="v" id="cash">$1.24M</div><div class="s">Sitting in the sweep, earning less than your long-term return assumption, with no planned use.</div></div>
+    <div class="card stripe" style="position:relative"><div class="k">Capital calls due</div><div class="v">None</div><div class="s">No commitments call capital before Q2, so this allocation does not compete with anything already promised.</div></div>
+  </div>
+  <div class="body" style="margin-top:56px;max-width:1400px">You hold long-horizon capital in public markets that you do not need to touch. Private markets pay you for accepting that lock-up. The allocation is sized so the illiquid sleeve stays inside your policy band even if public markets fall.</div>
+</section>
+
+<section data-screen-label="03 The opportunity">
+  <div class="slide-title">The opportunity</div>
+  <div style="display:grid;grid-template-columns:560px minmax(0,1fr);gap:56px;align-items:start">
+    <div>
+      <img src="../assets/helm-fund-x.png" alt="City skyline at dusk" style="width:100%;height:380px;object-fit:cover;border-radius:14px;border:1px solid rgba(75,85,99,0.5)" />
+      <div style="font-size:19px;color:rgb(163,163,163);margin-top:20px">Sponsored by Impact Company IV · administered in Delio</div>
+    </div>
+    <div>
+      <div class="body">The Helm PM Fund invests in initiatives designed to deliver measurable social and environmental impact. Focused on supporting sustainable and inclusive communities, the fund seeks opportunities that drive positive outcomes while creating long term value.</div>
+      <table style="margin-top:44px">
+        <tr><td>Structure</td><td class="num">Evergreen fund · multi-asset</td></tr>
+        <tr><td>Target return</td><td class="num">12%</td></tr>
+        <tr><td>Minimum investment</td><td class="num">USD 100,000</td></tr>
+        <tr><td>Initial close</td><td class="num">1 December</td></tr>
+        <tr><td>Fees</td><td class="num">1% initial · 2% AMC · 10% over 8% hurdle</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="04 Your allocation">
+  <div class="slide-title">Your allocation</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px">
+    <div class="card"><div class="k">Commitment</div><div class="v green" id="commit">$750,000</div><div class="s"><span id="pct-hh">4.1</span>% of household assets</div></div>
+    <div class="card"><div class="k">Funding source</div><div class="v" style="font-size:38px" id="source">$420,000 cash<br />+ $330,000 sale</div><div class="s">Bonds first, then a partial equity trim.</div></div>
+    <div class="card"><div class="k">Tax cost</div><div class="v amber" id="tax">$14,856</div><div class="s">Long-term federal and state on the realized gain.</div></div>
+  </div>
+  <div style="margin-top:56px">
+    <div class="k" style="margin-bottom:22px">Alternatives against your IPS target</div>
+    <div style="position:relative;height:54px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(75,85,99,0.5);overflow:hidden">
+      <div id="bar-after" style="position:absolute;inset:0;width:43%;background:rgba(35,89,255,0.4)"></div>
+      <div id="bar-now" style="position:absolute;inset:0;width:21%;background:rgba(255,255,255,0.10)"></div>
+      <div id="bar-tgt" style="position:absolute;top:0;bottom:0;left:80%;width:3px;background:rgb(245,200,90)"></div>
+    </div>
+    <div style="display:flex;gap:44px;margin-top:20px;font-size:20px;color:rgb(163,163,163)"><span>Now <span id="l-now">4</span>%</span><span class="green">After <span id="l-after">8.1</span>%</span><span class="amber">IPS target <span id="l-tgt">15</span>%</span></div>
+  </div>
+</section>
+
+<section data-screen-label="05 Funding and timing">
+  <div class="slide-title">Funding and timing</div>
+  <table>
+    <thead><tr><th>Position</th><th class="num">Sell</th><th class="num">Realized gain</th><th class="num">Tax</th><th class="num">Settles</th></tr></thead>
+    <tbody id="sell-rows">
+      <tr><td>AGG · iShares Core US Aggregate</td><td class="num">$180,000</td><td class="num green">−$4,200</td><td class="num">$0</td><td class="num">T+1</td></tr>
+      <tr><td>VOO · Vanguard S&amp;P 500 ETF</td><td class="num">$150,000</td><td class="num">+$62,400</td><td class="num">$14,856</td><td class="num">T+1</td></tr>
+    </tbody>
+  </table>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:64px">
+    <div class="card"><div class="k">Trade date</div><div class="v" style="font-size:44px">19 Sep</div><div class="s">Order generated in Halo, routed to your custodian.</div></div>
+    <div class="card"><div class="k">Cash settled</div><div class="v" style="font-size:44px">22 Sep</div><div class="s">Held at the custodian until the wire.</div></div>
+    <div class="card"><div class="k">Wire deadline</div><div class="v amber" style="font-size:44px">26 Sep</div><div class="s">Fund cut-off for the current close.</div></div>
+  </div>
+</section>
+
+<section data-screen-label="06 Approve">
+  <div class="slide-title">What happens after you approve</div>
+  <div style="display:grid;grid-template-columns:minmax(0,1fr) 620px;gap:72px;align-items:start">
+    <div>
+      <div class="step" style="border-top:none"><div class="dot" style="background:rgba(35,89,255,0.18);border:1px solid rgba(35,89,255,0.5);color:rgb(140,175,255)">1</div><div style="flex:1"><div style="font-size:26px;font-weight:600">Subscription documents pre-filled</div><div class="s" style="font-size:20px">Your details and the commitment amount are pushed from Halo, so you are not retyping anything.</div></div><span class="owner own-field">Halo</span></div>
+      <div class="step"><div class="dot" style="background:rgba(56,189,248,0.14);border:1px solid rgba(56,189,248,0.45);color:rgb(56,189,248)">2</div><div style="flex:1"><div style="font-size:26px;font-weight:600">Classification, KYC, and signature</div><div class="s" style="font-size:20px">Run and recorded by the fund's platform. You sign the subscription agreement there; we track progress from here.</div></div><span class="owner own-delio">Delio</span></div>
+      <div class="step"><div class="dot" style="background:rgba(255,255,255,0.06);border:1px solid rgba(75,85,99,0.6);color:rgb(163,163,163)">3</div><div style="flex:1"><div style="font-size:26px;font-weight:600">Trade, settle, and wire</div><div class="s" style="font-size:20px">Money moves at your custodian and your bank against the fund's payment reference. Receipt is confirmed back to us.</div></div><span class="owner own-cust">Custodian · Bank</span></div>
+    </div>
+    <div class="card" style="padding:44px">
+      <div class="k">Approving confirms</div>
+      <div class="body" style="font-size:22px;margin-top:18px">A <span id="commit-2">$750,000</span> commitment to Helm Private Markets Fund X, funded as set out on the previous page, with the tax cost shown.</div>
+      <div style="margin-top:40px"><button id="approve">Approve this allocation</button></div>
+      <div class="s" style="margin-top:24px">Nothing is submitted to the fund until you approve.</div>
+    </div>
+  </div>
+</section>
+
+</deck-stage>
+<script>
+(function(){
+  var q = new URLSearchParams(location.search);
+  var set = function(id, v){ var el = document.getElementById(id); if (el && v) el.textContent = v; };
+  set('c-name', q.get('client'));
+  set('commit', q.get('commit')); set('commit-2', q.get('commit'));
+  set('tax', q.get('tax')); set('cash', q.get('cash'));
+  set('alts-now', q.get('alts')); set('l-now', q.get('alts'));
+  set('alts-tgt', q.get('target')); set('l-tgt', q.get('target'));
+  set('l-after', q.get('after')); set('pct-hh', q.get('hh'));
+  if (q.get('source')) document.getElementById('source').innerHTML = q.get('source');
+  var a = parseFloat(q.get('alts')), b = parseFloat(q.get('after')), t = parseFloat(q.get('target'));
+  if (a && b && t) {
+    var scale = Math.max(t, b) * 1.25;
+    document.getElementById('bar-now').style.width = (a/scale*100) + '%';
+    document.getElementById('bar-after').style.width = (b/scale*100) + '%';
+    document.getElementById('bar-tgt').style.left = (t/scale*100) + '%';
+  }
+  if (q.get('rows')) { try { document.getElementById('sell-rows').innerHTML = decodeURIComponent(q.get('rows')); } catch(e){} }
+  var btn = document.getElementById('approve');
+  btn.addEventListener('click', function(){
+    btn.disabled = true;
+    btn.textContent = 'Approved · sending to the fund';
+    try { window.parent.postMessage({ type:'helmx:approved' }, '*'); } catch(e){}
+  });
+})();
+</script>
+</body>
+</html>

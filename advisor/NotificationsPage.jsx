@@ -1,5 +1,5 @@
 /* Notifications Page — full-width list view of all notifications with filter chips.
-   Matches the Field Shadcn glass aesthetic. Each card is bordered left with a tone
+   Matches the Halo Shadcn glass aesthetic. Each card is bordered left with a tone
    color (red=high, yellow=medium, blue=info, purple=private). Cards can have a
    dense "multi-client" variant with a bulleted breakdown, and an actions row.
 */
@@ -142,9 +142,40 @@ function NotificationCard({
   );
 }
 
+
+/* Helm subscription left in progress after the Delio hand-off (persisted so a
+   refresh keeps it; Restart demo clears halo.* keys). */
+function haloHelmPending() {
+  try { return window.HALO_HELMX || JSON.parse(localStorage.getItem('halo.helmx') || 'null'); } catch (e) { return null; }
+}
+
 /* ---- Data -------------------------------------------------------------- */
 const NP_ALL_NOTIFICATIONS = [
   // ALL tab — general feed
+  {
+    group:'all',
+    tone:'danger', icon:'triangle-alert', unread:true,
+    title:'Capital Call Due · Kestermark Growth Fund (TRELLIS)',
+    titleBadges:[{ tone:'danger', label:'High' }, { tone:'mute', label:'Helm · Delio' }],
+    body:'Marcus Ellery — $125K due Oct 2. Available cash $38K. Short $87K. Call 3 on a $500K commitment; the commitment is binding, so the only decision is what to liquidate.',
+    meta:[{ label:'Due Oct 2', tone:'danger' }, { label:'Capital calls' }, { label:'Payment ref F11F78' }],
+    actions:[
+      { variant:'primary', label:'Open the client', arrow:true, onClick:() => window.dispatchEvent(new CustomEvent('client:open', { detail:{ client:'Marcus Ellery', highlight:'call' } })) },
+      { variant:'secondary', label:'View funding plan', onClick:() => window.dispatchEvent(new CustomEvent('call:open')) },
+    ],
+    time:'20 min ago',
+    priority:'high', upcoming:true, today:true, hideWhenPaid:true,
+  },
+  {
+    group:'all',
+    tone:'success', icon:'check-circle-2', unread:true,
+    title:'Capital Call Paid · Kestermark Growth Fund (TRELLIS)',
+    titleBadges:[{ tone:'success', label:'Paid' }, { tone:'mute', label:'Helm · Delio' }],
+    body:'Marcus Ellery — $125,000 wired against payment reference F11F78. Delio marked call 3 paid; paid-in capital is now $375,000 of a $500,000 commitment. Orders SW-84219 and SW-84229 filled at Schwab.',
+    meta:[{ label:'Just now' }, { label:'Capital calls' }, { label:'$214 realized tax' }],
+    time:'Just now',
+    priority:'medium', upcoming:false, today:true, onlyWhenPaid:true,
+  },
   {
     group:'all',
     tone:'success', icon:'sparkles', unread:true,
@@ -291,14 +322,30 @@ const NP_FILTERS = [
 /* ---- Page -------------------------------------------------------------- */
 function NotificationsPage() {
   const [filter, setFilter] = React.useState('all');
+  const [paidTick, setPaidTick] = React.useState(0);
+  React.useEffect(() => { const f = () => setPaidTick(n => n + 1); window.addEventListener('call:paid', f); window.addEventListener('helmx:pending', f); return () => { window.removeEventListener('call:paid', f); window.removeEventListener('helmx:pending', f); }; }, []);
 
   // "All" = union of unread + high priority + today + next 10 days, de-duped.
   // Other filters apply their match predicate across the whole set.
   const rows = React.useMemo(() => {
+    const paid = !!window.FIELD_CALL_PAID;
+    const gate = (n) => !(n.hideWhenPaid && paid) && !(n.onlyWhenPaid && !paid);
     const f = NP_FILTERS.find(x => x.id === filter) || NP_FILTERS[0];
     const seen = new Set();
+    const hp = haloHelmPending();
+    const USD = (n) => '$' + Math.round(n).toLocaleString('en-US');
+    const SRC = hp ? [{
+      group:'all', tone:'info', icon:'file-signature', unread:true,
+      title:'Subscription In Progress · Helm Private Markets Fund X',
+      titleBadges:[{ tone:'info', label:'In progress' }, { tone:'mute', label:'Helm · Delio' }],
+      body:`${hp.client} — ${USD(hp.commit)} commitment submitted in Delio. Agreement signed and funds sent; Delio confirms receipt in 2–3 business days, and units issue at the initial close on 1 Dec.`,
+      meta:[{ label:'5 of 7 steps' }, { label:'Private markets' }, { label:'Close 1 Dec' }],
+      actions:[{ variant:'primary', label:'Open the client', arrow:true, onClick:() => window.dispatchEvent(new CustomEvent('client:open', { detail:{ client:hp.client, highlight:'helmx-progress' } })) }],
+      time:'Just now', priority:'medium', upcoming:true, today:true,
+    }].concat(NP_ALL_NOTIFICATIONS) : NP_ALL_NOTIFICATIONS;
     if (filter === 'all') {
-      return NP_ALL_NOTIFICATIONS.filter(n => {
+      return SRC.filter(n => {
+        if (!gate(n)) return false;
         const hit = n.unread || n.priority === 'high' || n.today || n.upcoming;
         if (!hit) return false;
         if (seen.has(n.title)) return false;
@@ -306,33 +353,19 @@ function NotificationsPage() {
         return true;
       });
     }
-    return NP_ALL_NOTIFICATIONS.filter(n => {
+    return SRC.filter(n => {
+      if (!gate(n)) return false;
       if (!f.match(n)) return false;
       if (seen.has(n.title)) return false;
       seen.add(n.title);
       return true;
     });
-  }, [filter]);
+  }, [filter, paidTick]);
 
   return (
     <div style={{ padding:'18px 28px 48px', maxWidth:1200, margin:'0 auto' }}>
       {/* Header w/ back */}
       <div style={{ display:'flex', alignItems:'center', gap:14, marginBottom:18 }}>
-        <button
-          onClick={() => window.dispatchEvent(new CustomEvent('nav:set', { detail:{ screen:'dashboard' } }))}
-          style={{
-            display:'inline-flex', alignItems:'center', gap:8,
-            background:'rgba(255,255,255,0.04)', color:'rgb(229,231,235)',
-            border:'1px solid rgba(75,85,99,0.7)', borderRadius:6,
-            padding:'7px 12px 7px 10px', cursor:'pointer',
-            fontFamily:'Inter', fontWeight:600, fontSize:11.5,
-          }}
-          onMouseEnter={(e)=>{ e.currentTarget.style.background='rgba(255,255,255,0.07)'; e.currentTarget.style.borderColor='rgba(107,114,128,0.9)'; }}
-          onMouseLeave={(e)=>{ e.currentTarget.style.background='rgba(255,255,255,0.04)'; e.currentTarget.style.borderColor='rgba(75,85,99,0.7)'; }}
-        >
-          <i className="fa-solid fa-arrow-left" style={{ width:11, height:11 }} />
-          Back to Dashboard
-        </button>
         <div style={{ fontFamily:'Inter', fontSize:18, fontWeight:600, color:'rgb(249,250,251)', letterSpacing:'-0.01em' }}>
           Notifications
         </div>

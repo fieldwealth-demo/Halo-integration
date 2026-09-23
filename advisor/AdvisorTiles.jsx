@@ -367,11 +367,16 @@ function UpcomingMeetings({ onMore }) {
 
 /* 2. Notifications -------------------------------------------------------- */
 function Notifications({ onMore }) {
+  const [, setPaidTick] = React.useState(0);
+  React.useEffect(() => { const f = () => setPaidTick(n => n + 1); window.addEventListener('call:paid', f); return () => window.removeEventListener('call:paid', f); }, []);
+  const callRow = window.FIELD_CALL_PAID
+    ? { icon:'check-circle-2', tone:'success', title:'Capital Call Paid: Marcus Ellery', body:'Kestermark Growth Fund — $125,000 wired, ref F11F78. Delio marked call 3 paid.', tag:'Paid', tagTone:'success', go:() => window.dispatchEvent(new CustomEvent('client:open', { detail:{ client:'Marcus Ellery' } })) }
+    : { icon:'triangle-alert', tone:'danger', title:'Capital Call Due: Marcus Ellery', body:'Kestermark Growth Fund — $125K due Oct 2, $87K short. Funding plan ready.', tag:'Due Oct 2', tagTone:'danger', go:() => window.dispatchEvent(new CustomEvent('client:open', { detail:{ client:'Marcus Ellery', highlight:'call' } })) };
   const rows = [
+    callRow,
     { icon:'calendar-circle-user', tone:'success', title:'Upcoming Meeting: David Young', body:'Tomorrow at 10:30 AM — prepare meeting brief and review prior notes', tag:'Prep', tagTone:'success', action:'prep_meeting' },
     { icon:'check-circle-2', tone:'warning', title:'Proposal Approved', body:'Maria Workman has approved the investment proposal. Next step…', tag:'In 3 days', tagTone:'warning' },
     { icon:'envelope', tone:'info', title:'New Client Reply', body:'Robert Patel responded to your Q4 review email — needs follow-up', tag:'New', tagTone:'info' },
-    { icon:'file-signature', tone:'info', title:'Document Signed', body:'Edwards Family signed advisory agreement — ready to file', tag:'Signed', tagTone:'success' },
   ];
   const TONE = {
     info:    { bg:'rgba(59,130,246,0.10)', ring:'rgba(59,130,246,0.35)', fg:'rgb(147,197,253)' },
@@ -393,11 +398,11 @@ function Notifications({ onMore }) {
         {rows.map((r,i) => {
           const t = TONE[r.tone];
           const tg = TAG[r.tagTone];
-          const isClickable = r.action === 'prep_meeting';
+          const isClickable = r.action === 'prep_meeting' || !!r.go;
           return (
             <div
               key={i}
-              onClick={isClickable ? (() => window.dispatchEvent(new CustomEvent('client:open', { detail:{ client:'David Young', highlight:'prep_meeting' } }))) : undefined}
+              onClick={r.go ? r.go : isClickable ? (() => window.dispatchEvent(new CustomEvent('client:open', { detail:{ client:'David Young', highlight:'prep_meeting' } }))) : undefined}
               style={{
                 display:'grid', gridTemplateColumns:'32px 1fr auto', alignItems:'center', gap:12,
                 padding:'10px 12px', borderRadius:10,
